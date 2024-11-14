@@ -1,4 +1,4 @@
-package backend
+package db
 
 import (
 	"fmt"
@@ -22,7 +22,6 @@ type Config struct {
 	Database string
 }
 
-// GetConnection retorna una única instancia de la conexión a la base de datos
 func GetConnection(config Config) *sqlx.DB {
 	once.Do(func() {
 		dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?parseTime=true",
@@ -37,8 +36,6 @@ func GetConnection(config Config) *sqlx.DB {
 		if err != nil {
 			log.Fatalf("Error conectando a la base de datos: %v", err)
 		}
-
-		// Configurar el pool de conexiones
 		db.SetMaxOpenConns(25)
 		db.SetMaxIdleConns(25)
 
