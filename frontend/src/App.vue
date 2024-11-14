@@ -1,12 +1,20 @@
-<script lang="ts" setup>
-import HelloWorld from './components/HelloWorld.vue'</script>
-
 <template>
-  <img id="logo" alt="Wails logo" src="./assets/images/logo-universal.png"/>
-  <HelloWorld/>
+  <img id="logo" alt="Wails logo" src="./assets/images/logo-universal.png" />
+  <HelloWorld />
 </template>
 
-<style>
+<script lang="ts" setup>
+import { onMounted } from "vue";
+import { Login } from "../wailsjs/go/services/LoginService";
+import HelloWorld from "./components/HelloWorld.vue";
+
+onMounted(async () => {
+  const x = await Login("adf", "afa");
+  console.log(x);
+});
+</script>
+
+<style lang="css">
 #logo {
   display: block;
   width: 50%;
