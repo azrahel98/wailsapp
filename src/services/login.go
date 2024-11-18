@@ -16,7 +16,9 @@ func NewLoginService(r repositories.LoginRepository) *LoginService {
 
 func (s *LoginService) Login(nickname string, password string) (*string, error) {
 	user, err := s.repo.Search_like_nickname(context.Background(), nickname)
+
 	if err != nil {
+
 		return nil, fmt.Errorf("el usuario no existe")
 	}
 

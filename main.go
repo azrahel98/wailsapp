@@ -23,11 +23,11 @@ func main() {
 	godotenv.Load()
 
 	config := db.Config{
-		Host:     "127.0.0.1",
+		Host:     "192.168.18.125",
 		Port:     3306,
 		User:     "root",
 		Password: "pleyades",
-		Database: "mves_rrhh",
+		Database: "rrhh",
 	}
 
 	dbt := db.GetConnection(config)
@@ -37,8 +37,11 @@ func main() {
 	urep := repositories.CreateLoginRepo(dbt)
 	lservice := services.NewLoginService(urep)
 
+	dashservice := services.NewDashboardService(repositories.CreatedashboardRepository(dbt))
+	persoService := services.NewPersonalService(repositories.CreatePersonalRepository(dbt))
+
 	err := wails.Run(&options.App{
-		Title:    "vesgoapppp",
+		Title:    "vesgoapp",
 		Width:    1024,
 		Height:   768,
 		MinWidth: 500,
@@ -54,6 +57,8 @@ func main() {
 		},
 		Bind: []interface{}{
 			lservice,
+			dashservice,
+			persoService,
 		},
 	})
 

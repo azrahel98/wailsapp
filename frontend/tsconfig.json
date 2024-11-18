@@ -6,6 +6,7 @@
     "moduleResolution": "Node",
     "strict": true,
     "jsx": "preserve",
+    "allowJs": true,
     "sourceMap": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
@@ -14,13 +15,20 @@
       "ESNext",
       "DOM"
     ],
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "paths": {
+      "@wails/*":["./wailsjs/go/*"],
+      "@views/*":["./src/views/*"],
+      "@router/*":["./src/router/*"],
+      "@comp/*":["./src/components/*"]
+    }
   },
   "include": [
     "src/**/*.ts",
     "src/**/*.d.ts",
     "src/**/*.tsx",
-    "src/**/*.vue"
+    "src/**/*.vue",
+    "src/*.ts"
   ],
   "references": [
     {

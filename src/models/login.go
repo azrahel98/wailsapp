@@ -5,5 +5,5 @@ type Usuario struct {
 	Nombre   string `db:"nombre"`
 	Password string `db:"pass"`
 	Nick     string `db:"nickname"`
-	Role     int    `db:"lvl"`
+	Role     int    `db:"nivel"`
 }
