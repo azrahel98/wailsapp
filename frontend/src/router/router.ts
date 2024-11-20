@@ -23,7 +23,7 @@ import Perfil from '@views/dash/perfil.vue'
       path: '/',
       name: 'home',
       component: dashboard,
-       beforeEnter: (to, from, next) => middleware(to, from, next),
+      beforeEnter: (to, from, next) => middleware(to, from, next),
       children: [
         {
           path: '/',
@@ -36,10 +36,10 @@ import Perfil from '@views/dash/perfil.vue'
           component: Buscar
         },
         {
-          path: '/perfil/:dni',
+          path: 'perfil/:dni',
           name: 'perfil',
-          component: Perfil
-        },
+      component: () => import('@views/dash/perfil.vue')
+        }
       ]
     },
   ]

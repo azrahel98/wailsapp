@@ -1,13 +1,16 @@
 <template>
-  <div class="container py-5">
-    <!-- Profile Section -->
-    <div class="card mb-4">
+  <div class="main-page bg-azure-lt">
+    <div class="text-start pt-4">
+      <!-- <div class="page-pretitle">{{ profile?.Dni }}</div> -->
+      <h2 class="page-title">Perfil Personal</h2>
+    </div>
+
+    <div class="card pt-1 bg-azure-lt">
       <div class="card-body">
         <div class="row align-items-center">
           <!-- Profile Image and Basic Info -->
           <div class="col-md-3 text-center">
             <img
-              src="/placeholder.svg?height=180&width=180"
               alt="Profile Photo"
               class="rounded-circle img-fluid mb-3"
               style="width: 180px; height: 180px; object-fit: cover"
@@ -104,21 +107,9 @@
             </div>
             <div>
               <div class="d-flex gap-2">
-                <img
-                  src="/placeholder.svg?height=20&width=20"
-                  alt="Spanish"
-                  class="rounded-circle"
-                />
-                <img
-                  src="/placeholder.svg?height=20&width=20"
-                  alt="English"
-                  class="rounded-circle"
-                />
-                <img
-                  src="/placeholder.svg?height=20&width=20"
-                  alt="German"
-                  class="rounded-circle"
-                />
+                <img alt="Spanish" class="rounded-circle" />
+                <img alt="English" class="rounded-circle" />
+                <img alt="German" class="rounded-circle" />
               </div>
               <small class="text-muted">LANGUAGES SPOKEN</small>
             </div>
@@ -187,7 +178,7 @@
               <small class="text-muted">San Francisco, CA</small>
             </div>
           </div>
-          <div class="row mb-4">
+          <div class="row mb-4 bg-azure">
             <div class="col-2">2019</div>
             <div class="col-10">
               <h6>Jr. Sales Agent</h6>
@@ -201,11 +192,20 @@
   </div>
 </template>
 
-<script setup>
-// Component logic can be added here if needed
+<script setup lang="ts">
+import { onMounted, ref, watch } from 'vue'
+import { Buscar_persona_by_dni } from '@wails/services/PersonalService'
+import { router } from '@router/router'
+import { RouteLocationNormalizedLoadedGeneric } from 'vue-router'
+
+watch(router.currentRoute, async (x: RouteLocationNormalizedLoadedGeneric, _y) => {
+  await Buscar_persona_by_dni(x.params.dni.toString())
+})
+
+const profile = ref<any>()
 </script>
 
-<style scoped>
+<style lang="css" scoped>
 .timeline .row:not(:last-child) {
   position: relative;
 }

@@ -27,7 +27,8 @@
 
           <RouterLink
             class="text-black"
-            :to="{ name: 'perfil', params: { dni: x.Dni.toString() } }"
+            :to="{ name:'perfil',params:{dni:x.Dni.toString()} }"
+            @click="console.log(`Navigating to /perfil/${x.Dni}`)"
           >
             <h4 class="m-0 mb-1">{{ x.Nombre }}</h4>
           </RouterLink>

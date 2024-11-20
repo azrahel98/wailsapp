@@ -18,14 +18,17 @@
       <RouterLink :to="{ path: '/buscar' }" class="nav-item">
         <IconSearch size="20" class="icon" /> <span v-if="isExpanded">Dashboard</span>
       </RouterLink>
-      <RouterLink
+      <RouterLink :to="{ name: 'perfil', params: { dni: 41662616 } }" class="nav-item">
+        <IconSearch size="20" class="icon" /> <span v-if="isExpanded">Dashboard</span>
+      </RouterLink>
+      <!-- <RouterLink
         :to="{ path: '/perfil' }"
         class="nav-item"
         :class="{ active: isActiveRoute('perfil') }"
         v-if="router.currentRoute.value.name === 'perfil'"
       >
         <IconUsers size="20" class="icon" /> <span v-if="isExpanded">Dashboard</span>
-      </RouterLink>
+      </RouterLink> -->
       <!-- <a
         href="#"
         class="nav-item"

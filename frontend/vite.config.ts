@@ -11,6 +11,11 @@ export default defineConfig({
         api: "modern",
       },
     },
+  }, server: {
+    hmr: {
+      host: 'localhost',
+      protocol: 'ws',
+    },
   },
   resolve: {
     alias: [
