@@ -18,17 +18,10 @@
       <RouterLink :to="{ path: '/buscar' }" class="nav-item">
         <IconSearch size="20" class="icon" /> <span v-if="isExpanded">Dashboard</span>
       </RouterLink>
-      <RouterLink :to="{ name: 'perfil', params: { dni: 41662616 } }" class="nav-item">
-        <IconSearch size="20" class="icon" /> <span v-if="isExpanded">Dashboard</span>
-      </RouterLink>
-      <!-- <RouterLink
-        :to="{ path: '/perfil' }"
-        class="nav-item"
-        :class="{ active: isActiveRoute('perfil') }"
-        v-if="router.currentRoute.value.name === 'perfil'"
-      >
+
+      <a class="nav-item active" v-if="router.currentRoute.value.name === 'perfil'">
         <IconUsers size="20" class="icon" /> <span v-if="isExpanded">Dashboard</span>
-      </RouterLink> -->
+      </a>
       <!-- <a
         href="#"
         class="nav-item"
@@ -77,9 +70,9 @@ const sidebar = ref<HTMLElement | null>(null)
 const setActiveItem = (item: string) => {
   activeItem.value = item
 }
-const isActiveRoute = (routeName: string): boolean => {
-  return router.currentRoute.value.name === routeName
-}
+
+console.log(router.currentRoute.value)
+
 defineProps({
   isExpanded: { type: Boolean, required: false, default: false },
   toggle: { type: Function, required: true }
