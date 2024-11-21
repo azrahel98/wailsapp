@@ -39,6 +39,11 @@ import Perfil from '@views/dash/perfil.vue'
           path: 'perfil/:dni',
           name: 'perfil',
       component: () => import('@views/dash/perfil.vue')
+        },
+        {
+          path: 'boleta',
+          name: 'boleta',
+      component: () => import('@views/dash/boleta.vue')
         }
       ]
     },

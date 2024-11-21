@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"embed"
 	"vesgoapp/src/db"
 	"vesgoapp/src/repositories"
@@ -13,17 +14,31 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/options/linux"
 )
 
-// https://v0.dev/chat/UgJmOIVN3Zb
-
 //go:embed all:frontend/dist
 var assets embed.FS
+
+type App struct {
+	ctx           context.Context
+	boletaService *services.BoletaService
+}
+
+func NewApp() *App {
+	return &App{}
+}
+
+func (a *App) startup(ctx context.Context) {
+	a.ctx = ctx
+	if a.boletaService != nil {
+		a.boletaService.SetContext(ctx)
+	}
+}
 
 func main() {
 
 	godotenv.Load()
 
 	config := db.Config{
-		Host:     "127.0.0.1",
+		Host:     "192.168.18.125",
 		Port:     3306,
 		User:     "root",
 		Password: "pleyades",
@@ -31,14 +46,19 @@ func main() {
 	}
 
 	dbt := db.GetConnection(config)
-
 	defer db.CloseConnection()
 
 	urep := repositories.CreateLoginRepo(dbt)
 	lservice := services.NewLoginService(urep)
-
 	dashservice := services.NewDashboardService(repositories.CreatedashboardRepository(dbt))
 	persoService := services.NewPersonalService(repositories.CreatePersonalRepository(dbt))
+
+	boletaRepo := repositories.CreateboletaRepository()
+	boletaService := services.NewBoletaService(boletaRepo)
+
+	app := &App{
+		boletaService: boletaService,
+	}
 
 	err := wails.Run(&options.App{
 		Title:    "vesgoapp",
@@ -56,10 +76,13 @@ func main() {
 			ProgramName:         "",
 		},
 		Bind: []interface{}{
+			app,
 			lservice,
 			dashservice,
 			persoService,
+			boletaService,
 		},
+		OnStartup: app.startup,
 	})
 
 	if err != nil {
