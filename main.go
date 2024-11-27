@@ -38,7 +38,7 @@ func main() {
 	godotenv.Load()
 
 	config := db.Config{
-		Host:     "192.168.18.125",
+		Host:     "127.0.0.1",
 		Port:     3306,
 		User:     "root",
 		Password: "pleyades",

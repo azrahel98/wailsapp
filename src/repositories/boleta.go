@@ -20,11 +20,12 @@ func (b *boletaRepository) Upload_file(path string) (bool, error) {
 	defer f.Close()
 
 	sheetNames := f.GetSheetList()
-	fmt.Println("Hojas del Excel:")
-	for w, nombre := range sheetNames {
-		fmt.Println("- ", nombre)
-		fmt.Println(w)
-	}
+
+	hoja := sheetNames[2]
+
+	celda, _ := f.GetCellValue(hoja, "B2")
+
+	fmt.Println(celda)
 
 	return true, nil
 

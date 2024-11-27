@@ -30,8 +30,8 @@
                   <label for="avatar-upload" class="btn btn-outline-primary btn-sm mt-2">
                     Cambiar foto
                   </label>
-                  <h3 class="m-0 mb-1">{{ user.name }}</h3>
-                  <div class="text-muted">{{ user.email }}</div>
+                  <h3 class="m-0 mb-1">{{ perfil?.Nombre }}</h3>
+                  <div class="text-muted">{{ perfil?.Email }}</div>
                   <div class="mt-3">
                     <span class="badge bg-purple-lt">Usuario Premium</span>
                   </div>
@@ -55,21 +55,21 @@
                       <div class="datagrid-title">Teléfono</div>
                       <div class="datagrid-content">
                         <IconPhone class="icon-inline text-muted me-1" />
-                        {{ user.phone }}
+                        {{ perfil?.Telf1 }}
                       </div>
                     </div>
                     <div class="datagrid-item">
                       <div class="datagrid-title">Dirección</div>
                       <div class="datagrid-content">
                         <IconMapPin class="icon-inline text-muted me-1" />
-                        {{ user.address }}
+                        {{ perfil?.Direccion }}
                       </div>
                     </div>
                     <div class="datagrid-item">
                       <div class="datagrid-title">Cuenta Bancaria</div>
                       <div class="datagrid-content">
                         <IconCreditCard class="icon-inline text-muted me-1" />
-                        {{ user.bankAccount }}
+                        {{ perfil?.Ruc }}
                       </div>
                     </div>
                   </div>
@@ -240,7 +240,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
+import { Buscar_persona_by_dni } from '@wails/services/PersonalService'
+import { models } from '@wails/models'
 import {
   IconEdit,
   IconPhone,
@@ -250,6 +252,17 @@ import {
   IconBriefcase,
   IconCalendar
 } from '@tabler/icons-vue'
+import { router } from '@router/router'
+
+const perfil = ref<models.Perfil>()
+
+onMounted(async () => {
+  try {
+    perfil.value = await Buscar_persona_by_dni(router.currentRoute.value.params.dni.toString())
+  } catch (error) {
+    console.log(error)
+  }
+})
 
 interface User {
   name: string
