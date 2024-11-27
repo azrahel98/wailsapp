@@ -6,3 +6,5 @@ build/darwin
 
 .env
 env
+wailsjs
+wailsjs/

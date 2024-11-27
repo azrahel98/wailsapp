@@ -1,7 +1,7 @@
 <template>
   <div class="page">
     <div class="page-wrapper">
-      <div class="container-xl">
+      <div class="container">
         <div class="page-header d-print-none">
           <div class="row align-items-center">
             <div class="col">
@@ -16,31 +16,35 @@
             <div class="col-md-6 col-lg-4">
               <div class="card">
                 <div class="card-body p-4 text-center">
-                  <span
-                    class="avatar avatar-xl mb-3 avatar-rounded"
-                    :style="{ backgroundImage: `url(${user.avatar})` }"
-                  ></span>
-                  <input
-                    type="file"
-                    id="avatar-upload"
-                    class="d-none"
-                    accept="image/*"
-                    @change="handleAvatarChange"
-                  />
-                  <label for="avatar-upload" class="btn btn-outline-primary btn-sm mt-2">
-                    Cambiar foto
-                  </label>
+                  <div class="grid-avatar">
+                    <span
+                      class="avatar avatar-xl mb-3 avatar-rounded"
+                      :style="{ backgroundImage: `url(${user.avatar})` }"
+                    ></span>
+                    <div class="d-flex flex-wrap justify-content-center align-content-center gap-2">
+                      <input
+                        type="file"
+                        id="avatar-upload"
+                        class="d-none"
+                        accept="image/*"
+                        @change="handleAvatarChange"
+                      />
+                      <label for="avatar-upload" class="btn btn-outline-primary btn-sm mt-2">
+                        Cambiar foto
+                      </label>
+                      <button
+                        type="button"
+                        class="card-btn btn btn-sm p-0 m-0"
+                        data-bs-toggle="modal"
+                        data-bs-target="#editmodal"
+                      >
+                        <IconEdit />
+                        Editar Información
+                      </button>
+                    </div>
+                  </div>
                   <h3 class="m-0 mb-1">{{ perfil?.Nombre }}</h3>
                   <div class="text-muted">{{ perfil?.Email }}</div>
-                  <div class="mt-3">
-                    <span class="badge bg-purple-lt">Usuario Premium</span>
-                  </div>
-                </div>
-                <div class="d-flex">
-                  <a href="#" class="card-btn" @click.prevent="openEditUserModal">
-                    <IconEdit />
-                    Editar Información
-                  </a>
                 </div>
               </div>
             </div>
@@ -138,7 +142,7 @@
     </div>
 
     <!-- Modal para editar información personal -->
-    <div
+    <!-- <div
       class="modal modal-blur fade"
       :class="{ show: isEditUserModalOpen }"
       tabindex="-1"
@@ -183,8 +187,8 @@
           </div>
         </div>
       </div>
-    </div>
-
+    </div> -->
+    <Modalinfo :user="perfil!" />
     <!-- Modal para editar/agregar trabajo -->
     <div
       class="modal modal-blur fade"
@@ -253,8 +257,13 @@ import {
   IconCalendar
 } from '@tabler/icons-vue'
 import { router } from '@router/router'
+import Modalinfo from '@comp/perfil/modal_info.vue'
 
-const perfil = ref<models.Perfil>()
+const perfil = ref<models.Perfil>({
+  Dni: '',
+  Nombre: '',
+  Nacimiento: ''
+})
 
 onMounted(async () => {
   try {
@@ -397,3 +406,15 @@ const handleAvatarChange = (event: Event) => {
   }
 }
 </script>
+<style lang="scss" scoped>
+.grid-avatar {
+  width: 100%;
+  display: grid;
+  grid-template-columns: min-content min-content;
+  .btn-sm {
+    width: min-content;
+    word-wrap: break-word;
+    white-space: wrap;
+  }
+}
+</style>
