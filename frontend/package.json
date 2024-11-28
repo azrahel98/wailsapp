@@ -19,7 +19,8 @@
     "vue": "^3.2.37",
     "vue-chart-3": "^3.1.8",
     "vue-leaflet": "^0.1.0",
-    "vue-router": "^4.4.5"
+    "vue-router": "^4.4.5",
+    "vue3-easy-data-table": "^1.5.47"
   },
   "devDependencies": {
     "@babel/types": "^7.18.10",

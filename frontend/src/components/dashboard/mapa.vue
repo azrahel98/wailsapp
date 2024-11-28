@@ -19,11 +19,8 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script lang="js" setup>
 import 'leaflet/dist/leaflet.css'
 import { LMap, LTileLayer, LMarker, LPopup } from '@vue-leaflet/vue-leaflet'
+import L from 'leaflet'
 </script>
-
-<style scoped>
-/* Puedes agregar estilos adicionales aquí si es necesario */
-</style>

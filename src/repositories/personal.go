@@ -9,10 +9,22 @@ import (
 
 type PersonalRepository interface {
 	Search_by_dni_perfil(ctx context.Context, dni string) (*models.Perfil, error)
+	Search_by_dni_vinculos(ctx context.Context, dni string) (*[]models.Vinculos, error)
 }
 
 type personalRepository struct {
 	db *sqlx.DB
+}
+
+// Search_by_dni_vinculos implements PersonalRepository.
+func (p *personalRepository) Search_by_dni_vinculos(ctx context.Context, dni string) (*[]models.Vinculos, error) {
+	var resul []models.Vinculos
+
+	err := p.db.SelectContext(ctx, &resul, "select * from Vinculos_vigentes where dni = ?", dni)
+	if err != nil {
+		return nil, err
+	}
+	return &resul, nil
 }
 
 // Search_by_dni_perfil implements PersonalRepository.

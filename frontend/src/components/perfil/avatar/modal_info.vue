@@ -96,6 +96,6 @@
 import { models } from '@wails/models'
 
 defineProps({
-  user: { type: models.Perfil, required: true }
+  user: { type: Object, required: true }
 })
 </script>

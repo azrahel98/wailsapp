@@ -5,3 +5,7 @@
 export function Buscar_persona_by_dni(arg1) {
   return window['go']['services']['PersonalService']['Buscar_persona_by_dni'](arg1);
 }
+
+export function Search_by_dni_vinculos(arg1) {
+  return window['go']['services']['PersonalService']['Search_by_dni_vinculos'](arg1);
+}

@@ -21,3 +21,11 @@ func (s *PersonalService) Buscar_persona_by_dni(dni string) (*models.Perfil, err
 	}
 	return res, nil
 }
+
+func (s *PersonalService) Search_by_dni_vinculos(dni string) (*[]models.Vinculos, error) {
+	res, err := s.repo.Search_by_dni_vinculos(context.Background(), dni)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}

@@ -1,242 +1,143 @@
 <template>
-  <div class="page">
-    <div class="page-wrapper">
-      <div class="container">
-        <div class="page-header d-print-none">
-          <div class="row align-items-center">
-            <div class="col">
-              <h2 class="page-title">Dashboard de Usuario</h2>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="page-body">
-        <div class="container-xl">
-          <div class="row row-cards">
-            <div class="col-md-6 col-lg-4">
-              <div class="card">
-                <div class="card-body p-4 text-center">
-                  <div class="grid-avatar">
-                    <span
-                      class="avatar avatar-xl mb-3 avatar-rounded"
-                      :style="{ backgroundImage: `url(${user.avatar})` }"
-                    ></span>
-                    <div class="d-flex flex-wrap justify-content-center align-content-center gap-2">
-                      <input
-                        type="file"
-                        id="avatar-upload"
-                        class="d-none"
-                        accept="image/*"
-                        @change="handleAvatarChange"
-                      />
-                      <label for="avatar-upload" class="btn btn-outline-primary btn-sm mt-2">
-                        Cambiar foto
-                      </label>
-                      <button
-                        type="button"
-                        class="card-btn btn btn-sm p-0 m-0"
-                        data-bs-toggle="modal"
-                        data-bs-target="#editmodal"
-                      >
-                        <IconEdit />
-                        Editar Información
-                      </button>
-                    </div>
-                  </div>
-                  <h3 class="m-0 mb-1">{{ perfil?.Nombre }}</h3>
-                  <div class="text-muted">{{ perfil?.Email }}</div>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6 col-lg-8">
-              <div class="card">
-                <div class="card-header">
-                  <h3 class="card-title">Información Personal</h3>
-                </div>
-                <div class="card-body">
-                  <div class="datagrid">
-                    <div class="datagrid-item">
-                      <div class="datagrid-title">Teléfono</div>
-                      <div class="datagrid-content">
-                        <IconPhone class="icon-inline text-muted me-1" />
-                        {{ perfil?.Telf1 }}
-                      </div>
-                    </div>
-                    <div class="datagrid-item">
-                      <div class="datagrid-title">Dirección</div>
-                      <div class="datagrid-content">
-                        <IconMapPin class="icon-inline text-muted me-1" />
-                        {{ perfil?.Direccion }}
-                      </div>
-                    </div>
-                    <div class="datagrid-item">
-                      <div class="datagrid-title">Cuenta Bancaria</div>
-                      <div class="datagrid-content">
-                        <IconCreditCard class="icon-inline text-muted me-1" />
-                        {{ perfil?.Ruc }}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-12">
-              <div class="card">
-                <div class="card-header">
-                  <h3 class="card-title">Historial Laboral</h3>
-                  <div class="card-actions">
-                    <a href="#" class="btn btn-primary" @click.prevent="openAddWorkModal">
-                      <IconPlus class="icon-inline me-1" />
-                      Agregar Trabajo
-                    </a>
-                  </div>
-                </div>
-                <div class="card-body">
-                  <div class="table-responsive">
-                    <table class="table table-vcenter card-table">
-                      <thead>
-                        <tr>
-                          <th>Empresa</th>
-                          <th>Posición</th>
-                          <th>Período</th>
-                          <th>Régimen</th>
-                          <th>Salario</th>
-                          <th>Acciones</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr v-for="job in workHistory" :key="job.id">
-                          <td>{{ job.company }}</td>
-                          <td class="text-muted">
-                            <IconBriefcase class="icon-inline me-1" />
-                            {{ job.position }}
-                          </td>
-                          <td class="text-muted">
-                            <IconCalendar class="icon-inline me-1" />
-                            {{ job.startDate }} - {{ job.endDate }}
-                          </td>
-                          <td class="text-muted">{{ job.regime }}</td>
-                          <td>
-                            <span class="badge bg-success">{{ job.salary }}</span>
-                          </td>
-                          <td>
-                            <a
-                              href="#"
-                              class="btn btn-sm btn-outline-secondary"
-                              @click.prevent="openEditWorkModal(job)"
-                            >
-                              <IconEdit class="icon-inline me-1" />
-                              Editar
-                            </a>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+  <div class="main">
+    <div class="text-start pt-2">
+      <div class="page-pretitle">Overview</div>
+      <h2 class="page-title">Dashboard</h2>
     </div>
 
-    <!-- Modal para editar información personal -->
-    <!-- <div
-      class="modal modal-blur fade"
-      :class="{ show: isEditUserModalOpen }"
-      tabindex="-1"
-      style="display: block"
-      v-if="isEditUserModalOpen"
-    >
-      <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Editar Información Personal</h5>
-            <button type="button" class="btn-close" @click="closeEditUserModal"></button>
-          </div>
-          <div class="modal-body">
-            <div class="mb-3">
-              <label class="form-label">Nombre</label>
-              <input type="text" class="form-control" v-model="editingUser.name" />
+    <div class="row row-cards p-0 m-0">
+      <div class="col-md-6 col-lg-4">
+        <div class="card p-0 m-0">
+          <div class="card-body p-0 m-0 text-center">
+            <div class="grid-avatar">
+              <span class="avatar avatar-xl mb-3 avatar-rounded">
+                <img :src="`${perfil.Foto}`" class="border-1 border-secondary" />
+              </span>
+              <div class="d-flex flex-wrap justify-content-center align-content-center gap-2">
+                <input
+                  type="file"
+                  id="avatar-upload"
+                  class="d-none"
+                  accept="image/*"
+                  @change="handleAvatarChange"
+                />
+                <label for="avatar-upload" class="btn btn-outline-primary btn-sm mt-2">
+                  Cambiar foto
+                </label>
+                <button
+                  type="button"
+                  class="card-btn btn btn-sm p-0 m-0"
+                  data-bs-toggle="modal"
+                  data-bs-target="#editmodal"
+                >
+                  <IconEdit />
+                  Editar Información
+                </button>
+              </div>
             </div>
-            <div class="mb-3">
-              <label class="form-label">Teléfono</label>
-              <input type="tel" class="form-control" v-model="editingUser.phone" />
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Dirección</label>
-              <input type="text" class="form-control" v-model="editingUser.address" />
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Cuenta Bancaria</label>
-              <input type="text" class="form-control" v-model="editingUser.bankAccount" />
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Email</label>
-              <input type="email" class="form-control" v-model="editingUser.email" />
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-link link-secondary" @click="closeEditUserModal">
-              Cancelar
-            </button>
-            <button type="button" class="btn btn-primary ms-auto" @click="saveUserInfo">
-              Guardar cambios
-            </button>
+            <h3 class="m-0 mb-1">{{ perfil?.Nombre }}</h3>
+            <div class="text-muted">{{ perfil?.Email }}</div>
           </div>
         </div>
       </div>
-    </div> -->
-    <Modalinfo :user="perfil!" />
-    <!-- Modal para editar/agregar trabajo -->
-    <div
-      class="modal modal-blur fade"
-      :class="{ show: isEditWorkModalOpen }"
-      tabindex="-1"
-      style="display: block"
-      v-if="isEditWorkModalOpen"
-    >
-      <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">{{ editingWork.id ? 'Editar Trabajo' : 'Agregar Trabajo' }}</h5>
-            <button type="button" class="btn-close" @click="closeEditWorkModal"></button>
+      <div class="col-md-6 col-lg-8">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Información Personal</h3>
           </div>
-          <div class="modal-body">
-            <div class="mb-3">
-              <label class="form-label">Empresa</label>
-              <input type="text" class="form-control" v-model="editingWork.company" />
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Posición</label>
-              <input type="text" class="form-control" v-model="editingWork.position" />
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Fecha de Inicio</label>
-              <input type="date" class="form-control" v-model="editingWork.startDate" />
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Fecha de Fin</label>
-              <input type="date" class="form-control" v-model="editingWork.endDate" />
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Régimen</label>
-              <input type="text" class="form-control" v-model="editingWork.regime" />
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Salario</label>
-              <input type="text" class="form-control" v-model="editingWork.salary" />
+          <div class="card-body">
+            <div class="datagrid">
+              <div class="datagrid-item">
+                <div class="datagrid-title">Teléfono</div>
+                <div class="datagrid-content">
+                  <IconPhone class="icon-inline text-muted me-1" />
+                  {{ perfil?.Telf1 }}
+                </div>
+              </div>
+              <div class="datagrid-item">
+                <div class="datagrid-title">Teléfono</div>
+                <div class="datagrid-content">
+                  <IconPhone class="icon-inline text-muted me-1" />
+                  {{ perfil?.Dni }}
+                </div>
+              </div>
+              <div class="datagrid-item">
+                <div class="datagrid-title">Teléfono</div>
+                <div class="datagrid-content">
+                  <IconPhone class="icon-inline text-muted me-1" />
+                  {{ perfil?.Telf2 }}
+                </div>
+              </div>
+              <div class="datagrid-item">
+                <div class="datagrid-title">Dirección</div>
+                <div class="datagrid-content">
+                  <IconMapPin class="icon-inline text-muted me-1" />
+                  {{ perfil?.Direccion }}
+                </div>
+              </div>
+              <div class="datagrid-item">
+                <div class="datagrid-title">Cuenta Bancaria</div>
+                <div class="datagrid-content">
+                  <IconCreditCard class="icon-inline text-muted me-1" />
+                  {{ perfil?.Ruc }}
+                </div>
+              </div>
             </div>
           </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-link link-secondary" @click="closeEditWorkModal">
-              Cancelar
-            </button>
-            <button type="button" class="btn btn-primary ms-auto" @click="saveWorkInfo">
-              {{ editingWork.id ? 'Guardar cambios' : 'Agregar trabajo' }}
-            </button>
+        </div>
+      </div>
+      <Contratos />
+    </div>
+  </div>
+
+  <Modalinfo :user="perfil!" />
+  <!-- Modal para editar/agregar trabajo -->
+  <div
+    class="modal modal-blur fade"
+    :class="{ show: isEditWorkModalOpen }"
+    tabindex="-1"
+    style="display: block"
+    v-if="isEditWorkModalOpen"
+  >
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ editingWork.id ? 'Editar Trabajo' : 'Agregar Trabajo' }}</h5>
+          <button type="button" class="btn-close" @click="closeEditWorkModal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Empresa</label>
+            <input type="text" class="form-control" v-model="editingWork.company" />
           </div>
+          <div class="mb-3">
+            <label class="form-label">Posición</label>
+            <input type="text" class="form-control" v-model="editingWork.position" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Fecha de Inicio</label>
+            <input type="date" class="form-control" v-model="editingWork.startDate" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Fecha de Fin</label>
+            <input type="date" class="form-control" v-model="editingWork.endDate" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Régimen</label>
+            <input type="text" class="form-control" v-model="editingWork.regime" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Salario</label>
+            <input type="text" class="form-control" v-model="editingWork.salary" />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-link link-secondary" @click="closeEditWorkModal">
+            Cancelar
+          </button>
+          <button type="button" class="btn btn-primary ms-auto" @click="saveWorkInfo">
+            {{ editingWork.id ? 'Guardar cambios' : 'Agregar trabajo' }}
+          </button>
         </div>
       </div>
     </div>
@@ -247,17 +148,10 @@
 import { ref, reactive, onMounted } from 'vue'
 import { Buscar_persona_by_dni } from '@wails/services/PersonalService'
 import { models } from '@wails/models'
-import {
-  IconEdit,
-  IconPhone,
-  IconMapPin,
-  IconCreditCard,
-  IconPlus,
-  IconBriefcase,
-  IconCalendar
-} from '@tabler/icons-vue'
+import { IconEdit, IconPhone, IconMapPin, IconCreditCard } from '@tabler/icons-vue'
 import { router } from '@router/router'
-import Modalinfo from '@comp/perfil/modal_info.vue'
+import Modalinfo from '@comp/perfil/avatar/modal_info.vue'
+import Contratos from '@comp/perfil/vinculos/contratos.vue'
 
 const perfil = ref<models.Perfil>({
   Dni: '',
@@ -268,6 +162,7 @@ const perfil = ref<models.Perfil>({
 onMounted(async () => {
   try {
     perfil.value = await Buscar_persona_by_dni(router.currentRoute.value.params.dni.toString())
+    console.log(perfil.value)
   } catch (error) {
     console.log(error)
   }
@@ -407,8 +302,15 @@ const handleAvatarChange = (event: Event) => {
 }
 </script>
 <style lang="scss" scoped>
+.main {
+  height: 100vh;
+  display: grid;
+  row-gap: 4px;
+  grid-template-rows: 6vh auto auto;
+}
 .grid-avatar {
   width: 100%;
+  height: 100%;
   display: grid;
   grid-template-columns: min-content min-content;
   .btn-sm {

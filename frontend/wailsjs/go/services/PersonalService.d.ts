@@ -3,3 +3,5 @@
 import {models} from '../models';
 
 export function Buscar_persona_by_dni(arg1:string):Promise<models.Perfil>;
+
+export function Search_by_dni_vinculos(arg1:string):Promise<any>;
