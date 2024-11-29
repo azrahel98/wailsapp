@@ -6,86 +6,18 @@
     </div>
 
     <div class="row row-cards p-0 m-0">
-      <div class="col-md-6 col-lg-4">
-        <div class="card p-0 m-0">
-          <div class="card-body p-0 m-0 text-center">
-            <div class="grid-avatar">
-              <span class="avatar avatar-xl mb-3 avatar-rounded">
-                <img :src="`${perfil.Foto}`" class="border-1 border-secondary" />
-              </span>
-              <div class="d-flex flex-wrap justify-content-center align-content-center gap-2">
-                <input
-                  type="file"
-                  id="avatar-upload"
-                  class="d-none"
-                  accept="image/*"
-                  @change="handleAvatarChange"
-                />
-                <label for="avatar-upload" class="btn btn-outline-primary btn-sm mt-2">
-                  Cambiar foto
-                </label>
-                <button
-                  type="button"
-                  class="card-btn btn btn-sm p-0 m-0"
-                  data-bs-toggle="modal"
-                  data-bs-target="#editmodal"
-                >
-                  <IconEdit />
-                  Editar Información
-                </button>
-              </div>
-            </div>
-            <h3 class="m-0 mb-1">{{ perfil?.Nombre }}</h3>
-            <div class="text-muted">{{ perfil?.Email }}</div>
+      <div class="col-12">
+        <div class="flex">
+          <div class="avatar avatar-xl">
+            <img
+              src="https://encrypted-tbn3.gstatic.com/licensed-image?q=tbn:ANd9GcR6pHfNWfIcZ9h948cUbNqKWt1qJvJvzFwf6JPr8cgDa7SFoWf5CNkwS_AgnTMkD_nxvY-y6eVyS9r6YWw"
+              alt=""
+              class="rounded-2 img-flui3"
+            />
           </div>
         </div>
       </div>
-      <div class="col-md-6 col-lg-8">
-        <div class="card">
-          <div class="card-header">
-            <h3 class="card-title">Información Personal</h3>
-          </div>
-          <div class="card-body">
-            <div class="datagrid">
-              <div class="datagrid-item">
-                <div class="datagrid-title">Teléfono</div>
-                <div class="datagrid-content">
-                  <IconPhone class="icon-inline text-muted me-1" />
-                  {{ perfil?.Telf1 }}
-                </div>
-              </div>
-              <div class="datagrid-item">
-                <div class="datagrid-title">Teléfono</div>
-                <div class="datagrid-content">
-                  <IconPhone class="icon-inline text-muted me-1" />
-                  {{ perfil?.Dni }}
-                </div>
-              </div>
-              <div class="datagrid-item">
-                <div class="datagrid-title">Teléfono</div>
-                <div class="datagrid-content">
-                  <IconPhone class="icon-inline text-muted me-1" />
-                  {{ perfil?.Telf2 }}
-                </div>
-              </div>
-              <div class="datagrid-item">
-                <div class="datagrid-title">Dirección</div>
-                <div class="datagrid-content">
-                  <IconMapPin class="icon-inline text-muted me-1" />
-                  {{ perfil?.Direccion }}
-                </div>
-              </div>
-              <div class="datagrid-item">
-                <div class="datagrid-title">Cuenta Bancaria</div>
-                <div class="datagrid-content">
-                  <IconCreditCard class="icon-inline text-muted me-1" />
-                  {{ perfil?.Ruc }}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+
       <Contratos />
     </div>
   </div>
@@ -312,9 +244,13 @@ const handleAvatarChange = (event: Event) => {
   width: 100%;
   height: 100%;
   display: grid;
-  grid-template-columns: min-content min-content;
+  justify-content: center;
+  padding-top: 3vh;
+  align-items: center;
+  justify-items: center;
+  grid-template-rows: 1fr min-content;
   .btn-sm {
-    width: min-content;
+    width: max-content;
     word-wrap: break-word;
     white-space: wrap;
   }
