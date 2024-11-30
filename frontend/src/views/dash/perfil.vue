@@ -1,19 +1,82 @@
 <template>
   <div class="main">
     <div class="text-start pt-2">
-      <div class="page-pretitle">Overview</div>
-      <h2 class="page-title">Dashboard</h2>
+      <div class="page-pretitle">perfil</div>
+      <h2 class="page-title">{{ perfil.Nombre }}</h2>
     </div>
 
-    <div class="row row-cards p-0 m-0">
-      <div class="col-12">
-        <div class="flex">
-          <div class="avatar avatar-xl">
-            <img
-              src="https://encrypted-tbn3.gstatic.com/licensed-image?q=tbn:ANd9GcR6pHfNWfIcZ9h948cUbNqKWt1qJvJvzFwf6JPr8cgDa7SFoWf5CNkwS_AgnTMkD_nxvY-y6eVyS9r6YWw"
-              alt=""
-              class="rounded-2 img-flui3"
-            />
+    <div class="row row-cards pt-2 m-0">
+      <div
+        class="col-md-4 col-sm-12 d-flex flex-column gap-4 justify-content-center align-items-center"
+      >
+        <div class="avatar" style="height: 100%; width: 150px">
+          <img
+            src="https://encrypted-tbn3.gstatic.com/licensed-image?q=tbn:ANd9GcR6pHfNWfIcZ9h948cUbNqKWt1qJvJvzFwf6JPr8cgDa7SFoWf5CNkwS_AgnTMkD_nxvY-y6eVyS9r6YWw"
+            class="rounded-5"
+          />
+        </div>
+      </div>
+      <div class="col-md-2">
+        <div class="d-flex gap-3 pt-3">
+          <button class="btn btn-outline-facebook btn-md btn-icon">
+            <IconCamera class="icon" />
+          </button>
+          <button class="btn btn-md btn-outline-warning btn-icon"><IconEdit class="icon" /></button>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-sm-12">
+        <div class="card rounded-3 card-info shadow-sm">
+          <div class="card-body infogrid">
+            <div class="d-flex align-items-center mb-2">
+              <span class="badge bg-facebook">DNI:</span>
+              <span class="mx-2 page-subtitle align-middle text-center">{{ perfil.Dni }}</span>
+            </div>
+            <div class="d-flex align-items-center mb-2">
+              <span class="badge" :class="perfil.Email ? 'bg-facebook-lt' : 'bg-warning-lt'"
+                >CORREO:</span
+              >
+              <span class="mx-2 page-subtitle align-middle text-center" v-if="perfil.Email">{{
+                perfil.Email
+              }}</span>
+              <span class="mx-3 status-dot bg-warning status-dot-animated" v-else />
+            </div>
+            <div class="d-flex align-items-center mb-2">
+              <span class="badge" :class="perfil.Telf1 ? 'bg-facebook' : 'bg-youtube'">TELF:</span>
+              <span class="mx-2 page-subtitle align-middle text-center" v-if="perfil.Telf1">{{
+                perfil.Telf1
+              }}</span>
+              <span class="mx-3 status-dot bg-youtube status-dot-animated" v-else />
+            </div>
+            <div class="d-flex align-items-center mb-2">
+              <span class="badge" :class="perfil.Nacimiento ? 'bg-facebook-lt' : 'bg-warning-lt'"
+                >CUMPLEAÑOS:</span
+              >
+              <span class="mx-2 page-subtitle align-middle text-center" v-if="perfil.Nacimiento">{{
+                perfil.Nacimiento.split('T')[0]
+              }}</span>
+              <span class="mx-3 status-dot bg-warning status-dot-animated" v-else />
+            </div>
+            <div class="d-flex align-items-center mb-2">
+              <span class="badge" :class="perfil.Ruc ? 'bg-facebook-lt' : 'bg-warning-lt'"
+                >RUC:</span
+              >
+              <span class="mx-2 page-subtitle align-middle text-center" v-if="perfil.Ruc">{{
+                perfil.Ruc
+              }}</span>
+              <span class="mx-3 status-dot bg-warning status-dot-animated" v-else />
+            </div>
+            <div class="d-flex align-items-center mb-2">
+              <span class="badge" :class="perfil.Sexo ? 'bg-facebook-lt' : 'bg-warning-lt'"
+                >SEXO:</span
+              >
+              <span
+                class="mx-2 page-subtitle align-middle text-center fw-bold text-secondary"
+                v-if="perfil.Sexo"
+                >{{ perfil.Sexo }}</span
+              >
+              <span class="mx-3 status-dot bg-warning status-dot-animated" v-else />
+            </div>
           </div>
         </div>
       </div>
@@ -24,7 +87,7 @@
 
   <Modalinfo :user="perfil!" />
   <!-- Modal para editar/agregar trabajo -->
-  <div
+  <!-- <div
     class="modal modal-blur fade"
     :class="{ show: isEditWorkModalOpen }"
     tabindex="-1"
@@ -73,17 +136,29 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
 import { Buscar_persona_by_dni } from '@wails/services/PersonalService'
 import { models } from '@wails/models'
-import { IconEdit, IconPhone, IconMapPin, IconCreditCard } from '@tabler/icons-vue'
+import {
+  IconEdit,
+  IconPhone,
+  IconMapPin,
+  IconCreditCard,
+  IconCamera,
+  IconEditCircle,
+  IconBandageFilled,
+  IconMoneybag,
+  IconCards
+} from '@tabler/icons-vue'
 import { router } from '@router/router'
 import Modalinfo from '@comp/perfil/avatar/modal_info.vue'
 import Contratos from '@comp/perfil/vinculos/contratos.vue'
+import { BanknoteIcon } from 'lucide-vue-next'
+import { format, formatDate } from 'date-fns'
 
 const perfil = ref<models.Perfil>({
   Dni: '',
@@ -99,160 +174,29 @@ onMounted(async () => {
     console.log(error)
   }
 })
-
-interface User {
-  name: string
-  avatar: string
-  phone: string
-  address: string
-  bankAccount: string
-  email: string
-}
-
-interface WorkHistory {
-  id: number
-  company: string
-  startDate: string
-  endDate: string
-  regime: string
-  salary: string
-  position: string
-}
-
-const user = reactive<User>({
-  name: 'María García',
-  avatar: '/placeholder.svg?height=200&width=200',
-  phone: '+34 123 456 789',
-  address: 'Calle Principal 123, Madrid, España',
-  bankAccount: 'ES91 2100 0418 4502 0005 1332',
-  email: 'maria.garcia@ejemplo.com'
-})
-
-const workHistory = ref<WorkHistory[]>([
-  {
-    id: 1,
-    company: 'Tech Innovators S.L.',
-    startDate: '2020-03-15',
-    endDate: '2022-06-30',
-    regime: 'Tiempo completo',
-    salary: '35.000€',
-    position: 'Desarrollador Frontend'
-  },
-  {
-    id: 2,
-    company: 'Digital Solutions Inc.',
-    startDate: '2018-01-10',
-    endDate: '2020-02-28',
-    regime: 'Tiempo parcial',
-    salary: '25.000€',
-    position: 'Diseñador UX/UI'
-  },
-  {
-    id: 3,
-    company: 'StartUp Ventures',
-    startDate: '2022-08-01',
-    endDate: 'Presente',
-    regime: 'Tiempo completo',
-    salary: '45.000€',
-    position: 'Ingeniero de Software Senior'
-  }
-])
-
-const isEditUserModalOpen = ref(false)
-const isEditWorkModalOpen = ref(false)
-const editingUser = reactive<User>({ ...user })
-const editingWork = reactive<WorkHistory>({
-  id: 0,
-  company: '',
-  startDate: '',
-  endDate: '',
-  regime: '',
-  salary: '',
-  position: ''
-})
-
-const openEditUserModal = () => {
-  Object.assign(editingUser, user)
-  isEditUserModalOpen.value = true
-}
-
-const closeEditUserModal = () => {
-  isEditUserModalOpen.value = false
-}
-
-const saveUserInfo = () => {
-  Object.assign(user, editingUser)
-  closeEditUserModal()
-}
-
-const openEditWorkModal = (work: WorkHistory) => {
-  Object.assign(editingWork, work)
-  isEditWorkModalOpen.value = true
-}
-
-const openAddWorkModal = () => {
-  Object.assign(editingWork, {
-    id: 0,
-    company: '',
-    startDate: '',
-    endDate: '',
-    regime: '',
-    salary: '',
-    position: ''
-  })
-  isEditWorkModalOpen.value = true
-}
-
-const closeEditWorkModal = () => {
-  isEditWorkModalOpen.value = false
-}
-
-const saveWorkInfo = () => {
-  if (editingWork.id) {
-    const index = workHistory.value.findIndex((w) => w.id === editingWork.id)
-    if (index !== -1) {
-      workHistory.value[index] = { ...editingWork }
-    }
-  } else {
-    workHistory.value.push({ ...editingWork, id: Date.now() })
-  }
-  closeEditWorkModal()
-}
-
-const handleAvatarChange = (event: Event) => {
-  const target = event.target as HTMLInputElement
-  if (target.files && target.files[0]) {
-    const file = target.files[0]
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      if (e.target?.result) {
-        user.avatar = e.target.result as string
-      }
-    }
-    reader.readAsDataURL(file)
-  }
-}
 </script>
 <style lang="scss" scoped>
 .main {
   height: 100vh;
   display: grid;
   row-gap: 4px;
-  grid-template-rows: 6vh auto auto;
-}
-.grid-avatar {
-  width: 100%;
-  height: 100%;
-  display: grid;
-  justify-content: center;
-  padding-top: 3vh;
-  align-items: center;
-  justify-items: center;
-  grid-template-rows: 1fr min-content;
-  .btn-sm {
-    width: max-content;
-    word-wrap: break-word;
-    white-space: wrap;
+  grid-template-rows: min-content min-content;
+  .card-info {
+    justify-content: center;
+    align-items: start;
+    justify-items: start;
+  }
+
+  .infogrid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(50%, 1fr));
+    justify-content: start;
+    justify-items: start;
+    .d-flex {
+      width: 100%;
+      text-align: end;
+    }
   }
 }
 </style>
