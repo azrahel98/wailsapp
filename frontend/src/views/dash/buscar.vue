@@ -21,13 +21,16 @@
         <div class="card-body p-4 text-center">
           <span class="avatar avatar-xl mb-3 rounded">
             <img :src="`${x.Foto.String}`" class="border-1 border-secondary" v-if="x.Foto.Valid" />
-            <img src="" class="border-1 border-secondary" v-else-if="!x.Sexo" />
-            <img src="" class="border-1 border-secondary" v-else
+            <img
+              src="../../assets/images/man.svg"
+              class="border-1 border-secondary"
+              v-else-if="x.Sexo == 'M'" />
+            <img src="../../assets/images/mujer.svg" class="border-1 border-secondary" v-else
           /></span>
 
           <RouterLink
             class="text-black"
-            :to="{ name:'perfil',params:{dni:x.Dni.toString()} }"
+            :to="{ name: 'perfil', params: { dni: x.Dni.toString() } }"
             @click="console.log(`Navigating to /perfil/${x.Dni}`)"
           >
             <h4 class="m-0 mb-1">{{ x.Nombre }}</h4>

@@ -20,7 +20,7 @@ type personalRepository struct {
 func (p *personalRepository) Search_by_dni_vinculos(ctx context.Context, dni string) (*[]models.Vinculos, error) {
 	var resul []models.Vinculos
 
-	err := p.db.SelectContext(ctx, &resul, "select * from Vinculos_vigentes where dni = ?", dni)
+	err := p.db.SelectContext(ctx, &resul, "select * from Vinculos_vigentes where dni = ? order by fecha_ingreso desc", dni)
 	if err != nil {
 		return nil, err
 	}

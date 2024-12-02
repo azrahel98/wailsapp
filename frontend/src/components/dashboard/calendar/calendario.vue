@@ -29,17 +29,40 @@
     </div>
     <div class="cuerpo">
       <div v-for="_x in semana()" class="card bg-white" />
-      <div class="card dia fs-4 fw-bold hoydia" v-for="x in getDaysInMonth(ahora)">
+      <!-- <div class="card dia fs-4 fw-bold hoydia" v-for="x in getDaysInMonth(ahora)">
         <h4 class="m-0 p-0 py-1">{{ x }}</h4>
-        <div class="d-flex flex-wrap gap-1 justify-content-center">
-          <span
-            class="w-100"
-            v-for="d in cumples.filter((e: any) => getDate(parseISO(e.Nacimiento)) == x)"
-          >
-            <span class="badge text-bg-flickr fs-6">{{ d.Nombre }}</span>
-          </span>
+
+        <div class="accordion w-100" id="accordion-example">
+          <div class="accordion-item">
+            <button
+              data-bs-toggle="collapse"
+              :data-bs-target="'#' + x"
+              class="w-100 btn btn-sm p-0 m-0"
+              aria-expanded="false"
+            >
+              s
+            </button>
+            <div
+              :id="x.toString()"
+              class="accordion-collapse collapse w-100"
+              data-bs-parent="#accordion-example"
+              style=""
+            >
+              <div class="accordion-body p-0">
+                <div class="d-flex flex-wrap gap-1 justify-content-center">
+                  <span
+                    class="w-100"
+                    v-for="d in cumples.filter((e: any) => getDate(parseISO(e.Nacimiento)) == x)"
+                  >
+                    <span class="badge text-bg-flickr fs-6">{{ d.Nombre }}</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+      </div> -->
+      <Popoover class="card dia fs-4 fw-bold hoydia" v-for="x in getDaysInMonth(ahora)" />
     </div>
   </div>
 </template>
@@ -49,6 +72,7 @@ import { IconArrowLeft, IconArrowRight } from '@tabler/icons-vue'
 import { Cumpleaños } from '@wails/services/DashboardService'
 import { addMonths, getDate, getDay, getDaysInMonth, parseISO, subMonths } from 'date-fns'
 import { onMounted, ref, watch } from 'vue'
+import Popoover from './popoover.vue'
 const meses = [
   'Enero',
   'Febrero',
