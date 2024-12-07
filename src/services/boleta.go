@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+	"vesgoapp/src/models"
 	"vesgoapp/src/repositories"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
@@ -20,9 +21,9 @@ func (s *BoletaService) SetContext(ctx context.Context) {
 	s.ctx = ctx
 }
 
-func (s *BoletaService) Upload_file() (bool, error) {
+func (s *BoletaService) Upload_file() (*models.Boleta, error) {
 	if s.ctx == nil {
-		return false, context.Canceled
+		return nil, context.Canceled
 	}
 
 	filePath, err := runtime.OpenFileDialog(
@@ -36,16 +37,16 @@ func (s *BoletaService) Upload_file() (bool, error) {
 	)
 
 	if err != nil {
-		return false, err
+		return nil, err
 	}
 
 	if filePath == "" {
-		return false, nil
+		return nil, nil
 	}
 
 	res, err := s.repo.Upload_file(filePath)
 	if err != nil {
-		return false, err
+		return nil, err
 	}
 
 	return res, nil

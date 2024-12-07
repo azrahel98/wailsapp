@@ -3,101 +3,208 @@ package repositories
 import (
 	"encoding/xml"
 	"fmt"
-	"io"
 	"os"
+	"strings"
+	"vesgoapp/src/models"
 )
 
 type BoletaRepository interface {
-	Upload_file(path string) (bool, error)
+	Upload_file(path string) (*models.Boleta, error)
 }
 type boletaRepository struct {
 }
 
-type Workbook struct {
-	Worksheet Worksheet `xml:"ss:Worksheet"`
-}
-
-// Worksheet representa el elemento ss:Worksheet del archivo XML
-type Worksheet struct {
-	Table Table `xml:"ss:Table"`
-}
-
-// Table representa el elemento ss:Table del archivo XML
 type Table struct {
-	Rows []Row `xml:"ss:Row"`
+	Rows []Row `xml:"Row"`
 }
 
-// Row representa el elemento ss:Row del archivo XML
 type Row struct {
-	Index string `xml:"ss:Index,attr"`
-	Cells []Cell `xml:"ss:Cell"`
+	Cells []Cell `xml:"Cell"`
 }
 
-// Cell representa el elemento ss:Cell del archivo XML
 type Cell struct {
-	Index string `xml:"ss:Index,attr"`
-	Data  Data   `xml:"ss:Data"`
+	Data string `xml:"Data"`
 }
 
-// Data representa el valor de una celda en el archivo XML
-type Data struct {
-	Value string `xml:",chardata"`
-	Type  string `xml:"ss:Type,attr"`
-}
+func (b *boletaRepository) Upload_file(path string) (*models.Boleta, error) {
 
-func obtenerValorXML(archivo string, rowIndex string, cellIndex string) (string, error) {
-	// Abrir el archivo XML
-	xmlFile, err := os.Open(archivo)
-	if err != nil {
-		return "", err
-	}
-	defer xmlFile.Close()
+	file, err := os.Open(path)
 
-	// Leer el contenido del archivo XML
-	contenido, err := io.ReadAll(xmlFile)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
-	// Deserializar el contenido XML en una estructura Workbook
-	var workbook Workbook
-	err = xml.Unmarshal(contenido, &workbook)
-	if err != nil {
-		return "", err
-	}
+	defer file.Close()
+	decoder := xml.NewDecoder(file)
 
-	fmt.Println(workbook)
+	var insideWorksheet bool
+	var table Table
 
-	// Buscar la fila y celda correspondientes
-	for _, row := range workbook.Worksheet.Table.Rows {
-		if row.Index == rowIndex {
-			for _, cell := range row.Cells {
-				if cell.Index == cellIndex {
-					fmt.Println(cell.Data.Value)
-					return cell.Data.Value, nil
+	// Procesar el XML token por token
+	for {
+		token, err := decoder.Token()
+		if err != nil {
+			break
+		}
+
+		switch elem := token.(type) {
+		case xml.StartElement:
+
+			if elem.Name.Local == "Worksheet" && elem.Name.Space == "urn:schemas-microsoft-com:office:spreadsheet" {
+				insideWorksheet = true
+			}
+			if insideWorksheet && elem.Name.Local == "Table" && elem.Name.Space == "urn:schemas-microsoft-com:office:spreadsheet" {
+				if err := decoder.DecodeElement(&table, &elem); err != nil {
+					fmt.Printf("Error al decodificar la tabla: %v\n", err)
+					return nil, err
 				}
+			}
+		case xml.EndElement:
+			if elem.Name.Local == "Worksheet" && elem.Name.Space == "urn:schemas-microsoft-com:office:spreadsheet" {
+				insideWorksheet = false
 			}
 		}
 	}
 
-	// Si no se encuentra la fila o celda, devolver un error
-	return "", fmt.Errorf("no se encontró la fila o celda correspondiente")
-}
+	// Imprime los datos decodificados
+	var boleta models.Boleta
 
-func (b *boletaRepository) Upload_file(path string) (bool, error) {
+	var ingresos int
+	var descuento int
+	var aportes int
+	var empleador int
+	var neto int
 
-	x, err := obtenerValorXML(path, "2", "9")
-
-	if err != nil {
-		fmt.Println("El erroorooooooooooooo esta aquiii")
-		fmt.Println(err)
-		return false, err
+	for index, row := range table.Rows {
+		for e, cell := range row.Cells {
+			// fmt.Printf(" Row %d Cell %d Dato : %s \n", index, e, cell.Data)
+			if cell.Data == "Ingresos" {
+				ingresos = index + 1
+			}
+			if cell.Data == "Descuentos" {
+				descuento = index + 1
+			}
+			if cell.Data == "Aportes del Trabajador" {
+				aportes = index + 1
+			}
+			if cell.Data == "Aportes de Empleador" {
+				empleador = index + 1
+			}
+			if cell.Data == "Neto a Pagar" {
+				neto = index
+			}
+			if index == 4 && e == 0 {
+				boleta.Fecha = strings.TrimSpace(strings.Split(cell.Data, ":")[1])
+			}
+			if index == 2 && e == 0 {
+				boleta.Ruc = strings.TrimSpace(strings.Split(cell.Data, ":")[1])
+			}
+			if index == 3 && e == 0 {
+				boleta.Empleador = strings.TrimSpace(strings.Split(cell.Data, ":")[1])
+			}
+			if index == 8 && e == 0 {
+				boleta.TipoDocIdentidad = cell.Data
+			}
+			if index == 8 && e == 1 {
+				boleta.NumeroDoc = cell.Data
+			}
+			if index == 8 && e == 2 {
+				boleta.Nombre = cell.Data
+			}
+			if index == 8 && e == 3 {
+				boleta.Situacion = cell.Data
+			}
+			if index == 10 && e == 0 {
+				boleta.Ingreso = cell.Data
+			}
+			if index == 10 && e == 0 {
+				boleta.TipoTrabajador = cell.Data
+			}
+			if index == 10 && e == 2 {
+				boleta.RegPensionario = cell.Data
+			}
+			if index == 10 && e == 3 {
+				boleta.Cussp = &cell.Data
+			}
+			if index == 13 && e == 0 {
+				boleta.DiasLab = cell.Data
+			}
+			if index == 13 && e == 1 {
+				boleta.DiasnoLab = cell.Data
+			}
+			if index == 13 && e == 2 {
+				boleta.DiasSubs = cell.Data
+			}
+			if index == 13 && e == 3 {
+				boleta.Condicion = cell.Data
+			}
+			if index == 13 && e == 4 {
+				boleta.Holaslab = cell.Data
+			}
+			if index == 16 && e == 0 {
+				boleta.TipoSuspe = cell.Data
+			}
+			if index == 16 && e == 1 {
+				boleta.MoitvoSuspe = cell.Data
+			}
+			if index == 16 && e == 2 {
+				boleta.DiasSuspe = cell.Data
+			}
+			if index == 16 && e == 0 {
+				boleta.TipoSuspe = cell.Data
+			}
+			if index == 29 && e == 1 {
+				boleta.TipoSuspe = cell.Data
+			}
+		}
 	}
+	var itemIngre []models.Item
+	var itemDesc []models.Item
+	var itemAportTra []models.Item
+	var itemAportem []models.Item
+	for e, row := range table.Rows {
+		if e >= ingresos && e < descuento-1 {
 
-	fmt.Println("Estoy aquiiiiiiiiiiiiiiiii")
-	fmt.Println(x)
+			var it models.Item
 
-	return true, nil
+			it.Codigo = row.Cells[0].Data
+			it.Nombre = row.Cells[1].Data
+			it.Monto = row.Cells[2].Data
+			itemIngre = append(itemIngre, it)
+		}
+		if e >= descuento && e < aportes-1 {
+			var it models.Item
+
+			it.Codigo = row.Cells[0].Data
+			it.Nombre = row.Cells[1].Data
+			it.Monto = row.Cells[2].Data
+			itemDesc = append(itemDesc, it)
+		}
+		if e >= aportes && e < neto {
+			var it models.Item
+
+			it.Codigo = row.Cells[0].Data
+			it.Nombre = row.Cells[1].Data
+			it.Monto = row.Cells[2].Data
+			itemAportTra = append(itemAportTra, it)
+		}
+
+		if e >= empleador && e < len(table.Rows)-1 {
+			var it models.Item
+
+			it.Codigo = row.Cells[0].Data
+			it.Nombre = row.Cells[1].Data
+			it.Monto = row.Cells[2].Data
+			itemAportem = append(itemAportem, it)
+		}
+	}
+	boleta.Neto = table.Rows[neto].Cells[1].Data
+	boleta.Ingresos = itemIngre
+	boleta.Descuentos = itemDesc
+	boleta.AporteEmpleador = itemAportem
+	boleta.AportesTrabajador = itemAportTra
+
+	return &boleta, nil
 
 }
 
