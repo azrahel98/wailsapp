@@ -30,7 +30,7 @@ func (s *BoletaService) Upload_file() (bool, error) {
 		runtime.OpenDialogOptions{
 			Title: "Seleccionar el Archivo Excel",
 			Filters: []runtime.FileFilter{
-				{DisplayName: "Todos los Archivos", Pattern: "*.xlsx"},
+				{DisplayName: "Todos los Archivos", Pattern: "*.xml"},
 			},
 		},
 	)

@@ -62,7 +62,7 @@
           </div>
         </div>
       </div> -->
-      <Popoover class="card dia fs-4 fw-bold hoydia" v-for="x in getDaysInMonth(ahora)" />
+      <!-- <Popoover class="card dia fs-4 fw-bold hoydia" v-for="x in getDaysInMonth(ahora)" /> -->
     </div>
   </div>
 </template>
@@ -72,7 +72,6 @@ import { IconArrowLeft, IconArrowRight } from '@tabler/icons-vue'
 import { Cumpleaños } from '@wails/services/DashboardService'
 import { addMonths, getDate, getDay, getDaysInMonth, parseISO, subMonths } from 'date-fns'
 import { onMounted, ref, watch } from 'vue'
-import Popoover from './popoover.vue'
 const meses = [
   'Enero',
   'Febrero',

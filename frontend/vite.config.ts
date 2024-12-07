@@ -8,24 +8,25 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        api: "modern",
-      },
-    },
-  }, server: {
+        api: 'modern'
+      }
+    }
+  },
+  server: {
     hmr: {
       host: 'localhost',
-      protocol: 'ws',
-    },
+      protocol: 'ws'
+    }
   },
   resolve: {
     alias: [
-      { find: "@wails", replacement: path.resolve(__dirname, "./wailsjs/go/") },
-      { find: "@views", replacement: path.resolve(__dirname, "./src/views/") },
-      { find: "@router", replacement: path.resolve(__dirname, "./src/router/") },
-      { find: "@comp", replacement: path.resolve(__dirname, "./src/components/") },
+      { find: '@wails', replacement: path.resolve(__dirname, './wailsjs/go/') },
+      { find: '@views', replacement: path.resolve(__dirname, './src/views/') },
+      { find: '@router', replacement: path.resolve(__dirname, './src/router/') },
+      { find: '@comp', replacement: path.resolve(__dirname, './src/components/') }
     ]
   },
-  define:{
-    '__VUE_PROD_HYDRATION_MISMATCH_DETAILS__': false,
+  define: {
+    __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: false
   }
 })

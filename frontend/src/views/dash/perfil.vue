@@ -50,7 +50,11 @@
                 <div class="card timeline-event-card">
                   <div class="card-body">
                     <div class="text-secondary float-end">
-                      {{ x.Fecha_ingreso }}
+                      {{
+                        x.Fecha_ingreso
+                          ? format(parseISO(x.Fecha_ingreso), 'yyyy/MM/dd')
+                          : 'Fecha no disponible'
+                      }}
                     </div>
                     <div class="page-subtitle">
                       <h4 class="p-0 m-0">{{ x.Cargo }}</h4>
@@ -131,7 +135,14 @@
                                   </div>
                                   <div class="mb-2" v-if="x.Doc_s">
                                     <IconClipboardOff class="icon text-danger" />
-                                    Fecha Renuncia: <strong>{{ x.Fecha_salida }}</strong>
+                                    Fecha Renuncia:
+                                    <strong>
+                                      {{
+                                        x.Fecha_salida
+                                          ? format(parseISO(x.Fecha_salida), 'yyyy/MM/dd')
+                                          : 'Fecha no disponible'
+                                      }}
+                                    </strong>
                                   </div>
                                 </div>
                               </div>
@@ -153,30 +164,49 @@
                     <div class="card-title">Informacion Basica</div>
                     <div class="mb-2">
                       <IconAddressBook class="icon me-2 text-secondary" />
-                      Vive en: <strong>{{ perfil.Direccion }}</strong>
+                      Vive en: <strong v-if="perfil.Direccion">{{ perfil.Direccion }}</strong>
+                      <div class="status-dot status-dot-animated bg-youtube mx-2" />
                     </div>
                     <div class="mb-2">
                       <IconBriefcase class="icon me-2 text-secondary" />
-                      Correo es: <strong>{{ perfil.Email }}</strong>
+                      Correo es: <strong v-if="perfil.Email">{{ perfil.Email }}</strong>
+                      <div class="status-dot status-dot-animated bg-youtube mx-2" />
                     </div>
                     <div class="mb-2">
                       <IconCashBanknote class="icon me-2 text-secondary" />
-                      Ruc: <strong>{{ perfil.Ruc }}</strong>
+                      Ruc: <strong v-if="perfil.Ruc">{{ perfil.Ruc }}</strong>
+                      <div class="status-dot status-dot-animated bg-youtube mx-2" />
                     </div>
                     <div class="mb-2">
                       <IconPhoneCall class="icon me-2 text-secondary" />
                       Telefono:
-                      <strong><span class="flag flag-country-si"></span> {{ perfil.Telf1 }}</strong>
+                      <strong v-if="perfil.Telf1"
+                        ><span class="flag flag-country-si"></span> {{ perfil.Telf1 }}</strong
+                      >
+                      <div class="status-dot status-dot-animated bg-youtube mx-2" />
                     </div>
-                    <div class="mb-2">
+                    <div class="mb-2" v-if="perfil.Telf2">
                       <IconPhoneCall class="icon me-2 text-secondary" />
                       Telefono 2:
                       <strong><span class="flag flag-country-si"></span> {{ perfil.Telf1 }}</strong>
                     </div>
-                    <div class="mb-2">
-                      <IconMailAi class="icon me-2 text-secondary" />
-                      Correo:
-                      <strong>{{ perfil.Nacimiento }}</strong>
+                    <div class="mb-2" v-if="parseISO(perfil.Nacimiento)">
+                      <CakeIcon class="icon me-2 text-secondary" />
+                      Cumpleaños:
+                      <strong>
+                        {{
+                          perfil.Nacimiento
+                            ? format(parseISO(perfil.Nacimiento), 'yyyy/MM/dd')
+                            : 'Fecha no disponible'
+                        }}
+                      </strong>
+                    </div>
+                    <div class="mb-2" v-if="parseISO(perfil.Nacimiento)">
+                      <IconMoodHappy class="icon me-2 text-secondary" />
+                      Edad:
+                      <strong>
+                        {{ getYear(new Date()) - getYear(parseISO(perfil.Nacimiento)) }} años
+                      </strong>
                     </div>
                   </div>
                 </div>
@@ -205,11 +235,13 @@ import {
   IconEyeX,
   IconFileInfo,
   IconMailAi,
+  IconMoodHappy,
   IconOutlet,
   IconPhoneCall,
   IconTrashX
 } from '@tabler/icons-vue'
-import { format, parseISO } from 'date-fns'
+import { format, formatDate, getYear, parse, parseISO } from 'date-fns'
+import { CakeIcon } from 'lucide-vue-next'
 
 const click_collapse = (x: number) => {
   document.getElementById(`collapse#${x}`)?.classList.toggle('toggle-collapse')
