@@ -9,24 +9,33 @@ import (
 )
 
 type BoletaRepository interface {
-	Upload_file(path string) (*models.Boleta, error)
+	ReadXmls_folder() (*[]models.ListOfFileDirectory, error)
+	Extraer_Datos(path string) (*models.Boleta, error)
 }
 type boletaRepository struct {
 }
 
-type Table struct {
-	Rows []Row `xml:"Row"`
+func (b *boletaRepository) ReadXmls_folder() (*[]models.ListOfFileDirectory, error) {
+
+	var list []models.ListOfFileDirectory
+	files, err := os.ReadDir("D:/xmls")
+
+	if err != nil {
+		return nil, err
+	}
+
+	for _, file := range files {
+		list = append(list, models.ListOfFileDirectory{
+			Dni:  strings.Split(file.Name(), "_")[3],
+			Mes:  strings.Split(file.Name(), "_")[2],
+			Año:  strings.Split(file.Name(), "_")[1],
+			Full: file.Name(),
+		})
+	}
+	return &list, nil
 }
 
-type Row struct {
-	Cells []Cell `xml:"Cell"`
-}
-
-type Cell struct {
-	Data string `xml:"Data"`
-}
-
-func (b *boletaRepository) Upload_file(path string) (*models.Boleta, error) {
+func (b *boletaRepository) Extraer_Datos(path string) (*models.Boleta, error) {
 
 	file, err := os.Open(path)
 
@@ -38,7 +47,7 @@ func (b *boletaRepository) Upload_file(path string) (*models.Boleta, error) {
 	decoder := xml.NewDecoder(file)
 
 	var insideWorksheet bool
-	var table Table
+	var table models.Table
 
 	// Procesar el XML token por token
 	for {
@@ -117,7 +126,7 @@ func (b *boletaRepository) Upload_file(path string) (*models.Boleta, error) {
 			if index == 10 && e == 0 {
 				boleta.Ingreso = cell.Data
 			}
-			if index == 10 && e == 0 {
+			if index == 10 && e == 1 {
 				boleta.TipoTrabajador = cell.Data
 			}
 			if index == 10 && e == 2 {

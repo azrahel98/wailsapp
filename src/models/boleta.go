@@ -32,3 +32,22 @@ type Item struct {
 	Nombre string
 	Monto  string
 }
+
+type Table struct {
+	Rows []Row `xml:"Row"`
+}
+
+type Row struct {
+	Cells []Cell `xml:"Cell"`
+}
+
+type Cell struct {
+	Data string `xml:"Data"`
+}
+
+type ListOfFileDirectory struct {
+	Dni  string
+	Mes  string
+	Año  string
+	Full string
+}

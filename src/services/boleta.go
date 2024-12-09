@@ -2,52 +2,41 @@ package services
 
 import (
 	"context"
+	"fmt"
+	"os"
 	"vesgoapp/src/models"
 	"vesgoapp/src/repositories"
-
-	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
 type BoletaService struct {
 	repo repositories.BoletaRepository
-	ctx  context.Context
+	empl repositories.PersonalRepository
 }
 
-func NewBoletaService(r repositories.BoletaRepository) *BoletaService {
-	return &BoletaService{repo: r}
+func NewBoletaService(r repositories.BoletaRepository, e repositories.PersonalRepository) *BoletaService {
+	return &BoletaService{repo: r, empl: e}
 }
 
-func (s *BoletaService) SetContext(ctx context.Context) {
-	s.ctx = ctx
-}
+func (s *BoletaService) ReadXmls_folder() (*[]models.Boleta, error) {
 
-func (s *BoletaService) Upload_file() (*models.Boleta, error) {
-	if s.ctx == nil {
-		return nil, context.Canceled
-	}
-
-	filePath, err := runtime.OpenFileDialog(
-		s.ctx,
-		runtime.OpenDialogOptions{
-			Title: "Seleccionar el Archivo Excel",
-			Filters: []runtime.FileFilter{
-				{DisplayName: "Todos los Archivos", Pattern: "*.xml"},
-			},
-		},
-	)
-
+	var resultadoFinal []models.Boleta
+	lista, err := s.repo.ReadXmls_folder()
 	if err != nil {
 		return nil, err
 	}
-
-	if filePath == "" {
-		return nil, nil
+	for _, x := range *lista {
+		resul, err := s.empl.IsCasbyDni(context.Background(), x.Dni)
+		if err != nil {
+			return nil, err
+		}
+		key := os.Getenv("XMLPATH")
+		if resul {
+			bolstru, err := s.repo.Extraer_Datos(fmt.Sprintf("%s/%s", key, x.Full))
+			if err != nil {
+			}
+			MakePdf(x.Dni, *bolstru)
+			resultadoFinal = append(resultadoFinal, *bolstru)
+		}
 	}
-
-	res, err := s.repo.Upload_file(filePath)
-	if err != nil {
-		return nil, err
-	}
-
-	return res, nil
+	return &resultadoFinal, nil
 }

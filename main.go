@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"embed"
 	"vesgoapp/src/db"
 	"vesgoapp/src/repositories"
@@ -16,22 +15,6 @@ import (
 
 //go:embed all:frontend/dist
 var assets embed.FS
-
-type App struct {
-	ctx           context.Context
-	boletaService *services.BoletaService
-}
-
-func NewApp() *App {
-	return &App{}
-}
-
-func (a *App) startup(ctx context.Context) {
-	a.ctx = ctx
-	if a.boletaService != nil {
-		a.boletaService.SetContext(ctx)
-	}
-}
 
 func main() {
 
@@ -54,11 +37,7 @@ func main() {
 	persoService := services.NewPersonalService(repositories.CreatePersonalRepository(dbt))
 
 	boletaRepo := repositories.CreateboletaRepository()
-	boletaService := services.NewBoletaService(boletaRepo)
-
-	app := &App{
-		boletaService: boletaService,
-	}
+	boletaService := services.NewBoletaService(boletaRepo, repositories.CreatePersonalRepository(dbt))
 
 	err := wails.Run(&options.App{
 		Title:    "vesgoapp",
@@ -76,13 +55,11 @@ func main() {
 			ProgramName:         "",
 		},
 		Bind: []interface{}{
-			app,
 			lservice,
 			dashservice,
 			persoService,
 			boletaService,
 		},
-		OnStartup: app.startup,
 	})
 
 	if err != nil {
