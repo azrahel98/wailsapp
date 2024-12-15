@@ -1,6 +1,15 @@
 <template>
   <div class="calendario card">
     <div class="header">
+      <button
+        type="button"
+        class="btn btn-lg btn-danger"
+        data-bs-toggle="popover"
+        data-bs-title="Popover title"
+        data-bs-content="And here's some amazing content. It's very engaging. Right?"
+      >
+        Click to toggle popover
+      </button>
       <div class="botones">
         <button
           class="btn btn-sm p-2 btn-ghost-facebook"
@@ -29,26 +38,30 @@
     </div>
     <div class="cuerpo">
       <div v-for="_x in semana()" class="card bg-white" />
-      <!-- <div class="card dia fs-4 fw-bold hoydia" v-for="x in getDaysInMonth(ahora)">
+      <div class="dia card fs-4 align-text-top gap-2 fw-bold" v-for="x in getDaysInMonth(ahora)">
         <h4 class="m-0 p-0 py-1">{{ x }}</h4>
-
-        <div class="accordion w-100" id="accordion-example">
-          <div class="accordion-item">
+        <!-- 
+        <div class="accordion w-100 overflow-y-auto border-0" id="accordion-example">
+          <div class="accordion-item border-0">
             <button
+              type="button"
               data-bs-toggle="collapse"
               :data-bs-target="'#' + x"
-              class="w-100 btn btn-sm p-0 m-0"
               aria-expanded="false"
+              class="btn btn-primary btn-sm p-0 m-0"
             >
-              s
+              Cumples
+              <span class="badge text-bg-warning">{{
+                cumples.filter((e: any) => getDate(parseISO(e.Nacimiento)) == x).length
+              }}</span>
             </button>
             <div
               :id="x.toString()"
-              class="accordion-collapse collapse w-100"
+              class="accordion-collapse collapse border-0 w-100"
               data-bs-parent="#accordion-example"
               style=""
             >
-              <div class="accordion-body p-0">
+              <div class="accordion-body p-0 pt-2 border-0">
                 <div class="d-flex flex-wrap gap-1 justify-content-center">
                   <span
                     class="w-100"
@@ -60,8 +73,8 @@
               </div>
             </div>
           </div>
-        </div>
-      </div> -->
+        </div> -->
+      </div>
       <!-- <Popoover class="card dia fs-4 fw-bold hoydia" v-for="x in getDaysInMonth(ahora)" /> -->
     </div>
   </div>
@@ -151,7 +164,6 @@ const semana = () => {
       border: 1px solid #ddd;
       border-radius: 10px;
       background-color: #f9f9f9;
-      overflow-y: auto;
       max-height: 15vh;
       span {
         height: min-content;
@@ -159,6 +171,10 @@ const semana = () => {
         white-space: wrap;
         width: 100%;
       }
+    }
+    .dia {
+      display: grid;
+      grid-template-rows: 2vh auto;
     }
   }
 }

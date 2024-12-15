@@ -24,9 +24,11 @@
           </div>
           <div class="col-auto ms-auto">
             <div class="btn-list">
-              <button class="btn btn-icon btn-outline-facebook px-2">
+              <button class="btn btn-action" data-bs-toggle="modal" data-bs-target="#editmodal">
                 <IconEdit class="icon p-0 m-0" />
               </button>
+
+              <modal_info :user="perfil" />
             </div>
           </div>
         </div>
@@ -221,6 +223,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import modal_info from '@comp/perfil/avatar/modal_info.vue'
 import { Buscar_persona_by_dni, Search_by_dni_vinculos } from '@wails/services/PersonalService'
 import { models } from '@wails/models'
 import { router } from '@router/router'

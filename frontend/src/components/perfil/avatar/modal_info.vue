@@ -59,13 +59,13 @@
 
               <!-- Cuenta Bancaria -->
               <div class="col-md-6 mb-3">
-                <label for="cuenta" class="form-label">Cuenta Bancaria</label>
+                <label for="cuenta" class="form-label">Ruc</label>
                 <input
                   type="text"
                   id="cuenta"
                   class="form-control"
                   v-model="user.Ruc"
-                  placeholder="Ingrese su cuenta bancaria"
+                  placeholder="Ingrese su numero de RUC"
                 />
               </div>
 

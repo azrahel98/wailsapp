@@ -18,7 +18,8 @@ type boletaRepository struct {
 func (b *boletaRepository) ReadXmls_folder() (*[]models.ListOfFileDirectory, error) {
 
 	var list []models.ListOfFileDirectory
-	files, err := os.ReadDir("D:/xmls")
+	pathke := os.Getenv("XMLPATH")
+	files, err := os.ReadDir(pathke)
 
 	if err != nil {
 		return nil, err

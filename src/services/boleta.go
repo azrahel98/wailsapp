@@ -24,18 +24,22 @@ func (s *BoletaService) ReadXmls_folder() (*[]models.Boleta, error) {
 	if err != nil {
 		return nil, err
 	}
+	key := os.Getenv("XMLPATH")
+
 	for _, x := range *lista {
 		resul, err := s.empl.IsCasbyDni(context.Background(), x.Dni)
 		if err != nil {
 			return nil, err
 		}
-		key := os.Getenv("XMLPATH")
+
 		if resul {
 			bolstru, err := s.repo.Extraer_Datos(fmt.Sprintf("%s/%s", key, x.Full))
 			if err != nil {
+				fmt.Println("Aquiiiiiiiiiiiiiiii el errorr")
 			}
+
 			MakePdf(x.Dni, *bolstru)
-			resultadoFinal = append(resultadoFinal, *bolstru)
+			// resultadoFinal = append(resultadoFinal, *bolstru)
 		}
 	}
 	return &resultadoFinal, nil

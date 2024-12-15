@@ -2,7 +2,6 @@ package services
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"strings"
 	"vesgoapp/src/models"
@@ -42,7 +41,8 @@ func MakePdf(name string, persona models.Boleta) {
 
 func GetMaroto(persona models.Boleta) core.Maroto {
 
-	bytes, err := os.ReadFile("D:/proyectos/wails/wailsapp/src/asset/mves.jpg")
+	key := os.Getenv("ASSET")
+	bytes, err := os.ReadFile(fmt.Sprintf("%s/mves.jpg", key))
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -50,8 +50,8 @@ func GetMaroto(persona models.Boleta) core.Maroto {
 	customFont := "Ubuntu"
 
 	customFonts, err := repository.New().
-		AddUTF8Font(customFont, fontstyle.Normal, "D:/proyectos/wails/wailsapp/src/asset/fonts/Ubuntu-Regular.ttf").
-		AddUTF8Font(customFont, fontstyle.Bold, "D:/proyectos/wails/wailsapp/src/asset/fonts/Ubuntu-Bold.ttf").
+		AddUTF8Font(customFont, fontstyle.Normal, fmt.Sprintf("%s/fonts/Ubuntu-Regular.ttf", key)).
+		AddUTF8Font(customFont, fontstyle.Bold, fmt.Sprintf("%s/fonts/Ubuntu-Bold.ttf", key)).
 		Load()
 	if err != nil {
 		fmt.Println(err)
@@ -72,7 +72,7 @@ func GetMaroto(persona models.Boleta) core.Maroto {
 
 	err = m.RegisterHeader(getPageHeader())
 	if err != nil {
-		log.Fatal(err.Error())
+		fmt.Println(err)
 	}
 
 	m.AddRow(10,
@@ -360,7 +360,7 @@ func GetMaroto(persona models.Boleta) core.Maroto {
 
 func getPageHeader() core.Row {
 	return row.New(30).Add(
-		image.NewFromFileCol(4, "D:/proyectos/wails/wailsapp/src/asset/logo.png", props.Rect{
+		image.NewFromFileCol(4, fmt.Sprintf("%s/logo.png", os.Getenv("ASSET")), props.Rect{
 			Center:             true,
 			Top:                20,
 			JustReferenceWidth: true,
