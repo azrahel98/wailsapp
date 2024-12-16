@@ -17,6 +17,14 @@ func NewBoletaService(r repositories.BoletaRepository, e repositories.PersonalRe
 	return &BoletaService{repo: r, empl: e}
 }
 
+func (s *BoletaService) Listar_Xmls() (*[]models.ListOfFileDirectory, error) {
+	lista, err := s.repo.ReadXmls_folder()
+	if err != nil {
+		return nil, err
+	}
+	return lista, nil
+}
+
 func (s *BoletaService) ReadXmls_folder() (*[]models.Boleta, error) {
 
 	var resultadoFinal []models.Boleta
@@ -37,10 +45,11 @@ func (s *BoletaService) ReadXmls_folder() (*[]models.Boleta, error) {
 			if err != nil {
 				fmt.Println("Aquiiiiiiiiiiiiiiii el errorr")
 			}
+			resultadoFinal = append(resultadoFinal, *bolstru)
 
 			MakePdf(x.Dni, *bolstru)
-			// resultadoFinal = append(resultadoFinal, *bolstru)
 		}
 	}
+
 	return &resultadoFinal, nil
 }

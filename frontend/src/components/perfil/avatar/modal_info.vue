@@ -9,7 +9,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Editar Informacion</h1>
           <button
             type="button"
             class="btn-close"
@@ -20,7 +20,6 @@
         <div class="modal-body">
           <form @submit.prevent="">
             <div class="row">
-              <!-- Nombre -->
               <div class="col-md-12 mb-3">
                 <label for="nombre" class="form-label">Nombre</label>
                 <input
@@ -33,31 +32,30 @@
                 />
               </div>
 
-              <!-- Teléfono -->
               <div class="col-md-6 mb-3">
                 <label for="telefono" class="form-label">Teléfono</label>
                 <input
                   type="tel"
                   id="telefono"
+                  :class="user.Telf1 ? '' : 'border-warning border-1'"
                   class="form-control"
                   v-model="user.Telf1"
                   placeholder="Ingrese su teléfono"
                 />
               </div>
 
-              <!-- Dirección -->
               <div class="col-md-6 mb-3">
                 <label for="direccion" class="form-label">Dirección</label>
                 <input
                   type="text"
                   id="direccion"
                   class="form-control"
+                  :class="user.Direccion ? '' : 'border-warning border-1'"
                   v-model="user.Direccion"
                   placeholder="Ingrese su dirección"
                 />
               </div>
 
-              <!-- Cuenta Bancaria -->
               <div class="col-md-6 mb-3">
                 <label for="cuenta" class="form-label">Ruc</label>
                 <input
@@ -65,6 +63,7 @@
                   id="cuenta"
                   class="form-control"
                   v-model="user.Ruc"
+                  :class="user.Ruc ? '' : 'border-warning border-1'"
                   placeholder="Ingrese su numero de RUC"
                 />
               </div>
@@ -75,6 +74,7 @@
                   type="email"
                   id="email"
                   class="form-control"
+                  :class="user.Email ? '' : 'border-warning border-1'"
                   v-model="user.Email"
                   placeholder="Ingrese su email"
                 />
@@ -85,7 +85,7 @@
 
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary me-2" @click="">Cancelar</button>
-          <button type="submit" class="btn btn-primary">Guardar</button>
+          <button type="submit" class="btn btn-primary" @click="guardar(user)">Guardar</button>
         </div>
       </div>
     </div>
@@ -93,7 +93,16 @@
 </template>
 
 <script lang="ts" setup>
-import { models } from '@wails/models'
+import { EditByDni } from '@wails/services/PersonalService'
+
+const guardar = (user: any) => {
+  try {
+    const x = EditByDni(user.Telf1, user.Telf2, user.Direccion, user.Email, user.Dni)
+    console.log(x)
+  } catch (error) {
+    console.log(error)
+  }
+}
 
 defineProps({
   user: { type: Object, required: true }

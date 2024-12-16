@@ -4,4 +4,6 @@ import {models} from '../models';
 
 export function Buscar_persona_by_dni(arg1:string):Promise<models.Perfil>;
 
+export function EditByDni(arg1:string,arg2:string,arg3:string,arg4:string,arg5:string):Promise<void>;
+
 export function Search_by_dni_vinculos(arg1:string):Promise<any>;

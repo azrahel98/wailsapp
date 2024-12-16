@@ -1,15 +1,6 @@
 <template>
   <div class="calendario card">
     <div class="header">
-      <button
-        type="button"
-        class="btn btn-lg btn-danger"
-        data-bs-toggle="popover"
-        data-bs-title="Popover title"
-        data-bs-content="And here's some amazing content. It's very engaging. Right?"
-      >
-        Click to toggle popover
-      </button>
       <div class="botones">
         <button
           class="btn btn-sm p-2 btn-ghost-facebook"

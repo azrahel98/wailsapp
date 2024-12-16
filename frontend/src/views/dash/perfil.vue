@@ -167,17 +167,26 @@
                     <div class="mb-2">
                       <IconAddressBook class="icon me-2 text-secondary" />
                       Vive en: <strong v-if="perfil.Direccion">{{ perfil.Direccion }}</strong>
-                      <div class="status-dot status-dot-animated bg-youtube mx-2" />
+                      <div
+                        v-if="!perfil.Direccion"
+                        class="status-dot status-dot-animated bg-youtube mx-2"
+                      />
                     </div>
                     <div class="mb-2">
                       <IconBriefcase class="icon me-2 text-secondary" />
                       Correo es: <strong v-if="perfil.Email">{{ perfil.Email }}</strong>
-                      <div class="status-dot status-dot-animated bg-youtube mx-2" />
+                      <div
+                        v-if="!perfil.Email"
+                        class="status-dot status-dot-animated bg-youtube mx-2"
+                      />
                     </div>
                     <div class="mb-2">
                       <IconCashBanknote class="icon me-2 text-secondary" />
                       Ruc: <strong v-if="perfil.Ruc">{{ perfil.Ruc }}</strong>
-                      <div class="status-dot status-dot-animated bg-youtube mx-2" />
+                      <div
+                        v-if="!perfil.Ruc"
+                        class="status-dot status-dot-animated bg-youtube mx-2"
+                      />
                     </div>
                     <div class="mb-2">
                       <IconPhoneCall class="icon me-2 text-secondary" />
@@ -185,7 +194,10 @@
                       <strong v-if="perfil.Telf1"
                         ><span class="flag flag-country-si"></span> {{ perfil.Telf1 }}</strong
                       >
-                      <div class="status-dot status-dot-animated bg-youtube mx-2" />
+                      <div
+                        v-if="!perfil.Telf1"
+                        class="status-dot status-dot-animated bg-youtube mx-2"
+                      />
                     </div>
                     <div class="mb-2" v-if="perfil.Telf2">
                       <IconPhoneCall class="icon me-2 text-secondary" />
