@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <div class="col text-start">
+    <div class="col text-start mt-4">
       <div class="page-pretitle fw-medium">Generar Boletas de Pago</div>
       <h2 class="page-title">Boleta</h2>
     </div>
@@ -75,6 +75,8 @@ const files = async () => {
     width: 100%;
     padding: 2vh;
     flex-wrap: wrap;
+    max-height: 100%;
+    overflow-y: scroll;
     gap: 2vh;
 
     .folder {

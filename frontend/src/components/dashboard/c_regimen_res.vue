@@ -104,6 +104,7 @@ onMounted(async () => {
   height: 100%;
   margin: 0 auto;
   padding: 1rem;
+
   border-radius: 0.5rem;
 }
 </style>

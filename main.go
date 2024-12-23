@@ -2,6 +2,7 @@ package main
 
 import (
 	"embed"
+	"os"
 	"vesgoapp/src/db"
 	"vesgoapp/src/repositories"
 	"vesgoapp/src/services"
@@ -20,12 +21,17 @@ func main() {
 
 	godotenv.Load()
 
+	user := os.Getenv("DBUSER")
+	dbname := os.Getenv("DBNAME")
+	hostdb := os.Getenv("DBHOST")
+	passuser := os.Getenv("DBPASS")
+
 	config := db.Config{
-		Host:     "192.168.18.125",
+		Host:     hostdb,
 		Port:     3306,
-		User:     "root",
-		Password: "pleyades",
-		Database: "rrhh",
+		User:     user,
+		Password: passuser,
+		Database: dbname,
 	}
 
 	dbt := db.GetConnection(config)

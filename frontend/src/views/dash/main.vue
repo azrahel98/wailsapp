@@ -4,22 +4,14 @@
       <div class="page-pretitle">Overview</div>
       <h2 class="page-title">Dashboard</h2>
     </div>
-    <div class="row row-deck row-cards p-0 m-0">
-      <div class="col-sm-12 col-lg-6">
-        <C_regimen_res />
-      </div>
-      <div class="col-sm-12 col-lg-6">
-        <mapa></mapa>
-      </div>
-      <div class="col-md-4">
-        <Lista class="lista" />
-      </div>
+    <div class="grid-items">
+      <C_regimen_res />
+      <mapa></mapa>
     </div>
   </div>
 </template>
 <script setup lang="ts">
 import C_regimen_res from '@comp/dashboard/c_regimen_res.vue'
-import Lista from '@comp/dashboard/lista.vue'
 import mapa from '@comp/dashboard/mapa.vue'
 </script>
 
@@ -29,9 +21,14 @@ import mapa from '@comp/dashboard/mapa.vue'
   display: grid;
   row-gap: 4px;
   grid-template-rows: min-content 1fr;
-  .lista {
-    height: min-content;
-    max-height: 50vh;
+  .grid-items {
+    max-height: 100%;
+    display: grid;
+    grid-template-columns: minmax(20vw, 40vw) 1fr;
+    column-gap: 2vh;
+    .card {
+      height: min-content;
+    }
   }
 }
 </style>

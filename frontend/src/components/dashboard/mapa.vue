@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 100%; min-height: 25vh; width: 100%">
+  <div style="height: 100%; min-height: 25vh" class="card">
     <l-map
       ref="map"
       :zoom="23"

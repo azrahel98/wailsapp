@@ -18,8 +18,8 @@
           class="card-status-top"
           :class="[x.Estado == 'activo' ? 'bg-success' : 'bg-danger']"
         ></div>
-        <div class="card-body p-4 text-center">
-          <span class="avatar avatar-xl mb-3 rounded">
+        <div class="card-body pt-2 text-center">
+          <span class="avatar avatar-md mb-3 rounded">
             <img :src="`${x.Foto.String}`" class="border-1 border-secondary" v-if="x.Foto.Valid" />
             <img
               src="../../assets/images/man.svg"
@@ -33,12 +33,12 @@
             :to="{ name: 'perfil', params: { dni: x.Dni.toString() } }"
             @click="console.log(`Navigating to /perfil/${x.Dni}`)"
           >
-            <h4 class="m-0 mb-1">{{ x.Nombre }}</h4>
+            <h5 class="m-0 mb-1">{{ x.Nombre }}</h5>
           </RouterLink>
           <div class="text-secondary">{{ x.Dni }}</div>
           <div class="mt-1">
             <span
-              class="badge"
+              class="badge fs-6"
               :class="[x.Estado == 'activo' ? 'bg-success text-white' : 'bg-danger text-white']"
               >{{ x.Estado ? 'Activo' : 'Inactivo' }}</span
             >
@@ -60,15 +60,11 @@ const realizarBusqueda = async () => {
   try {
     trabajadores.value = []
     if (busqueda.value.length > 3) {
-      //   const res: any = await invoke('buscar_trabajadores', { nombre: busqueda.value })
-      //   console.log(res)
       const res: any = await Buscar_trabajador(busqueda.value)
       trabajadores.value = res
-      console.log(res)
     }
   } catch (error) {
     trabajadores.value = []
-    console.log(error)
   }
 }
 </script>
@@ -118,7 +114,7 @@ const realizarBusqueda = async () => {
     .card {
       height: min-content;
       width: 200px;
-      max-height: 40vh;
+      max-height: min-content;
     }
   }
 }

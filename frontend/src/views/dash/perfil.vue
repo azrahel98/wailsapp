@@ -2,7 +2,7 @@
   <div class="page-wrapper">
     <div class="page-header">
       <div class="container">
-        <div class="col text-start">
+        <div class="col text-start mt-3">
           <div class="page-pretitle fw-medium">Perfil e Informacion Personal</div>
         </div>
         <div class="row align-items-center text-start">
@@ -91,6 +91,13 @@
                               </button>
                               <button class="btn-action">
                                 <IconEdit class="icon text-success" />
+                              </button>
+                              <button
+                                class="btn-action"
+                                data-bs-toggle="modal"
+                                data-bs-target="#salidmodal"
+                              >
+                                <IconDoorExit class="icon text-warning" />
                               </button>
                               <span
                                 class="badge fs-6 text-uppercase"
@@ -245,13 +252,12 @@ import {
   IconCardboards,
   IconCashBanknote,
   IconClipboardOff,
+  IconDoorExit,
   IconEdit,
   IconEyePlus,
   IconEyeX,
   IconFileInfo,
-  IconMailAi,
   IconMoodHappy,
-  IconOutlet,
   IconPhoneCall,
   IconTrashX
 } from '@tabler/icons-vue'

@@ -16,7 +16,7 @@
         <IconDashboard size="20" class="icon" /> <span v-if="isExpanded">Dashboard</span>
       </RouterLink>
       <RouterLink :to="{ path: '/buscar' }" class="nav-item">
-        <IconSearch size="20" class="icon" /> <span v-if="isExpanded">Dashboard</span>
+        <IconSearch size="20" class="icon" /> <span v-if="isExpanded">Buscar</span>
       </RouterLink>
       <RouterLink :to="{ path: '/boleta' }" class="nav-item">
         <IconFile3d size="20" class="icon" /> <span v-if="isExpanded">Boleta</span>
@@ -25,22 +25,6 @@
       <a class="nav-item active" v-if="router.currentRoute.value.name === 'perfil'">
         <IconUsers size="20" class="icon" /> <span v-if="isExpanded">Dashboard</span>
       </a>
-      <!-- <a
-        href="#"
-        class="nav-item"
-        :class="{ active: activeItem === 'users' }"
-        @click.stop="setActiveItem('users')"
-      >
-        <IconUsers size="20" class="icon" /> <span v-if="isExpanded">Users</span>
-      </a>
-      <a
-        href="#"
-        class="nav-item"
-        :class="{ active: activeItem === 'analytics' }"
-        @click.stop="setActiveItem('analytics')"
-      >
-        <IconChartBar size="20" class="icon" /> <span v-if="isExpanded">Analytics</span>
-      </a> -->
     </nav>
     <div class="sidebar-footer">
       <a
