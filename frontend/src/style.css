@@ -10,10 +10,18 @@ body {
   overflow: auto;
   overflow-x: auto;
   padding: 0;
+  color: black;
   height: 100%;
 }
 
 #app {
   height: 100vh;
   overflow-y: auto;
+}
+.page-pretitle{
+  font-size: .6rem;
+}
+.page-title{
+  font-size: 1rem;
+  text-wrap-style: pretty;
 }

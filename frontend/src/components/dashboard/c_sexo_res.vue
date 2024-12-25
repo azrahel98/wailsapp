@@ -2,21 +2,16 @@
   <div class="chart-container card">
     <div class="card-body p-0 m-0">
       <div class="text-secondary subheader">Personal por regimen</div>
-      <DoughnutChart
-        v-if="chartData"
-        :chartData="chartData"
-        :options="chartOptions"
-        :height="200"
-      />
+      <BarChart v-if="chartData" :chartData="chartData" :options="chartOptions" :height="200" />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { DoughnutChart } from 'vue-chart-3'
+import { BarChart } from 'vue-chart-3'
 import { Chart, registerables } from 'chart.js'
 import { onMounted, ref, computed } from 'vue'
-import { Regimenes_resumen } from '@wails/services/DashboardService'
+import { Sexo_cantidad } from '@wails/services/DashboardService'
 
 Chart.register(...registerables)
 
@@ -35,9 +30,17 @@ const chartData = computed(() => {
     labels: sortedData.map((r) => r.Nombre),
     datasets: [
       {
-        label: 'Cantidad de Personal',
-        data: sortedData.map((r) => r.Cantidad),
-        backgroundColor: ['#222940', '#A7C8F2', '#2B88D9', '#04D976', '#F2F2F2'],
+        label: 'Masculino',
+        data: sortedData.map((r) => (r.Nombre == 'F' ? 1 : r.Cantidad)), // 1 para masculino, 0 para no masculino
+        backgroundColor: '#007BFF', // Azul para masculino
+        borderColor: '#FFFFFF',
+        borderWidth: 1,
+        borderRadius: 4
+      },
+      {
+        label: 'Femenino',
+        data: sortedData.map((r) => (r.Nombre == 'M' ? 1 : r.Cantidad)), // 1 para femenino, 0 para no femenino
+        backgroundColor: '#FF69B4', // Rosa para femenino
         borderColor: '#FFFFFF',
         borderWidth: 1,
         borderRadius: 4
@@ -47,7 +50,6 @@ const chartData = computed(() => {
 })
 
 const chartOptions = {
-  indexAxis: 'y' as const,
   responsive: true,
   maintainAspectRatio: true,
   plugins: {
@@ -68,7 +70,7 @@ const chartOptions = {
     },
     legend: {
       display: true,
-      position: 'right',
+      position: 'bottom',
       labels: {
         pointStyle: 'circle',
         usePointStyle: true
@@ -89,7 +91,7 @@ const chartOptions = {
 
 onMounted(async () => {
   try {
-    regimenes.value = await Regimenes_resumen()
+    regimenes.value = await Sexo_cantidad()
   } catch (error) {
     console.error('Error al cargar los datos:', error)
   }

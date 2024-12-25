@@ -13,3 +13,7 @@ export function Cumpleaños(arg1) {
 export function Regimenes_resumen() {
   return window['go']['services']['DashboardService']['Regimenes_resumen']();
 }
+
+export function Sexo_cantidad() {
+  return window['go']['services']['DashboardService']['Sexo_cantidad']();
+}

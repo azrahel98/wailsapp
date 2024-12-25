@@ -78,7 +78,7 @@ const realizarBusqueda = async () => {
   width: 100%;
   height: 100vh;
   overflow-y: auto;
-  padding-top: 3vh;
+  padding-top: 2vh;
   padding-bottom: 1vh;
 
   .info {

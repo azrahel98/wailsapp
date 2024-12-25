@@ -3,7 +3,7 @@
     <Sidebar :is-expanded="isExpanded" :toggle="togglesidebar" />
     <div class="main-content" @click="handleOutsideClick">
       <div class="page-body p-0 m-0">
-        <div class="container-xl">
+        <div class="container">
           <RouterView></RouterView>
         </div>
       </div>
@@ -29,8 +29,6 @@ const handleOutsideClick = (event: MouseEvent) => {
   display: flex;
   height: 100vh;
   max-width: 100vw;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
-    sans-serif;
 }
 .main-content {
   flex: 1;

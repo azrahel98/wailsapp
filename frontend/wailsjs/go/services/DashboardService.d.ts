@@ -6,3 +6,5 @@ export function Buscar_trabajador(arg1:string):Promise<any>;
 export function Cumpleaños(arg1:number):Promise<any>;
 
 export function Regimenes_resumen():Promise<any>;
+
+export function Sexo_cantidad():Promise<any>;

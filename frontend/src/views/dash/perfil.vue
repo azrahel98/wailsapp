@@ -1,11 +1,11 @@
 <template>
-  <div class="page-wrapper">
-    <div class="page-header">
+  <div class="main">
+    <div class="page-header mt-0">
       <div class="container">
-        <div class="col text-start mt-3">
+        <div class="text-start">
           <div class="page-pretitle fw-medium">Perfil e Informacion Personal</div>
         </div>
-        <div class="row align-items-center text-start">
+        <div class="row align-items-center text-start pt-2">
           <div class="col-auto">
             <span class="avatar avatar-lg rounded">
               <img :src="perfil.Foto" v-if="perfil.Foto" />
@@ -13,18 +13,20 @@
               <img src="../../assets/images/mujer.svg" v-else />
             </span>
           </div>
-          <div class="col">
-            <h1 class="fw-bold">{{ perfil.Nombre }}</h1>
-            <div class="list-inline list-inline-dots text-secondary">
-              <div class="list-inline-item">
-                <IconCardboards class="icon" /> Dni:
-                {{ perfil.Dni }}
-              </div>
+          <div class="col-auto">
+            <h2 class="fw-bold m-0">{{ perfil.Nombre }}</h2>
+            <div class="p-0 m-0 fs-4">
+              <IconCardboards class="icon" /> DNI:
+              {{ perfil.Dni }}
             </div>
           </div>
-          <div class="col-auto ms-auto">
+          <div class="col-2 ms-auto">
             <div class="btn-list">
-              <button class="btn btn-action" data-bs-toggle="modal" data-bs-target="#editmodal">
+              <button
+                class="btn btn-outline-facebook p-1"
+                data-bs-toggle="modal"
+                data-bs-target="#editmodal"
+              >
                 <IconEdit class="icon p-0 m-0" />
               </button>
 
@@ -50,25 +52,25 @@
                   />
                 </div>
                 <div class="card timeline-event-card">
-                  <div class="card-body">
-                    <div class="text-secondary float-end">
+                  <div class="card-body p-0 m-0 mx-2 my-2">
+                    <div class="text-secondary float-end fs-5">
                       {{
                         x.Fecha_ingreso
-                          ? format(parseISO(x.Fecha_ingreso), 'yyyy/MM/dd')
+                          ? format(addDays(parseISO(x.Fecha_ingreso), 1), 'yyyy/MM/dd')
                           : 'Fecha no disponible'
                       }}
                     </div>
                     <div class="page-subtitle">
-                      <h4 class="p-0 m-0">{{ x.Cargo }}</h4>
-                      <p class="text-secondary p-0 m-0">
+                      <h4 class="p-0 m-0 fs-5">{{ x.Cargo }}</h4>
+                      <p class="text-secondary p-0 m-0 fs-5">
                         {{ x.Area }}
                       </p>
                     </div>
-                    <div class="info">
+                    <div class="info p-0 m-0">
                       <div class="accordion" id="accordion-example">
                         <div class="accordion-item border-0 p-0 m-0">
                           <h2
-                            class="accordion-header text-center d-flex justify-content-between pt-2 align-content-center align-items-center"
+                            class="accordion-header text-center d-flex justify-content-between align-content-center align-items-center"
                             id="heading-1"
                           >
                             <button
@@ -95,15 +97,17 @@
                               <button
                                 class="btn-action"
                                 data-bs-toggle="modal"
-                                data-bs-target="#salidmodal"
+                                :data-bs-target="`#${x.Id}`"
                               >
                                 <IconDoorExit class="icon text-warning" />
                               </button>
+                              <renunciaModal :id="x.Id" />
                               <span
-                                class="badge fs-6 text-uppercase"
-                                :class="x.Estado !== 'activo' ? 'bg-danger' : 'bg-green'"
+                                class="text-center align-middle d-flex"
+                                :class="x.Estado !== 'activo' ? 'text-danger' : 'text-facebook'"
                               >
-                                {{ x.Estado }}
+                                <IconMoodHappy v-if="x.Estado == 'activo'" class="icon icon-sm" />
+                                <IconMoodSad2 v-else class="icon icon-sm" />
                               </span>
                             </div>
                           </h2>
@@ -148,7 +152,10 @@
                                     <strong>
                                       {{
                                         x.Fecha_salida
-                                          ? format(parseISO(x.Fecha_salida), 'yyyy/MM/dd')
+                                          ? format(
+                                              addDays(parseISO(x.Fecha_salida), 1),
+                                              'yyyy/MM/dd'
+                                            )
                                           : 'Fecha no disponible'
                                       }}
                                     </strong>
@@ -165,14 +172,14 @@
               </li>
             </ul>
           </div>
-          <div class="col-lg-4">
+          <div class="col-lg-5">
             <div class="row row-cards">
               <div class="col-12">
                 <div class="card">
-                  <div class="card-body text-start">
+                  <div class="card-body p-3 pb-0 text-start">
                     <div class="card-title">Informacion Basica</div>
                     <div class="mb-2">
-                      <IconAddressBook class="icon me-2 text-secondary" />
+                      <IconAddressBook class="icon me-2 text-secondary fs-6" />
                       Vive en: <strong v-if="perfil.Direccion">{{ perfil.Direccion }}</strong>
                       <div
                         v-if="!perfil.Direccion"
@@ -217,7 +224,7 @@
                       <strong>
                         {{
                           perfil.Nacimiento
-                            ? format(parseISO(perfil.Nacimiento), 'yyyy/MM/dd')
+                            ? format(addDays(parseISO(perfil.Nacimiento), 1), 'yyyy/MM/dd')
                             : 'Fecha no disponible'
                         }}
                       </strong>
@@ -243,6 +250,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import modal_info from '@comp/perfil/avatar/modal_info.vue'
+import renunciaModal from '@comp/perfil/vinculos/renuncia-modal.vue'
 import { Buscar_persona_by_dni, Search_by_dni_vinculos } from '@wails/services/PersonalService'
 import { models } from '@wails/models'
 import { router } from '@router/router'
@@ -258,10 +266,11 @@ import {
   IconEyeX,
   IconFileInfo,
   IconMoodHappy,
+  IconMoodSad2,
   IconPhoneCall,
   IconTrashX
 } from '@tabler/icons-vue'
-import { format, formatDate, getYear, parse, parseISO } from 'date-fns'
+import { format, getYear, parseISO, addDays } from 'date-fns'
 import { CakeIcon } from 'lucide-vue-next'
 
 const click_collapse = (x: number) => {
@@ -274,7 +283,6 @@ const perfil = ref<models.Perfil>({
   Nacimiento: ''
 })
 
-const expanded = ref(true)
 const vinculos = ref<Array<any>>()
 
 onMounted(async () => {
@@ -289,7 +297,6 @@ onMounted(async () => {
 
 <style lang="scss" scoped>
 .vinculos {
-  height: 100%;
 }
 
 .toggle-collapse {
@@ -303,5 +310,20 @@ onMounted(async () => {
 .detalles-collapse {
   display: flex;
   flex-wrap: wrap;
+}
+
+.main {
+  max-height: 100vh;
+  display: grid;
+  grid-template-rows: 20vh 80vh;
+  .page-body {
+    max-height: 100%;
+    overflow-y: auto;
+    padding: 0;
+    margin: 0;
+  }
+  strong {
+    font-size: 0.8rem;
+  }
 }
 </style>

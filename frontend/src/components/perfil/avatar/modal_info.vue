@@ -84,7 +84,9 @@
         </div>
 
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary me-2" @click="">Cancelar</button>
+          <button type="button" class="btn" data-bs-dismiss="modal" aria-label="Close">
+            Cancelar
+          </button>
           <button type="submit" class="btn btn-primary" @click="guardar(user)">Guardar</button>
         </div>
       </div>

@@ -6,12 +6,13 @@
     </div>
     <div class="grid-items">
       <C_regimen_res />
-      <mapa></mapa>
+      <c_sexo_res />
     </div>
   </div>
 </template>
 <script setup lang="ts">
 import C_regimen_res from '@comp/dashboard/c_regimen_res.vue'
+import c_sexo_res from '@comp/dashboard/c_sexo_res.vue'
 import mapa from '@comp/dashboard/mapa.vue'
 </script>
 
