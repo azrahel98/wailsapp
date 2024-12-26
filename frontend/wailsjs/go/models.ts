@@ -1,5 +1,33 @@
 export namespace models {
 	
+	export class Documento {
+	    id?: number;
+	    tipo: string;
+	    numero?: number;
+	    "año"?: number;
+	    fecha: string;
+	    fecha_valida?: string;
+	    conv?: number;
+	    descripcion: string;
+	    funcion?: number;
+	
+	    static createFrom(source: any = {}) {
+	        return new Documento(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.id = source["id"];
+	        this.tipo = source["tipo"];
+	        this.numero = source["numero"];
+	        this["año"] = source["año"];
+	        this.fecha = source["fecha"];
+	        this.fecha_valida = source["fecha_valida"];
+	        this.conv = source["conv"];
+	        this.descripcion = source["descripcion"];
+	        this.funcion = source["funcion"];
+	    }
+	}
 	export class Perfil {
 	    Dni: string;
 	    Nombre: string;

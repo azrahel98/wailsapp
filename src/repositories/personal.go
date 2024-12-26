@@ -14,10 +14,37 @@ type PersonalRepository interface {
 	Search_by_dni_vinculos(ctx context.Context, dni string) (*[]models.Vinculos, error)
 	IsCasbyDni(ctx context.Context, dni string) (bool, error)
 	EditByDni(ctx context.Context, telf1 string, telf2 string, direccion string, emai string, dni string) error
+	AddRenuncia(ctx context.Context, doc models.Documento, idvinculo int) (*int64, error)
 }
 
 type personalRepository struct {
 	db *sqlx.DB
+}
+
+func (p *personalRepository) AddRenuncia(ctx context.Context, doc models.Documento, idvinculo int) (*int64, error) {
+	query := `insert into Documento (tipo, numero, year, fecha, fecha_valida, descripcion) values (?, ?, ?, ?, ?, ?)`
+
+	last, err := p.db.Exec(query, doc.Tipo, doc.Numero, doc.Año, doc.Fecha, doc.Fecha_Valida, doc.Descripcion)
+	if err != nil {
+		return nil, err
+	}
+
+	id, err := last.LastInsertId()
+	if err != nil {
+		return nil, err
+	}
+
+	query2 := `update Vinculo set estado = 'inactivo',doc_salida_id= ? where   id = ?`
+
+	last, err = p.db.Exec(query2, id, idvinculo)
+	if err != nil {
+		return nil, err
+	}
+	id2, err := last.RowsAffected()
+	if err != nil {
+		return nil, err
+	}
+	return &id2, nil
 }
 
 func (p *personalRepository) EditByDni(ctx context.Context, telf1 string, telf2 string, direccion string, emai string, dni string) error {
@@ -65,7 +92,6 @@ limit
 	return true, nil
 }
 
-// Search_by_dni_vinculos implements PersonalRepository.
 func (p *personalRepository) Search_by_dni_vinculos(ctx context.Context, dni string) (*[]models.Vinculos, error) {
 	var resul []models.Vinculos
 
@@ -76,7 +102,6 @@ func (p *personalRepository) Search_by_dni_vinculos(ctx context.Context, dni str
 	return &resul, nil
 }
 
-// Search_by_dni_perfil implements PersonalRepository.
 func (p *personalRepository) Search_by_dni_perfil(ctx context.Context, dni string) (*models.Perfil, error) {
 	var res models.Perfil
 

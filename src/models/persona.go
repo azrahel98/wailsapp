@@ -30,3 +30,15 @@ type Vinculos struct {
 	Descrip_s     *string `db:"descrip_salida"`
 	Numero_doc_s  *string `db:"numero_doc_salida"`
 }
+
+type Documento struct {
+	Id           *int    `db:"id" json:"id"`
+	Tipo         string  `db:"tipo" json:"tipo"`
+	Numero       *int    `db:"numero" json:"numero"`
+	Año          *int    `db:"year" json:"año"`
+	Fecha        string  `db:"fecha" json:"fecha"`
+	Fecha_Valida *string `db:"fecha_valida" json:"fecha_valida"`
+	Conv         *int64  `db:"conv" json:"conv"`
+	Descripcion  string  `db:"descripcion" json:"descripcion"`
+	Funcion      *int64  `db:"funcion" json:"funcion"`
+}

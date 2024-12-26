@@ -177,7 +177,7 @@
               <div class="col-12">
                 <div class="card">
                   <div class="card-body p-3 pb-0 text-start">
-                    <div class="card-title">Informacion Basica</div>
+                    <div class="card-title fs-4">Informacion Basica</div>
                     <div class="mb-2">
                       <IconAddressBook class="icon me-2 text-secondary fs-6" />
                       Vive en: <strong v-if="perfil.Direccion">{{ perfil.Direccion }}</strong>
@@ -296,9 +296,6 @@ onMounted(async () => {
 </script>
 
 <style lang="scss" scoped>
-.vinculos {
-}
-
 .toggle-collapse {
   svg {
     display: none;
@@ -318,9 +315,17 @@ onMounted(async () => {
   grid-template-rows: 20vh 80vh;
   .page-body {
     max-height: 100%;
-    overflow-y: auto;
+    height: 100%;
     padding: 0;
     margin: 0;
+    .container-xl,
+    .row {
+      height: 100%;
+      .vinculos {
+        max-height: 100%;
+        overflow-y: auto;
+      }
+    }
   }
   strong {
     font-size: 0.8rem;

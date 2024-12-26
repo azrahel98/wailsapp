@@ -37,3 +37,11 @@ func (s *PersonalService) Search_by_dni_vinculos(dni string) (*[]models.Vinculos
 	}
 	return res, nil
 }
+
+func (s *PersonalService) AddRenuncia(doc models.Documento, id int) error {
+	_, err := s.repo.AddRenuncia(context.Background(), doc, id)
+	if err != nil {
+		return err
+	}
+	return nil
+}
