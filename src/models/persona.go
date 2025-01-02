@@ -2,7 +2,9 @@ package models
 
 type Perfil struct {
 	Dni        string  `db:"dni"`
-	Nombre     string  `db:"nombre"`
+	Nombre     string  `db:"nombres"`
+	Aparterno  string  `db:"apaterno"`
+	Amaterno   string  `db:"amaterno"`
 	Direccion  *string `db:"direccion"`
 	Telf1      *string `db:"telf1"`
 	Telf2      *string `db:"telf2"`
@@ -41,4 +43,10 @@ type Documento struct {
 	Conv         *int64  `db:"conv" json:"conv"`
 	Descripcion  string  `db:"descripcion" json:"descripcion"`
 	Funcion      *int64  `db:"funcion" json:"funcion"`
+}
+
+type PersonDniRequest struct {
+	Nombres  string `json:"nombres"`
+	Apaterno string `json:"apellidoPaterno"`
+	Amaterno string `json:"apellidoMaterno"`
 }

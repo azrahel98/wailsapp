@@ -8,3 +8,4 @@ build/darwin
 env
 wailsjs
 wailsjs/
+key.go

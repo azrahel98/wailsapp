@@ -31,10 +31,6 @@ import { IconFileTypePdf, IconFileTypeXml } from '@tabler/icons-vue'
 
 const file = ref()
 
-const check = (e: any) => {
-  console.log(e.target.files)
-}
-
 const archivos = ref<Array<any>>([])
 const pdfresultado = ref<Array<any>>([])
 

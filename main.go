@@ -12,9 +12,9 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
 	"github.com/wailsapp/wails/v2/pkg/options/linux"
+	"github.com/wailsapp/wails/v2/pkg/options/windows"
 )
 
-//go:embed all:frontend/dist
 var assets embed.FS
 
 func main() {
@@ -53,6 +53,7 @@ func main() {
 		AssetServer: &assetserver.Options{
 			Assets: assets,
 		},
+
 		Linux: &linux.Options{
 			Icon:                []byte{},
 			WindowIsTranslucent: true,
@@ -60,6 +61,16 @@ func main() {
 			WebviewGpuPolicy:    linux.WebviewGpuPolicyOnDemand,
 			ProgramName:         "",
 		},
+		Windows: &windows.Options{
+			DisableWindowIcon: true,
+			Theme:             windows.Theme(windows.Dark),
+			CustomTheme: &windows.ThemeSettings{
+				DarkModeTitleBar:  windows.RGB(26, 34, 52),
+				DarkModeTitleText: windows.RGB(220, 220, 255),
+				DarkModeBorder:    windows.RGB(0, 0, 0),
+			},
+		},
+
 		Bind: []interface{}{
 			lservice,
 			dashservice,

@@ -2,7 +2,10 @@ package repositories
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
+	"io"
+	"net/http"
 	"os"
 	"vesgoapp/src/models"
 
@@ -10,6 +13,7 @@ import (
 )
 
 type PersonalRepository interface {
+	Search_dni_onlinne(ctx context.Context, dni string) (*models.PersonDniRequest, error)
 	Search_by_dni_perfil(ctx context.Context, dni string) (*models.Perfil, error)
 	Search_by_dni_vinculos(ctx context.Context, dni string) (*[]models.Vinculos, error)
 	IsCasbyDni(ctx context.Context, dni string) (bool, error)
@@ -19,6 +23,36 @@ type PersonalRepository interface {
 
 type personalRepository struct {
 	db *sqlx.DB
+}
+
+func (p *personalRepository) Search_dni_onlinne(ctx context.Context, dni string) (*models.PersonDniRequest, error) {
+	url := fmt.Sprintf("https://api.apis.net.pe/v2/reniec/dni?numero=%s", dni)
+
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Add("Authorization", "Bearer "+models.APIKEY)
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, fmt.Errorf("error leyendo la respuesta: %w", err)
+	}
+
+	fmt.Println("Cuerpo de la respuesta:", string(body))
+	var resultado models.PersonDniRequest
+
+	if err := json.Unmarshal(body, &resultado); err != nil {
+		return nil, fmt.Errorf("error decodificando la respuesta: %w", err)
+	}
+
+	return &resultado, nil
 }
 
 func (p *personalRepository) AddRenuncia(ctx context.Context, doc models.Documento, idvinculo int) (*int64, error) {
@@ -110,7 +144,9 @@ func (p *personalRepository) Search_by_dni_perfil(ctx context.Context, dni strin
 	query := `
 	select
 	p.dni,
-	concat(p.apaterno, " ", p.amaterno, " ", p.nombre) nombre,
+	p.nombre nombres,
+	p.apaterno,
+	p.amaterno,
 	cast(aes_decrypt(p.direccion,?) as char)  direccion,
 	cast(aes_decrypt(p.telf1,?) as char)  telf1,
 	cast(aes_decrypt(p.telf2,?) as char)  telf2,
@@ -118,7 +154,7 @@ func (p *personalRepository) Search_by_dni_perfil(ctx context.Context, dni strin
 	p.ruc,
 	p.fecha_nacimiento,
 	p.sexo,
-	p.foto
+	null as foto
 	from
 	Vinculo v
 	inner join Persona p on v.dni = p.dni

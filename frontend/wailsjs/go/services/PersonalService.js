@@ -6,6 +6,10 @@ export function AddRenuncia(arg1, arg2) {
   return window['go']['services']['PersonalService']['AddRenuncia'](arg1, arg2);
 }
 
+export function Buscar_dni_onlinne(arg1) {
+  return window['go']['services']['PersonalService']['Buscar_dni_onlinne'](arg1);
+}
+
 export function Buscar_persona_by_dni(arg1) {
   return window['go']['services']['PersonalService']['Buscar_persona_by_dni'](arg1);
 }

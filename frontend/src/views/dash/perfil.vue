@@ -5,50 +5,52 @@
         <div class="text-start">
           <div class="page-pretitle fw-medium">Perfil e Informacion Personal</div>
         </div>
-        <div class="row align-items-center text-start pt-2">
-          <div class="col-auto">
-            <span class="avatar avatar-lg rounded">
-              <img :src="perfil.Foto" v-if="perfil.Foto" />
-              <img src="../../assets/images/man.svg" v-else-if="perfil.Sexo == 'M'" />
-              <img src="../../assets/images/mujer.svg" v-else />
-            </span>
-          </div>
-          <div class="col-auto">
-            <h2 class="fw-bold m-0">{{ perfil.Nombre }}</h2>
-            <div class="p-0 m-0 fs-4">
-              <IconCardboards class="icon" /> DNI:
-              {{ perfil.Dni }}
-            </div>
-          </div>
-          <div class="col-2 ms-auto">
-            <div class="btn-list">
-              <button
-                class="btn btn-outline-facebook p-1"
-                data-bs-toggle="modal"
-                data-bs-target="#editmodal"
-              >
-                <IconEdit class="icon p-0 m-0" />
-              </button>
+      </div>
+    </div>
+    <div class="row align-items-center text-start pt-2">
+      <div class="col-auto">
+        <span class="avatar avatar-lg rounded">
+          <img :src="perfil.Foto" v-if="perfil.Foto" />
+          <img src="../../assets/images/man.svg" v-else-if="perfil.Sexo == 'M'" />
+          <img src="../../assets/images/mujer.svg" v-else />
+        </span>
+      </div>
+      <div class="col-6">
+        <h2 class="fw-bold m-0">
+          {{ perfil.Nombre }} {{ perfil.Aparterno }} {{ perfil.Amaterno }}
+        </h2>
+        <div class="p-0 m-0 fs-4">
+          <IconCardboards class="icon" /> DNI:
+          {{ perfil.Dni }}
+        </div>
+      </div>
+      <div class="col-2 ms-auto">
+        <div class="btn-list">
+          <button
+            class="btn btn-outline-facebook p-1"
+            data-bs-toggle="modal"
+            data-bs-target="#editmodal"
+          >
+            <IconEdit class="icon p-0 m-0" />
+          </button>
 
-              <modal_info :user="perfil" />
-            </div>
-          </div>
+          <modal_info :user="perfil" />
         </div>
       </div>
     </div>
     <div class="page-body">
       <div class="container-xl">
-        <div class="row g-3">
-          <div class="col vinculos">
+        <div class="row gap-3">
+          <div class="col vinculos" v-if="!isloading">
             <ul class="timeline">
               <li class="timeline-event text-start" v-for="x in vinculos">
                 <div
                   class="timeline-event-icon"
-                  :class="x.Estado !== 'activo' ? 'bg-danger-lt' : 'bg-facebook-lt'"
+                  :class="x.Estado !== 'activo' ? 'bg-youtube ' : 'bg-facebook'"
                 >
                   <IconBriefcase
-                    class="icon text-secondary"
-                    :class="x.Estado !== 'activo' ? 'text-danger' : 'text-facebook'"
+                    class="icon"
+                    :class="x.Estado !== 'activo' ? 'text-white' : 'text-white'"
                   />
                 </div>
                 <div class="card timeline-event-card">
@@ -69,8 +71,8 @@
                     <div class="info p-0 m-0">
                       <div class="accordion" id="accordion-example">
                         <div class="accordion-item border-0 p-0 m-0">
-                          <h2
-                            class="accordion-header text-center d-flex justify-content-between align-content-center align-items-center"
+                          <div
+                            class="accordion-header text-center w-100 d-flex justify-content-between align-content-center align-items-center"
                             id="heading-1"
                           >
                             <button
@@ -87,30 +89,24 @@
                                 class="icon me-1 text-warning fw-bold d-none"
                               />
                             </button>
-                            <div class="d-flex justify-content-center align-items-center">
-                              <button class="btn-action">
+                            <div class="d-flex justify-content-end gap-1 align-items-center">
+                              <button class="btn-action btn btn-icon btn-md">
                                 <IconTrashX class="icon text-youtube" />
                               </button>
-                              <button class="btn-action">
+                              <button class="btn-action btn btn-icon">
                                 <IconEdit class="icon text-success" />
                               </button>
                               <button
-                                class="btn-action"
+                                v-if="!x.Doc_s"
+                                class="btn-action btn btn-icon"
                                 data-bs-toggle="modal"
                                 :data-bs-target="`#${x.Id}`"
                               >
-                                <IconDoorExit class="icon text-warning" />
+                                <IconX class="icon text-warning" />
                               </button>
-                              <renunciaModal :id="x.Id" />
-                              <span
-                                class="text-center align-middle d-flex"
-                                :class="x.Estado !== 'activo' ? 'text-danger' : 'text-facebook'"
-                              >
-                                <IconMoodHappy v-if="x.Estado == 'activo'" class="icon icon-sm" />
-                                <IconMoodSad2 v-else class="icon icon-sm" />
-                              </span>
+                              <renunciaModal :id="x.Id" v-if="!x.Doc_s" />
                             </div>
-                          </h2>
+                          </div>
                           <div
                             :id="'collapse' + x.Id"
                             class="accordion-collapse collapse"
@@ -172,13 +168,19 @@
               </li>
             </ul>
           </div>
+          <div v-else class="col d-flex flex-column h-100 gap-4">
+            <div class="card placeholder-glow" v-for="_ in 4">
+              <div class="placeholder col-9 mb-3 pt-2"></div>
+            </div>
+          </div>
+
           <div class="col-lg-5">
             <div class="row row-cards">
               <div class="col-12">
-                <div class="card">
-                  <div class="card-body p-3 pb-0 text-start">
-                    <div class="card-title fs-4">Informacion Basica</div>
-                    <div class="mb-2">
+                <div class="card" v-if="!isloading">
+                  <div class="card-body px-2 py-0 text-start">
+                    <div class="card-title fs-4 p-0 m-0 py-2">Informacion Basica</div>
+                    <div class="mb-1">
                       <IconAddressBook class="icon me-2 text-secondary fs-6" />
                       Vive en: <strong v-if="perfil.Direccion">{{ perfil.Direccion }}</strong>
                       <div
@@ -186,7 +188,7 @@
                         class="status-dot status-dot-animated bg-youtube mx-2"
                       />
                     </div>
-                    <div class="mb-2">
+                    <div class="mb-1">
                       <IconBriefcase class="icon me-2 text-secondary" />
                       Correo es: <strong v-if="perfil.Email">{{ perfil.Email }}</strong>
                       <div
@@ -194,7 +196,7 @@
                         class="status-dot status-dot-animated bg-youtube mx-2"
                       />
                     </div>
-                    <div class="mb-2">
+                    <div class="mb-1">
                       <IconCashBanknote class="icon me-2 text-secondary" />
                       Ruc: <strong v-if="perfil.Ruc">{{ perfil.Ruc }}</strong>
                       <div
@@ -202,7 +204,7 @@
                         class="status-dot status-dot-animated bg-youtube mx-2"
                       />
                     </div>
-                    <div class="mb-2">
+                    <div class="mb-1">
                       <IconPhoneCall class="icon me-2 text-secondary" />
                       Telefono:
                       <strong v-if="perfil.Telf1"
@@ -213,12 +215,12 @@
                         class="status-dot status-dot-animated bg-youtube mx-2"
                       />
                     </div>
-                    <div class="mb-2" v-if="perfil.Telf2">
+                    <div class="mb-1" v-if="perfil.Telf2">
                       <IconPhoneCall class="icon me-2 text-secondary" />
                       Telefono 2:
                       <strong><span class="flag flag-country-si"></span> {{ perfil.Telf1 }}</strong>
                     </div>
-                    <div class="mb-2" v-if="parseISO(perfil.Nacimiento)">
+                    <div class="mb-1" v-if="parseISO(perfil.Nacimiento)">
                       <CakeIcon class="icon me-2 text-secondary" />
                       Cumpleaños:
                       <strong>
@@ -229,13 +231,20 @@
                         }}
                       </strong>
                     </div>
-                    <div class="mb-2" v-if="parseISO(perfil.Nacimiento)">
+                    <div class="mb-1" v-if="parseISO(perfil.Nacimiento)">
                       <IconMoodHappy class="icon me-2 text-secondary" />
                       Edad:
                       <strong>
                         {{ getYear(new Date()) - getYear(parseISO(perfil.Nacimiento)) }} años
                       </strong>
                     </div>
+                  </div>
+                </div>
+                <div class="card placeholder-glow" v-else>
+                  <div class="card-body pt-5">
+                    <div class="placeholder col-9 mb-3"></div>
+                    <div class="placeholder placeholder-lg col-10"></div>
+                    <div class="placeholder placeholder-xs col-11"></div>
                   </div>
                 </div>
               </div>
@@ -260,15 +269,14 @@ import {
   IconCardboards,
   IconCashBanknote,
   IconClipboardOff,
-  IconDoorExit,
   IconEdit,
   IconEyePlus,
   IconEyeX,
   IconFileInfo,
   IconMoodHappy,
-  IconMoodSad2,
   IconPhoneCall,
-  IconTrashX
+  IconTrashX,
+  IconX
 } from '@tabler/icons-vue'
 import { format, getYear, parseISO, addDays } from 'date-fns'
 import { CakeIcon } from 'lucide-vue-next'
@@ -279,18 +287,24 @@ const click_collapse = (x: number) => {
 
 const perfil = ref<models.Perfil>({
   Dni: '',
+  Nacimiento: '',
   Nombre: '',
-  Nacimiento: ''
+  Aparterno: '',
+  Amaterno: ''
 })
 
 const vinculos = ref<Array<any>>()
+const isloading = ref(false)
 
 onMounted(async () => {
   try {
+    isloading.value = true
     perfil.value = await Buscar_persona_by_dni(router.currentRoute.value.params.dni.toString())
     vinculos.value = await Search_by_dni_vinculos(router.currentRoute.value.params.dni.toString())
   } catch (error) {
     console.log(error)
+  } finally {
+    isloading.value = false
   }
 })
 </script>
@@ -312,7 +326,7 @@ onMounted(async () => {
 .main {
   max-height: 100vh;
   display: grid;
-  grid-template-rows: 20vh 80vh;
+  grid-template-rows: 2vh 18vh 80vh;
   .page-body {
     max-height: 100%;
     height: 100%;
@@ -321,9 +335,19 @@ onMounted(async () => {
     .container-xl,
     .row {
       height: 100%;
+
       .vinculos {
         max-height: 100%;
         overflow-y: auto;
+      }
+    }
+    @media (max-width: 960px) {
+      .container-xl,
+      .row {
+        height: 100%;
+        .vinculos {
+          max-height: 50%;
+        }
       }
     }
   }

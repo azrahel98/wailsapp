@@ -3,15 +3,13 @@ import {
     RouteLocationNormalized,
     RouteRecordRaw,
     createRouter,
-    createWebHashHistory,
-    createWebHistory
+    createWebHashHistory
   } from 'vue-router'
   
 import dashboard from '@views/dashboard.vue'
 import login from '@views/login.vue'
 import Main from '@views/dash/main.vue'
 import Buscar from '@views/dash/buscar.vue'
-import Perfil from '@views/dash/perfil.vue'
   
   const routes: RouteRecordRaw[] = [
     {
@@ -44,6 +42,10 @@ import Perfil from '@views/dash/perfil.vue'
           path: 'boleta',
           name: 'boleta',
       component: () => import('@views/dash/boleta.vue')
+        },{
+          path: 'add',
+          name: 'add',
+      component: () => import('@views/dash/add.vue')
         }
       ]
     },

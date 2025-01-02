@@ -5,18 +5,35 @@
       <h2 class="page-title">Buscar</h2>
     </div>
     <div class="search">
-      <input
-        type="text"
-        v-model="busqueda"
-        @keyup.enter="realizarBusqueda"
-        class="form-control rounded-2 text-center fs-6 w-100"
-      />
+      <div class="input-icon w-33">
+        <span class="input-icon-addon">
+          <IconSearch class="icon" />
+        </span>
+        <input
+          type="text"
+          v-model="busqueda"
+          @keyup.enter="realizarBusqueda"
+          class="form-control"
+          placeholder="Search…"
+          aria-label="Search in website"
+        />
+      </div>
     </div>
+
     <div class="resultados">
-      <div class="card" v-for="x in trabajadores">
+      <div class="card placeholder-glow" v-for="_ in 5" v-if="loading">
+        <div class="ratio ratio-21x9 card-img-top placeholder"></div>
+        <div class="card-body">
+          <div class="placeholder col-9 mb-3"></div>
+          <div class="placeholder placeholder-xs col-10"></div>
+          <div class="placeholder placeholder-xs col-11"></div>
+        </div>
+      </div>
+
+      <div v-else class="card" v-for="x in trabajadores">
         <div
           class="card-status-top"
-          :class="[x.Estado == 'activo' ? 'bg-success' : 'bg-danger']"
+          :class="[x.Estado == 'activo' ? 'bg-facebook' : 'bg-youtube']"
         ></div>
         <div class="card-body pt-2 text-center">
           <span class="avatar avatar-md mb-3 rounded">
@@ -49,22 +66,26 @@
   </div>
 </template>
 <script setup lang="ts">
+import { IconSearch } from '@tabler/icons-vue'
 import { Buscar_trabajador } from '@wails/services/DashboardService'
 import { ref } from 'vue'
 
 const trabajadores = ref<Array<any>>([])
-
 const busqueda = ref('')
+const loading = ref(false)
 
 const realizarBusqueda = async () => {
   try {
     trabajadores.value = []
     if (busqueda.value.length > 3) {
+      loading.value = true
       const res: any = await Buscar_trabajador(busqueda.value)
       trabajadores.value = res
     }
   } catch (error) {
     trabajadores.value = []
+  } finally {
+    loading.value = false
   }
 }
 </script>
@@ -90,15 +111,11 @@ const realizarBusqueda = async () => {
   .search {
     justify-self: center;
     display: flex;
-    width: 30vw;
     align-items: center;
     justify-content: center;
-    .form-control {
-      justify-self: center;
-      font-size: 0.84rem !important;
-      max-width: 25vw;
-    }
+    width: 100%;
   }
+
   .resultados {
     overflow-y: scroll;
     padding-top: 3vh;

@@ -4,7 +4,7 @@
     <div class="main-content" @click="handleOutsideClick">
       <div class="page-body p-0 m-0">
         <div class="container">
-          <RouterView></RouterView>
+          <RouterView />
         </div>
       </div>
     </div>

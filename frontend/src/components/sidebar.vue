@@ -21,6 +21,9 @@
       <RouterLink :to="{ path: '/boleta' }" class="nav-item">
         <IconFile3d size="20" class="icon" /> <span v-if="isExpanded">Boleta</span>
       </RouterLink>
+      <RouterLink :to="{ path: '/add' }" class="nav-item">
+        <IconUsersPlus size="20" class="icon" /> <span v-if="isExpanded">Boleta</span>
+      </RouterLink>
 
       <a class="nav-item active" v-if="router.currentRoute.value.name === 'perfil'">
         <IconUsers size="20" class="icon" /> <span v-if="isExpanded">Dashboard</span>
@@ -47,7 +50,8 @@ import {
   IconUsers,
   IconSettings,
   IconSearch,
-  IconFile3d
+  IconFile3d,
+  IconUsersPlus
 } from '@tabler/icons-vue'
 import { router } from '@router/router'
 

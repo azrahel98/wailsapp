@@ -45,3 +45,12 @@ func (s *PersonalService) AddRenuncia(doc models.Documento, id int) error {
 	}
 	return nil
 }
+
+func (s *PersonalService) Buscar_dni_onlinne(dni string) (*models.PersonDniRequest, error) {
+
+	res, err := s.repo.Search_dni_onlinne(context.Background(), dni)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}

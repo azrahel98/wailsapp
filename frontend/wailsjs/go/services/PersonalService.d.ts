@@ -4,6 +4,8 @@ import {models} from '../models';
 
 export function AddRenuncia(arg1:models.Documento,arg2:number):Promise<void>;
 
+export function Buscar_dni_onlinne(arg1:string):Promise<models.PersonDniRequest>;
+
 export function Buscar_persona_by_dni(arg1:string):Promise<models.Perfil>;
 
 export function EditByDni(arg1:string,arg2:string,arg3:string,arg4:string,arg5:string):Promise<void>;

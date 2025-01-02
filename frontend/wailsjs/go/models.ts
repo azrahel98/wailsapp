@@ -31,6 +31,8 @@ export namespace models {
 	export class Perfil {
 	    Dni: string;
 	    Nombre: string;
+	    Aparterno: string;
+	    Amaterno: string;
 	    Direccion?: string;
 	    Telf1?: string;
 	    Telf2?: string;
@@ -48,6 +50,8 @@ export namespace models {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.Dni = source["Dni"];
 	        this.Nombre = source["Nombre"];
+	        this.Aparterno = source["Aparterno"];
+	        this.Amaterno = source["Amaterno"];
 	        this.Direccion = source["Direccion"];
 	        this.Telf1 = source["Telf1"];
 	        this.Telf2 = source["Telf2"];
@@ -56,6 +60,22 @@ export namespace models {
 	        this.Nacimiento = source["Nacimiento"];
 	        this.Sexo = source["Sexo"];
 	        this.Foto = source["Foto"];
+	    }
+	}
+	export class PersonDniRequest {
+	    nombres: string;
+	    apellidoPaterno: string;
+	    apellidoMaterno: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new PersonDniRequest(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.nombres = source["nombres"];
+	        this.apellidoPaterno = source["apellidoPaterno"];
+	        this.apellidoMaterno = source["apellidoMaterno"];
 	    }
 	}
 
