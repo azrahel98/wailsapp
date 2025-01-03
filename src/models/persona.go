@@ -50,3 +50,9 @@ type PersonDniRequest struct {
 	Apaterno string `json:"apellidoPaterno"`
 	Amaterno string `json:"apellidoMaterno"`
 }
+
+type AreaCargoSerch struct {
+	Cantidad int    `db:"cantidad" json:"cantidad"`
+	Nombre   string `db:"nombre" json:"nombre"`
+	Id       int    `db:"id" json:"id"`
+}

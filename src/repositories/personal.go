@@ -16,6 +16,8 @@ type PersonalRepository interface {
 	Search_dni_onlinne(ctx context.Context, dni string) (*models.PersonDniRequest, error)
 	Search_by_dni_perfil(ctx context.Context, dni string) (*models.Perfil, error)
 	Search_by_dni_vinculos(ctx context.Context, dni string) (*[]models.Vinculos, error)
+	Search_Areas_count(ctx context.Context, area string) (*[]models.AreaCargoSerch, error)
+	Search_Cargo_count(ctx context.Context, cargo string) (*[]models.AreaCargoSerch, error)
 	IsCasbyDni(ctx context.Context, dni string) (bool, error)
 	EditByDni(ctx context.Context, telf1 string, telf2 string, direccion string, emai string, dni string) error
 	AddRenuncia(ctx context.Context, doc models.Documento, idvinculo int) (*int64, error)
@@ -23,6 +25,48 @@ type PersonalRepository interface {
 
 type personalRepository struct {
 	db *sqlx.DB
+}
+
+func (p *personalRepository) Search_Cargo_count(ctx context.Context, cargo string) (*[]models.AreaCargoSerch, error) {
+	var res []models.AreaCargoSerch
+	query := `SELECT
+	COUNT(*) AS cantidad,
+	ar.nombre,
+	ar.id
+  FROM
+	Vinculo v
+	INNER JOIN Cargo ar ON v.cargo_id = ar.id
+  WHERE
+	v.estado = 'activo' AND ar.activo = 1 AND ar.nombre LIKE ?
+  GROUP BY
+	v.cargo_id`
+	nombreLike := "%" + cargo + "%"
+
+	err := p.db.SelectContext(ctx, &res, query, nombreLike)
+	if err != nil {
+		return nil, err
+	}
+	return &res, nil
+}
+
+func (p *personalRepository) Search_Areas_count(ctx context.Context, area string) (*[]models.AreaCargoSerch, error) {
+	var res []models.AreaCargoSerch
+	query := `select
+  count(*) as cantidad,
+  ar.nombre,
+  ar.id
+from
+  Vinculo v
+  inner join Area ar on v.area_id = ar.id
+  where v.estado = 'activo' and ar.activo = 1 and ar.nombre like ?
+GROUP by
+  v.area_id`
+	nombreLike := "%" + area + "%"
+	err := p.db.SelectContext(ctx, &res, query, nombreLike)
+	if err != nil {
+		return nil, err
+	}
+	return &res, nil
 }
 
 func (p *personalRepository) Search_dni_onlinne(ctx context.Context, dni string) (*models.PersonDniRequest, error) {

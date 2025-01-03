@@ -77,6 +77,7 @@
                 class="form-control"
                 :class="errors?.email ? 'is-invalid' : ''"
                 id="email"
+                :disabled="formData.existe"
                 required
               />
               <span v-if="errors?.email">
@@ -91,6 +92,7 @@
                 class="form-control"
                 :class="errors?.telf1 ? 'is-invalid' : ''"
                 id="telf1"
+                :disabled="formData.existe"
                 required
               />
               <span v-if="errors?.telf1">
@@ -103,6 +105,7 @@
                 v-model="formData.nacimiento"
                 type="date"
                 class="form-control"
+                :disabled="formData.existe"
                 id="nacimiento"
                 required
               />
@@ -116,6 +119,7 @@
                 id="direccion"
                 :class="errors?.direccion ? 'is-invalid' : ''"
                 required
+                :disabled="formData.existe"
               />
               <span v-if="errors?.direccion">
                 <p class="text-danger fs-6" v-for="x in errors.direccion._errors">{{ x }}</p>
@@ -130,6 +134,7 @@
                     v-model="formData.sexo"
                     type="radio"
                     name="sexo"
+                    :disabled="formData.existe"
                     value="M"
                     class="form-selectgroup-input"
                   />
@@ -140,6 +145,7 @@
                     v-model="formData.sexo"
                     type="radio"
                     name="sexo"
+                    :disabled="formData.existe"
                     value="F"
                     class="form-selectgroup-input"
                   />
@@ -176,6 +182,7 @@ interface FormData {
   nacimiento: string
   sexo: string | undefined
   email: string | undefined
+  existe?: boolean
 }
 const phoneRegex = /^\d{9}$/
 const schema_validate = z.object({
@@ -200,7 +207,8 @@ const formData: FormData = reactive({
   telf1: '',
   nacimiento: '',
   sexo: 'M',
-  email: ''
+  email: '',
+  existe: false
 })
 
 const buscar_dni = async () => {
@@ -223,6 +231,7 @@ const buscar_dni = async () => {
       formData.nacimiento = parseISO(user.Nacimiento).toISOString().split('T')[0]
       formData.sexo = user.Sexo
       formData.email = user.Email
+      formData.existe = true
     }
   } catch (error) {
     try {
@@ -241,11 +250,10 @@ const emit = defineEmits(['nextStep'])
 const submitForm = () => {
   errors.value = null
   const result = schema_validate.safeParse(formData)
-  if (result.success) {
+  if (result.success || formData.existe) {
     emit('nextStep', formData)
   } else {
     errors.value = result.error.format()
-    console.log('Datos del formulario:', result.error)
   }
 }
 </script>

@@ -114,7 +114,7 @@
 </template>
 
 <script lang="ts" setup>
-import { getYear, parseISO } from 'date-fns'
+import { getYear } from 'date-fns'
 import { reactive, ref } from 'vue'
 import { z } from 'zod'
 
@@ -122,7 +122,7 @@ const emit = defineEmits(['nextStep', 'prevStep'])
 
 const schema_validate = z.object({
   tipoDocumento: z.string().nonempty('Se debe seleccionar un tipo de documento'),
-  numeroDocumento: z.number().int().positive(),
+  numeroDocumento: z.number().int().positive('El numero debe de ser positivo'),
   añoDocumento: z.number().int().positive().min(2000, 'El año debe ser mayor al 2000'),
   fecha: z.string().date('La fecha no es válida'),
   fechaValida: z.string().date('La fecha no es válida'),
@@ -146,28 +146,26 @@ const formData = reactive({
 })
 
 const submit = () => {
-  // emit('nextStep')
   errors.value = null
   const success = schema_validate.safeParse(formData)
   if (!success.success) {
     errors.value = success.error.format()
   } else {
-    console.log(getYear(parseISO(formData.añoDocumento)))
     if (
-      getYear(parseISO(formData.añoDocumento)) > getYear(parseISO(formData.fecha)) ||
-      getYear(parseISO(formData.añoDocumento)) > getYear(parseISO(formData.fechaValida))
+      getYear(new Date(formData.añoDocumento)) > getYear(new Date(formData.fecha)) ||
+      getYear(new Date(formData.añoDocumento)) > getYear(new Date(formData.fechaValida))
     ) {
       errors.value = {
         añoDocumento: {
           _errors: ['El año debe ser menor o igual al año de la fecha del documento']
         },
         fechaValida: {
-          _errors: ['El año de la fecha valida debe de ser mayor al año del documento']
+          _errors: ['El año de la fecha válida debe ser mayor o igual al año del documento']
         },
         _errors: []
       }
     } else {
-      emit('nextStep')
+      emit('nextStep', formData)
     }
   }
 }

@@ -47,8 +47,23 @@ func (s *PersonalService) AddRenuncia(doc models.Documento, id int) error {
 }
 
 func (s *PersonalService) Buscar_dni_onlinne(dni string) (*models.PersonDniRequest, error) {
-
 	res, err := s.repo.Search_dni_onlinne(context.Background(), dni)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+func (s *PersonalService) Buscar_Areas(area string) (*[]models.AreaCargoSerch, error) {
+	res, err := s.repo.Search_Areas_count(context.Background(), area)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+func (s *PersonalService) Buscar_Cargos(cargo string) (*[]models.AreaCargoSerch, error) {
+	res, err := s.repo.Search_Cargo_count(context.Background(), cargo)
 	if err != nil {
 		return nil, err
 	}

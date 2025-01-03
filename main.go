@@ -62,7 +62,7 @@ func main() {
 			ProgramName:         "",
 		},
 		Windows: &windows.Options{
-			DisableWindowIcon: true,
+			DisableWindowIcon: false,
 			Theme:             windows.Theme(windows.Dark),
 			CustomTheme: &windows.ThemeSettings{
 				DarkModeTitleBar:  windows.RGB(26, 34, 52),

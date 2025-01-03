@@ -22,47 +22,17 @@
           <form @submit.prevent="submitForm">
             <Step1 v-if="currentStep === 1" @next-step="handle1" />
 
-            <Step2 v-if="currentStep === 2" />
+            <Step2 v-if="currentStep === 2" @prev-step="prevStep" @next-step="handle2" />
 
-            <!-- Paso 3: Información Laboral -->
-            <div v-if="currentStep === 3">
-              <div class="mb-3">
-                <label class="form-label">Cargo</label>
-                <input v-model="formData.cargo" type="text" class="form-control" required />
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Área</label>
-                <input v-model="formData.area" type="text" class="form-control" required />
-              </div>
-            </div>
+            <Step3 v-if="currentStep === 3" @prev-step="prevStep" @next-step="handle3" />
 
             <!-- Paso 4: Resumen -->
             <div v-if="currentStep === 4">
               <h4 class="mb-3">Resumen de la Información</h4>
-              <div v-for="(value, key) in formData" :key="key" class="mb-2">
+              <div v-for="(value, key) in formDataF" :key="key" class="mb-2">
                 <strong>{{ key.charAt(0).toUpperCase() + key.slice(1) }}:</strong> {{ value }}
               </div>
             </div>
-
-            <!-- <div class="d-flex justify-content-center gap-5">
-              <button
-                v-if="currentStep > 1"
-                @click.prevent="prevStep"
-                class="btn btn-sm btn-secondary"
-              >
-                Anterior
-              </button>
-              <button
-                v-if="currentStep < 4"
-                @click.prevent="nextStep"
-                class="btn btn-sm btn-primary"
-              >
-                Siguiente
-              </button>
-              <button v-if="currentStep === 4" type="submit" class="btn btn-sm btn-success">
-                Guardar
-              </button>
-            </div> -->
           </form>
         </div>
       </div>
@@ -73,9 +43,10 @@
 <script setup>
 import Step1 from '@comp/add//step1.vue'
 import Step2 from '@comp/add/step2.vue'
+import Step3 from '@comp/add/step3.vue'
 import { ref, reactive } from 'vue'
 
-const currentStep = ref(2)
+const currentStep = ref(1)
 const steps = [
   { title: 'Información Personal' },
   { title: 'Documento' },
@@ -86,6 +57,24 @@ const steps = [
 const handle1 = (data) => {
   formDataF.persona = data
   nextStep()
+}
+
+const handle2 = (data) => {
+  formDataF.documento = data
+  nextStep()
+}
+
+const handle3 = (data) => {
+  formDataF.vinculo.area = data.area
+  formDataF.vinculo.cargo = data.cargo
+  formDataF.vinculo.regimen = data.regimen
+  nextStep()
+}
+
+const prevStep = () => {
+  if (currentStep.value > 1) {
+    currentStep.value--
+  }
 }
 
 const formData = reactive({
@@ -104,26 +93,8 @@ const formData = reactive({
 })
 
 const formDataF = reactive({
-  persona: {
-    dni: '',
-    aparterno: '',
-    amaterno: '',
-    nombres: '',
-    direccion: '',
-    telf1: null,
-    nacimiento: '',
-    sexo: 'M',
-    email: ''
-  },
-  documento: {
-    tipo: '',
-    numero: '',
-    año: '',
-    fecha: null,
-    fecha_valida: '',
-    descripcion: '',
-    sueldo: ''
-  },
+  persona: {},
+  documento: {},
   vinculo: {
     dni: '',
     doc_ingreso_id: '',
@@ -140,12 +111,6 @@ const nextStep = () => {
   }
 }
 
-const prevStep = () => {
-  if (currentStep.value > 1) {
-    currentStep.value--
-  }
-}
-
 const goToStep = (step) => {
   if (step <= currentStep.value) {
     currentStep.value = step
@@ -155,7 +120,6 @@ const goToStep = (step) => {
 const submitForm = () => {
   console.log('Datos del formulario:', formData)
   alert('Formulario guardado con éxito!')
-  // Aquí puedes agregar la lógica para enviar los datos a tu backend
 }
 </script>
 
