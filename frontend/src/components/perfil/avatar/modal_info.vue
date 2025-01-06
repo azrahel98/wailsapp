@@ -131,12 +131,14 @@ const errors = ref<z.ZodFormattedError<schema_validateType> | null>(null)
 
 const guardar = (user: any) => {
   try {
+    console.log('click aquii')
     errors.value = null
     const valid = schema_validate.safeParse(user)
-    if (!valid.success) errors.value = valid.error.format()
-
+    if (!valid.success) {
+      errors.value = valid.error.format()
+    }
     if (valid.success) {
-      EditByDni(user.Telf1, user.Telf2, user.Direccion, user.Email, user.Dni)
+      EditByDni(user.Telf1, user.Telf2, user.Direccion, user.Email, user.Dni, user.Ruc)
       router.go(0)
     }
   } catch (error) {

@@ -3,6 +3,7 @@ package repositories
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -10,6 +11,7 @@ import (
 	"vesgoapp/src/models"
 
 	"github.com/jmoiron/sqlx"
+	"github.com/lib/pq"
 )
 
 type PersonalRepository interface {
@@ -19,12 +21,69 @@ type PersonalRepository interface {
 	Search_Areas_count(ctx context.Context, area string) (*[]models.AreaCargoSerch, error)
 	Search_Cargo_count(ctx context.Context, cargo string) (*[]models.AreaCargoSerch, error)
 	IsCasbyDni(ctx context.Context, dni string) (bool, error)
-	EditByDni(ctx context.Context, telf1 string, telf2 string, direccion string, emai string, dni string) error
+	EditByDni(ctx context.Context, telf1 string, telf2 string, direccion string, emai string, dni string, ruc string) error
 	AddRenuncia(ctx context.Context, doc models.Documento, idvinculo int) (*int64, error)
+	Create_newIUser(ctx *sqlx.Tx, perfil models.Perfil) (*models.Perfil, error)
+	Create_documento(ctx *sqlx.Tx, documento models.Documento) (*int64, error)
+	Crear_Vinculo(ctx *sqlx.Tx, vinculo models.Vinculo) (*int64, error)
+	TxBegin(ctx context.Context) (*sqlx.Tx, error)
 }
 
 type personalRepository struct {
-	db *sqlx.DB
+	Db *sqlx.DB
+}
+
+func (p *personalRepository) TxBegin(ctx context.Context) (*sqlx.Tx, error) {
+	tx, err := p.Db.BeginTxx(context.Background(), nil)
+	if err != nil {
+		return nil, err
+	}
+	return tx, nil
+}
+
+func (p *personalRepository) Crear_Vinculo(ctx *sqlx.Tx, vinculo models.Vinculo) (*int64, error) {
+	query := `INSERT INTO Vinculo (dni, doc_ingreso_id, doc_salida_id, estado, area_id, cargo_id, regimen) VALUES (?, ?, ?, ?, ?, ?, ?)`
+
+	row, err := ctx.Exec(query, vinculo.Dni, vinculo.Dingreso, vinculo.Dsalida, vinculo.Estado, vinculo.Area, vinculo.Cargo, vinculo.Regimen)
+	if err != nil {
+		return nil, err
+	}
+	last, err := row.LastInsertId()
+	if err != nil {
+		return nil, err
+	}
+	return &last, nil
+}
+
+func (p *personalRepository) Create_documento(ctx *sqlx.Tx, documento models.Documento) (*int64, error) {
+	query := `INSERT INTO Documento (tipo, numero, year, fecha, fecha_valida, descripcion,sueldo) VALUES (?, ?, ?, ?, ?, ?, ?)`
+	row, err := ctx.Exec(query, documento.Tipo, documento.Numero, documento.Año, documento.Fecha, documento.Fecha_Valida, documento.Descripcion, documento.Sueldo)
+	if err != nil {
+		if sqlErr, ok := err.(*pq.Error); ok && sqlErr.Code == "1062" {
+			return nil, errors.New("el registro ya existe, no pueden existir duplicados")
+		}
+		return nil, err
+	}
+	last, err := row.LastInsertId()
+	if err != nil {
+		return nil, err
+	}
+	return &last, nil
+}
+
+func (p *personalRepository) Create_newIUser(ctx *sqlx.Tx, perfil models.Perfil) (*models.Perfil, error) {
+	key := os.Getenv("DBKEY")
+	query := `INSERT INTO Persona (dni, nombre, apaterno, amaterno, direccion, telf1, telf2, email, ruc, fecha_nacimiento, sexo, foto) 
+              VALUES (?, ?, ?, ?, aes_encrypt(?, ?), aes_encrypt(?, ?), aes_encrypt(?, ?), aes_encrypt(?, ?), ?, ?, ?, ?)`
+	_, err := ctx.Exec(query, perfil.Dni, perfil.Nombre, perfil.Aparterno, perfil.Amaterno, perfil.Direccion, key, perfil.Telf1, key, perfil.Telf2, key, perfil.Email, key,
+		perfil.Ruc, perfil.Nacimiento, perfil.Sexo, perfil.Foto)
+	if err != nil {
+		if sqlErr, ok := err.(*pq.Error); ok && sqlErr.Code == "1062" {
+			return nil, errors.New("el registro ya existe, no pueden existir duplicados")
+		}
+		return nil, err
+	}
+	return &perfil, nil
 }
 
 func (p *personalRepository) Search_Cargo_count(ctx context.Context, cargo string) (*[]models.AreaCargoSerch, error) {
@@ -42,7 +101,7 @@ func (p *personalRepository) Search_Cargo_count(ctx context.Context, cargo strin
 	v.cargo_id`
 	nombreLike := "%" + cargo + "%"
 
-	err := p.db.SelectContext(ctx, &res, query, nombreLike)
+	err := p.Db.SelectContext(ctx, &res, query, nombreLike)
 	if err != nil {
 		return nil, err
 	}
@@ -62,7 +121,7 @@ from
 GROUP by
   v.area_id`
 	nombreLike := "%" + area + "%"
-	err := p.db.SelectContext(ctx, &res, query, nombreLike)
+	err := p.Db.SelectContext(ctx, &res, query, nombreLike)
 	if err != nil {
 		return nil, err
 	}
@@ -89,7 +148,6 @@ func (p *personalRepository) Search_dni_onlinne(ctx context.Context, dni string)
 		return nil, fmt.Errorf("error leyendo la respuesta: %w", err)
 	}
 
-	fmt.Println("Cuerpo de la respuesta:", string(body))
 	var resultado models.PersonDniRequest
 
 	if err := json.Unmarshal(body, &resultado); err != nil {
@@ -102,7 +160,7 @@ func (p *personalRepository) Search_dni_onlinne(ctx context.Context, dni string)
 func (p *personalRepository) AddRenuncia(ctx context.Context, doc models.Documento, idvinculo int) (*int64, error) {
 	query := `insert into Documento (tipo, numero, year, fecha, fecha_valida, descripcion) values (?, ?, ?, ?, ?, ?)`
 
-	last, err := p.db.Exec(query, doc.Tipo, doc.Numero, doc.Año, doc.Fecha, doc.Fecha_Valida, doc.Descripcion)
+	last, err := p.Db.Exec(query, doc.Tipo, doc.Numero, doc.Año, doc.Fecha, doc.Fecha_Valida, doc.Descripcion)
 	if err != nil {
 		return nil, err
 	}
@@ -114,7 +172,7 @@ func (p *personalRepository) AddRenuncia(ctx context.Context, doc models.Documen
 
 	query2 := `update Vinculo set estado = 'inactivo',doc_salida_id= ? where   id = ?`
 
-	last, err = p.db.Exec(query2, id, idvinculo)
+	last, err = p.Db.Exec(query2, id, idvinculo)
 	if err != nil {
 		return nil, err
 	}
@@ -125,22 +183,32 @@ func (p *personalRepository) AddRenuncia(ctx context.Context, doc models.Documen
 	return &id2, nil
 }
 
-func (p *personalRepository) EditByDni(ctx context.Context, telf1 string, telf2 string, direccion string, emai string, dni string) error {
+func (p *personalRepository) EditByDni(ctx context.Context, telf1 string, telf2 string, direccion string, emai string, ruc string, dni string) error {
 	key := os.Getenv("DBKEY")
-	query := fmt.Sprintf("update Persona set direccion = aes_encrypt('%s','%s'), telf1= aes_encrypt('%s','%s'), telf2 = aes_encrypt('%s','%s'), email = aes_encrypt('%s','%s') where dni = '%s'", direccion, key, telf1, key, telf2, key, emai, key, dni)
+	query := `UPDATE Persona SET 
+        direccion = aes_encrypt(?, ?), 
+        telf1 = aes_encrypt(?, ?), 
+        telf2 = aes_encrypt(?, ?), 
+        email = aes_encrypt(?, ?), 
+        ruc = ? 
+        WHERE dni = ?`
 
-	last, err := p.db.Exec(query)
+	result, err := p.Db.ExecContext(ctx, query, direccion, key, telf1, key, telf2, key, emai, key, ruc, dni)
+	if err != nil {
+
+		return err
+	}
+
+	rowsAffected, err := result.RowsAffected()
 	if err != nil {
 		return err
 	}
 
-	_, err = last.RowsAffected()
-	if err != nil {
-		return err
+	if rowsAffected == 0 {
+		return errors.New("no rows were updated")
 	}
 
 	return nil
-
 }
 
 func (p *personalRepository) IsCasbyDni(ctx context.Context, dni string) (bool, error) {
@@ -163,7 +231,7 @@ ORDER by
 limit
   1`
 
-	err := p.db.GetContext(ctx, &status, query, dni)
+	err := p.Db.GetContext(ctx, &status, query, dni)
 	if err != nil {
 		return false, err
 	}
@@ -173,7 +241,7 @@ limit
 func (p *personalRepository) Search_by_dni_vinculos(ctx context.Context, dni string) (*[]models.Vinculos, error) {
 	var resul []models.Vinculos
 
-	err := p.db.SelectContext(ctx, &resul, "select * from Vinculos_vigentes where dni = ? order by fecha_ingreso desc", dni)
+	err := p.Db.SelectContext(ctx, &resul, "select * from Vinculos_vigentes where dni = ? order by fecha_ingreso desc", dni)
 	if err != nil {
 		return nil, err
 	}
@@ -205,13 +273,12 @@ func (p *personalRepository) Search_by_dni_perfil(ctx context.Context, dni strin
 	where p.dni = ?
 	GROUP by
 	p.dni`
-	err := p.db.GetContext(ctx, &res, query, key, key, key, key, dni)
+	err := p.Db.GetContext(ctx, &res, query, key, key, key, key, dni)
 	if err != nil {
 		return nil, err
 	}
 	return &res, nil
 }
-
 func CreatePersonalRepository(db *sqlx.DB) PersonalRepository {
 	return &personalRepository{db}
 }

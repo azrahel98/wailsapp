@@ -2,7 +2,7 @@
   <div class="container-fluid p-3">
     <div class="card card-sm">
       <div class="card-body">
-        <form class="row g-3" @submit.prevent="submit">
+        <div class="row g-3">
           <div class="col-md-6">
             <label class="form-label">Tipo de Doc</label>
             <select
@@ -11,9 +11,9 @@
               class="form-select"
               required
             >
-              <option value="carta">Carta</option>
               <option value="contrato">Contrato</option>
-              <option value="otro">Otro</option>
+              <option value="Resolucion">Resolucion</option>
+              <option value="Acta">Acta</option>
             </select>
             <span v-if="errors?.tipoDocumento">
               <p class="text-danger fs-6" v-for="x in errors.tipoDocumento._errors">{{ x }}</p>
@@ -103,11 +103,11 @@
             <button @click="prevent" class="btn btn-outline-secondary btn-md p-1 fs-5">
               Anterior
             </button>
-            <button type="submit" class="btn btn-outline-facebook btn-md p-1 fs-5">
+            <button type="button" @click="submit" class="btn btn-outline-facebook btn-md p-1 fs-5">
               Siguiente
             </button>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   </div>

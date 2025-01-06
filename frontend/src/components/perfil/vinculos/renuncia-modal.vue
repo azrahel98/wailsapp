@@ -11,7 +11,7 @@
             <div class="row row-gap-3">
               <div class="col-md-6">
                 <label for="nombre" class="form-label">Tipo de Documento</label>
-                <select class="form-select" v-model="doc.tipo">
+                <select class="form-select" v-model="doc.tipoDocumento">
                   <option value="Carta">Carta</option>
                   <option value="Resolucion">Resolucion</option>
                   <option value="Acta">Acta</option>
@@ -24,10 +24,10 @@
                 <input
                   type="number"
                   id="telefono"
-                  v-model="doc.numero"
+                  v-model="doc.numeroDocumento"
                   class="form-control"
                   placeholder="##"
-                  :class="errors?.numero ? 'is-invalid' : ''"
+                  :class="errors?.numeroDocumento ? 'is-invalid' : ''"
                   required
                 />
               </div>
@@ -36,11 +36,11 @@
                 <label for="direccion" class="form-label">Año</label>
                 <input
                   type="number"
-                  v-model="doc.año"
+                  v-model="doc.añoDocumento"
                   id="direccion"
                   class="form-control"
                   placeholder="202$"
-                  :class="errors?.año ? 'is-invalid' : ''"
+                  :class="errors?.añoDocumento ? 'is-invalid' : ''"
                   required
                 />
               </div>
@@ -65,14 +65,14 @@
                   id="date"
                   class="form-control"
                   required
-                  v-model="doc.fecha_valida"
-                  :class="errors?.fecha_valida ? 'is-invalid' : ''"
+                  v-model="doc.fechaValida"
+                  :class="errors?.fechaValida ? 'is-invalid' : ''"
                   placeholder="Fecha"
                 />
                 <span
-                  v-if="errors?.fecha_valida"
+                  v-if="errors?.fechaValida"
                   class="invalid-feedback fs-6"
-                  v-for="x in errors.fecha_valida._errors"
+                  v-for="x in errors.fechaValida._errors"
                   >{{ x }}</span
                 >
               </div>
@@ -110,9 +110,10 @@ import { isAfter, parseISO } from 'date-fns'
 import { router } from '@router/router'
 
 const doc = ref<models.Documento>({
-  tipo: 'Carta',
+  tipoDocumento: 'Carta',
   fecha: '',
-  descripcion: ''
+  descripcion: '',
+  sueldo: 0
 })
 
 const prop = defineProps({
@@ -120,11 +121,11 @@ const prop = defineProps({
 })
 
 const schema_validate = z.object({
-  tipo: z.string().nonempty(),
-  numero: z.number(),
-  año: z.number().min(2024, 'El año debe ser mayor al 2024'),
+  tipoDocumento: z.string().nonempty(),
+  numeroDocumento: z.number(),
+  añoDocumento: z.number().min(2024, 'El año debe ser mayor al 2024'),
   fecha: z.string().date('La fecha no es valida'),
-  fecha_valida: z.string().date('La fecha no es valida'),
+  fechaValida: z.string().date('La fecha no es valida'),
   descripcion: z.string().min(3, 'La descripcion debe tener al menos 5 caracteres')
 })
 type schema_validateType = z.infer<typeof schema_validate>
@@ -136,9 +137,9 @@ const renuncia = async (id: number) => {
   if (!valid.success) {
     errors.value = valid.error.format()
   } else {
-    if (isAfter(parseISO(doc.value.fecha), parseISO(doc.value.fecha_valida!))) {
+    if (isAfter(parseISO(doc.value.fecha), parseISO(doc.value.fechaValida!))) {
       errors.value = {
-        fecha_valida: {
+        fechaValida: {
           _errors: ['La fecha valida no puede ser menor a la fecha del documento']
         },
         _errors: []

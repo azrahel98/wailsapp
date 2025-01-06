@@ -12,6 +12,8 @@ export function Buscar_dni_onlinne(arg1:string):Promise<models.PersonDniRequest>
 
 export function Buscar_persona_by_dni(arg1:string):Promise<models.Perfil>;
 
-export function EditByDni(arg1:string,arg2:string,arg3:string,arg4:string,arg5:string):Promise<void>;
+export function Crear_nuevoTrabajador(arg1:models.Data,arg2:boolean):Promise<any>;
+
+export function EditByDni(arg1:string,arg2:string,arg3:string,arg4:string,arg5:string,arg6:string):Promise<void>;
 
 export function Search_by_dni_vinculos(arg1:string):Promise<any>;

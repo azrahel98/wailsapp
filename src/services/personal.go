@@ -22,8 +22,8 @@ func (s *PersonalService) Buscar_persona_by_dni(dni string) (*models.Perfil, err
 	return res, nil
 }
 
-func (s *PersonalService) EditByDni(telf1 string, telf2 string, direccion string, email string, dni string) error {
-	err := s.repo.EditByDni(context.Background(), telf1, telf2, direccion, email, dni)
+func (s *PersonalService) EditByDni(telf1 string, telf2 string, direccion string, email string, ruc string, dni string) error {
+	err := s.repo.EditByDni(context.Background(), telf1, telf2, direccion, email, dni, ruc)
 	if err != nil {
 		return err
 	}
@@ -33,6 +33,7 @@ func (s *PersonalService) EditByDni(telf1 string, telf2 string, direccion string
 func (s *PersonalService) Search_by_dni_vinculos(dni string) (*[]models.Vinculos, error) {
 	res, err := s.repo.Search_by_dni_vinculos(context.Background(), dni)
 	if err != nil {
+
 		return nil, err
 	}
 	return res, nil
@@ -68,4 +69,57 @@ func (s *PersonalService) Buscar_Cargos(cargo string) (*[]models.AreaCargoSerch,
 		return nil, err
 	}
 	return res, nil
+}
+
+func (s *PersonalService) Crear_nuevoTrabajador(info models.Data, existe bool) (*string, error) {
+	tx, err := s.repo.TxBegin(context.Background())
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		if p := recover(); p != nil {
+			tx.Rollback()
+			panic(p)
+		} else if err != nil {
+			tx.Rollback()
+		} else {
+			err = tx.Commit()
+		}
+	}()
+
+	if existe {
+		doc, err := s.repo.Create_documento(tx, info.Documento)
+		if err != nil {
+			tx.Rollback()
+			return nil, err
+		}
+		info.Vinculo.Dingreso = int(*doc)
+		info.Vinculo.Dni = info.Persona.Dni
+		_, err = s.repo.Crear_Vinculo(tx, info.Vinculo)
+		if err != nil {
+			tx.Rollback()
+			return nil, err
+		}
+		return &info.Persona.Dni, nil
+	} else {
+		per, err := s.repo.Create_newIUser(tx, info.Persona)
+		if err != nil {
+
+			tx.Rollback()
+			return nil, err
+		}
+		doc, err := s.repo.Create_documento(tx, info.Documento)
+		if err != nil {
+			tx.Rollback()
+			return nil, err
+		}
+		info.Vinculo.Dingreso = int(*doc)
+		info.Vinculo.Dni = per.Dni
+		_, err = s.repo.Crear_Vinculo(tx, info.Vinculo)
+		if err != nil {
+			tx.Rollback()
+			return nil, err
+		}
+		return &info.Persona.Dni, err
+	}
 }

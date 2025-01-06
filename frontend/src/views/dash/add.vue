@@ -13,27 +13,27 @@
             class="step-item"
             :class="{ active: currentStep === index + 1, disabled: currentStep < index + 1 }"
           >
-            <a @click.prevent="goToStep(index + 1)">{{ index + 1 }}. {{ step.title }}</a>
+            <span @click.prevent="goToStep(index + 1)">{{ index + 1 }}. {{ step.title }}</span>
           </li>
         </ol>
       </div>
       <div class="col-sm-12 col-md-8 card">
         <div class="card-body px-0 mx-0">
-          <form @submit.prevent="submitForm">
+          <div>
             <Step1 v-if="currentStep === 1" @next-step="handle1" />
 
             <Step2 v-if="currentStep === 2" @prev-step="prevStep" @next-step="handle2" />
 
             <Step3 v-if="currentStep === 3" @prev-step="prevStep" @next-step="handle3" />
 
-            <!-- Paso 4: Resumen -->
             <div v-if="currentStep === 4">
               <h4 class="mb-3">Resumen de la Información</h4>
               <div v-for="(value, key) in formDataF" :key="key" class="mb-2">
                 <strong>{{ key.charAt(0).toUpperCase() + key.slice(1) }}:</strong> {{ value }}
               </div>
             </div>
-          </form>
+            <button type="button" @click="submitForm">click</button>
+          </div>
         </div>
       </div>
     </div>
@@ -45,7 +45,22 @@ import Step1 from '@comp/add//step1.vue'
 import Step2 from '@comp/add/step2.vue'
 import Step3 from '@comp/add/step3.vue'
 import { ref, reactive } from 'vue'
+import { Crear_nuevoTrabajador } from '@wails/services/PersonalService'
+import { router } from '@router/router'
 
+const existe = ref(false)
+const formDataF = reactive({
+  persona: {},
+  documento: {},
+  vinculo: {
+    dni: '',
+    doc_ingreso_id: '',
+    estado: 'activo',
+    area: '',
+    cargo: '',
+    regimen: ''
+  }
+})
 const currentStep = ref(1)
 const steps = [
   { title: 'Información Personal' },
@@ -54,8 +69,10 @@ const steps = [
   { title: 'Resumen' }
 ]
 
-const handle1 = (data) => {
+const handle1 = (data, x) => {
   formDataF.persona = data
+  existe.value = x
+
   nextStep()
 }
 
@@ -77,34 +94,6 @@ const prevStep = () => {
   }
 }
 
-const formData = reactive({
-  dni: '',
-  nombres: '',
-  correo: '',
-  direccion: '',
-  telefono: '',
-  tipoDocumento: '',
-  numeroDocumento: '',
-  fechaDocumento: '',
-  descripcion: '',
-  sueldo: '',
-  cargo: '',
-  area: ''
-})
-
-const formDataF = reactive({
-  persona: {},
-  documento: {},
-  vinculo: {
-    dni: '',
-    doc_ingreso_id: '',
-    estado: '',
-    area: '',
-    cargo: '',
-    regimen: ''
-  }
-})
-
 const nextStep = () => {
   if (currentStep.value < 4) {
     currentStep.value++
@@ -117,9 +106,14 @@ const goToStep = (step) => {
   }
 }
 
-const submitForm = () => {
-  console.log('Datos del formulario:', formData)
-  alert('Formulario guardado con éxito!')
+const submitForm = async () => {
+  try {
+    const x = await Crear_nuevoTrabajador(formDataF, existe.value)
+
+    await router.push(`/perfil/${x}`)
+  } catch (error) {
+    console.log(error)
+  }
 }
 </script>
 

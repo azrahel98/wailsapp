@@ -16,9 +16,7 @@
         </span>
       </div>
       <div class="col-6">
-        <h2 class="fw-bold m-0">
-          {{ perfil.Nombre }} {{ perfil.Aparterno }} {{ perfil.Amaterno }}
-        </h2>
+        <h2 class="fw-bold m-0">{{ perfil.Nombre }} {{ perfil.Apaterno }} {{ perfil.Amaterno }}</h2>
         <div class="p-0 m-0 fs-4">
           <IconCardboards class="icon" /> DNI:
           {{ perfil.Dni }}
@@ -289,7 +287,7 @@ const perfil = ref<models.Perfil>({
   Dni: '',
   Nacimiento: '',
   Nombre: '',
-  Aparterno: '',
+  Apaterno: '',
   Amaterno: ''
 })
 

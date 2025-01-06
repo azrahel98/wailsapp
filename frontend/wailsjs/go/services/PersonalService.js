@@ -22,8 +22,12 @@ export function Buscar_persona_by_dni(arg1) {
   return window['go']['services']['PersonalService']['Buscar_persona_by_dni'](arg1);
 }
 
-export function EditByDni(arg1, arg2, arg3, arg4, arg5) {
-  return window['go']['services']['PersonalService']['EditByDni'](arg1, arg2, arg3, arg4, arg5);
+export function Crear_nuevoTrabajador(arg1, arg2) {
+  return window['go']['services']['PersonalService']['Crear_nuevoTrabajador'](arg1, arg2);
+}
+
+export function EditByDni(arg1, arg2, arg3, arg4, arg5, arg6) {
+  return window['go']['services']['PersonalService']['EditByDni'](arg1, arg2, arg3, arg4, arg5, arg6);
 }
 
 export function Search_by_dni_vinculos(arg1) {
