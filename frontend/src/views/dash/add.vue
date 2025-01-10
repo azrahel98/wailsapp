@@ -32,7 +32,14 @@
                 <strong>{{ key.charAt(0).toUpperCase() + key.slice(1) }}:</strong> {{ value }}
               </div>
             </div>
-            <button type="button" @click="submitForm">click</button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              v-if="currentStep == 4"
+              @click="submitForm"
+            >
+              click
+            </button>
           </div>
         </div>
       </div>
