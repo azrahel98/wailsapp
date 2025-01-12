@@ -6,6 +6,8 @@ export function AddRenuncia(arg1:models.Documento,arg2:number):Promise<void>;
 
 export function Buscar_Areas(arg1:string):Promise<any>;
 
+export function Buscar_Asistencia(arg1:string,arg2:number,arg3:number):Promise<any>;
+
 export function Buscar_Cargos(arg1:string):Promise<any>;
 
 export function Buscar_dni_onlinne(arg1:string):Promise<models.PersonDniRequest>;

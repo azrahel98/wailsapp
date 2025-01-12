@@ -23,6 +23,7 @@ type PersonalRepository interface {
 	IsCasbyDni(ctx context.Context, dni string) (bool, error)
 	EditByDni(ctx context.Context, telf1 string, telf2 string, direccion string, emai string, dni string, ruc string) error
 	AddRenuncia(ctx context.Context, doc models.Documento, idvinculo int) (*int64, error)
+	Buscar_Asistencia(ctx context.Context, dni string, mes int, año int) (*[]models.AsistenciaResponse, error)
 	Create_newIUser(ctx *sqlx.Tx, perfil models.Perfil) (*models.Perfil, error)
 	Create_documento(ctx *sqlx.Tx, documento models.Documento) (*int64, error)
 	Crear_Vinculo(ctx *sqlx.Tx, vinculo models.Vinculo) (*int64, error)
@@ -31,6 +32,19 @@ type PersonalRepository interface {
 
 type personalRepository struct {
 	Db *sqlx.DB
+}
+
+func (p *personalRepository) Buscar_Asistencia(ctx context.Context, dni string, mes int, año int) (*[]models.AsistenciaResponse, error) {
+
+	var asistencia []models.AsistenciaResponse
+
+	query := `select * from asistenciavw where dni = ? and year(fecha) = ? and month(fecha) = ?`
+
+	err := p.Db.SelectContext(ctx, &asistencia, query, dni, año, mes)
+	if err != nil {
+		return nil, err
+	}
+	return &asistencia, nil
 }
 
 func (p *personalRepository) TxBegin(ctx context.Context) (*sqlx.Tx, error) {

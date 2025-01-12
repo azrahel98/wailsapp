@@ -123,3 +123,11 @@ func (s *PersonalService) Crear_nuevoTrabajador(info models.Data, existe bool) (
 		return &info.Persona.Dni, err
 	}
 }
+
+func (s *PersonalService) Buscar_Asistencia(dni string, mes int, año int) (*[]models.AsistenciaResponse, error) {
+	res, err := s.repo.Buscar_Asistencia(context.Background(), dni, mes, año)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}

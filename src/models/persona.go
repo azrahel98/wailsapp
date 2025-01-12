@@ -75,3 +75,17 @@ type AreaCargoSerch struct {
 	Nombre   string `db:"nombre" json:"nombre"`
 	Id       int    `db:"id" json:"id"`
 }
+
+type AsistenciaResponse struct {
+	Dni     string  `db:"dni" json:"dni"`
+	Record1 *string `db:"registro1" json:"r1"`
+	Record2 *string `db:"registro2" json:"r2"`
+	Record3 *string `db:"registro3" json:"r3"`
+	Record4 *string `db:"registro4" json:"r4"`
+	Record5 *string `db:"registro5" json:"r5"`
+	Record6 *string `db:"registro6" json:"r6"`
+	Record7 *string `db:"registro7" json:"r7"`
+	Record8 *string `db:"registro8" json:"r8"`
+	Fecha   string  `db:"fecha" json:"fecha"`
+	Reloj   int     `db:"relojid" json:"reloj"`
+}

@@ -32,7 +32,22 @@
             <IconEdit class="icon p-0 m-0" />
           </button>
 
+          <button
+            class="btn btn-outline-warning p-1"
+            data-bs-toggle="modal"
+            @click="() => (open_asistencia = true)"
+            data-bs-target="#searchcalendar"
+          >
+            <CalendarSearchIcon class="icon p-0 m-0" />
+          </button>
+
           <modal_info :user="perfil" />
+          <modal_asistencia
+            :openmodal="open_asistencia"
+            @close="(x) => (open_asistencia = x)"
+            :dni="perfil.Dni"
+            :nombre="perfil.Nombre"
+          />
         </div>
       </div>
     </div>
@@ -258,6 +273,7 @@
 import { ref, onMounted } from 'vue'
 import modal_info from '@comp/perfil/avatar/modal_info.vue'
 import renunciaModal from '@comp/perfil/vinculos/renuncia-modal.vue'
+import modal_asistencia from '@comp/perfil/asistencia/moda.vue'
 import { Buscar_persona_by_dni, Search_by_dni_vinculos } from '@wails/services/PersonalService'
 import { models } from '@wails/models'
 import { router } from '@router/router'
@@ -277,7 +293,7 @@ import {
   IconX
 } from '@tabler/icons-vue'
 import { format, getYear, parseISO, addDays } from 'date-fns'
-import { CakeIcon } from 'lucide-vue-next'
+import { CakeIcon, CalendarSearchIcon } from 'lucide-vue-next'
 
 const click_collapse = (x: number) => {
   document.getElementById(`collapse#${x}`)?.classList.toggle('toggle-collapse')
@@ -293,6 +309,8 @@ const perfil = ref<models.Perfil>({
 
 const vinculos = ref<Array<any>>()
 const isloading = ref(false)
+
+const open_asistencia = ref(false)
 
 onMounted(async () => {
   try {

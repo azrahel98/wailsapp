@@ -25,10 +25,20 @@ import mapa from '@comp/dashboard/mapa.vue'
   .grid-items {
     max-height: 100%;
     display: grid;
-    grid-template-columns: minmax(20vw, 40vw) 1fr;
-    column-gap: 2vh;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-rows: min-content;
+    gap: 1.5rem;
+
     .card {
+      display: flex;
+      width: max-content;
       height: min-content;
+      align-items: center;
+      background: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 1rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
   }
 }

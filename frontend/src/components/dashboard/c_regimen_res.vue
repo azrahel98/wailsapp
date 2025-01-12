@@ -48,7 +48,7 @@ const chartData = computed(() => {
 
 const chartOptions = {
   indexAxis: 'y' as const,
-  responsive: true,
+  responsive: false,
   maintainAspectRatio: true,
   plugins: {
     animations: {
@@ -68,7 +68,7 @@ const chartOptions = {
     },
     legend: {
       display: true,
-      position: 'right',
+      position: 'bottom',
       labels: {
         pointStyle: 'circle',
         usePointStyle: true

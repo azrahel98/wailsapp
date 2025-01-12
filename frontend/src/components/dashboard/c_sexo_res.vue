@@ -31,8 +31,8 @@ const chartData = computed(() => {
     datasets: [
       {
         label: 'Masculino',
-        data: sortedData.map((r) => (r.Nombre == 'F' ? 1 : r.Cantidad)), // 1 para masculino, 0 para no masculino
-        backgroundColor: '#007BFF', // Azul para masculino
+        data: sortedData.map((r) => (r.Nombre == 'F' ? 1 : r.Cantidad)),
+        backgroundColor: '#007BFF',
         borderColor: '#FFFFFF',
         borderWidth: 1,
         borderRadius: 4
@@ -50,7 +50,7 @@ const chartData = computed(() => {
 })
 
 const chartOptions = {
-  responsive: true,
+  responsive: false,
   maintainAspectRatio: true,
   plugins: {
     animations: {
@@ -65,25 +65,15 @@ const chartOptions = {
     title: {
       display: true,
       padding: {
-        top: 1
+        top: 0
       }
     },
     legend: {
-      display: true,
+      display: false,
       position: 'bottom',
       labels: {
         pointStyle: 'circle',
         usePointStyle: true
-      }
-    },
-    tooltip: {
-      callbacks: {
-        label: (context: any) => {
-          const value = context.raw
-          const total = context.dataset.data.reduce((a: number, b: number) => a + b, 0)
-          const percentage = ((value / total) * 100).toFixed(1)
-          return `${value} personas (${percentage}%)`
-        }
       }
     }
   }

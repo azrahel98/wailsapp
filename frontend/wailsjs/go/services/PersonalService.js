@@ -10,6 +10,10 @@ export function Buscar_Areas(arg1) {
   return window['go']['services']['PersonalService']['Buscar_Areas'](arg1);
 }
 
+export function Buscar_Asistencia(arg1, arg2, arg3) {
+  return window['go']['services']['PersonalService']['Buscar_Asistencia'](arg1, arg2, arg3);
+}
+
 export function Buscar_Cargos(arg1) {
   return window['go']['services']['PersonalService']['Buscar_Cargos'](arg1);
 }
