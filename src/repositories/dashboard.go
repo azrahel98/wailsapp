@@ -12,9 +12,37 @@ type DashboardRepository interface {
 	Cantidad_by_sexo(ctx context.Context) (*[]models.RegimenesCantidad, error)
 	Cumpleaño_by_activos(ctx context.Context, mes int) (*[]models.Cumpleaños_Activos, error)
 	Buscar_by_nombre(ctx context.Context, nombre string) (*[]models.Buscar_trabajador, error)
+	Trabajadores_activos(ctx context.Context) (*[]models.RegimenesCantidad, error)
 }
 type dashboardRepository struct {
 	db *sqlx.DB
+}
+
+func (d *dashboardRepository) Trabajadores_activos(ctx context.Context) (*[]models.RegimenesCantidad, error) {
+	var res []models.RegimenesCantidad
+
+	query := `
+      select
+  ar.nombre nombre,
+  count(v.area_id) cantidad
+from
+  Vinculo v
+  inner join Area ar on v.area_id = ar.id
+WHERE
+  v.estado = 'activo'
+  and ar.activo = 1
+GROUP by
+  ar.id order by
+  cantidad desc
+
+    `
+
+	err := d.db.SelectContext(ctx, &res, query)
+	if err != nil {
+		return nil, err
+	}
+
+	return &res, nil
 }
 
 func (d *dashboardRepository) Cantidad_by_sexo(ctx context.Context) (*[]models.RegimenesCantidad, error) {

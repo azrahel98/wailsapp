@@ -17,3 +17,7 @@ export function Regimenes_resumen() {
 export function Sexo_cantidad() {
   return window['go']['services']['DashboardService']['Sexo_cantidad']();
 }
+
+export function Trabajadore_Activos_Area() {
+  return window['go']['services']['DashboardService']['Trabajadore_Activos_Area']();
+}

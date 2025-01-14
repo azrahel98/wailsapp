@@ -45,3 +45,11 @@ func (s *DashboardService) Buscar_trabajador(nombre string) (*[]models.Buscar_tr
 	}
 	return res, nil
 }
+
+func (s *DashboardService) Trabajadore_Activos_Area() (*[]models.RegimenesCantidad, error) {
+	res, err := s.repo.Trabajadores_activos(context.Background())
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}

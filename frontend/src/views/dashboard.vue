@@ -3,7 +3,7 @@
     <Sidebar :is-expanded="isExpanded" :toggle="togglesidebar" />
     <div class="main-content" @click="handleOutsideClick">
       <div class="page-body p-0 m-0">
-        <div class="container">
+        <div class="container-fluid">
           <RouterView />
         </div>
       </div>
