@@ -8,7 +8,7 @@
     aria-labelledby="staticBackdropLabel"
     aria-hidden="true"
   >
-    <div class="modal-dialog modal-xl">
+    <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header d-flex">
           <div class="d-flex justify-content-around align-items-center pt-3 mb-3 w-100">
@@ -32,8 +32,8 @@
             aria-label="Close"
           ></button>
         </div>
-        <div class="modal-body">
-          <div class="calendar">
+        <div class="modal-body p-0">
+          <div class="calendar px-2">
             <div class="calendar-header">
               <div class="day">Dom</div>
               <div class="day">Lun</div>
@@ -44,41 +44,61 @@
               <div class="day">Sáb</div>
             </div>
             <div class="calendar-body" v-if="isLoading">
-              <div class="calendar-day" v-for="_ in 30">
-                <div class="card placeholder-glow">
+              <div class="calendar-day w-100 p-0 m-0" v-for="_ in 30">
+                <div
+                  class="card placeholder-glow w-100"
+                  style="height: min-content; max-height: 60px"
+                >
                   <div class="ratio ratio-21x9 card-img-top placeholder"></div>
-                  <div class="card-body">
+                  <div class="card-body w-100">
                     <div class="placeholder col-9 mb-3"></div>
-                    <div class="placeholder placeholder-xs col-10"></div>
-                    <div class="placeholder placeholder-xs col-11"></div>
                   </div>
                 </div>
               </div>
             </div>
             <div class="calendar-body" v-else>
-              <div v-for="x in fristnumday" class="calendar-day"></div>
+              <div v-for="x in fristnumday" class="calendar-day bg-secondary-lt"></div>
               <div
                 class="calendar-day"
                 v-for="day in totaldiasMes"
-                :class="{ 'has-data': search_find(day).length > 0 }"
+                :class="{
+                  'bg-primary-lt text-dark': search_find(day).length > 0,
+                  'bg-secondary-lt': search_find(day).length === 0
+                }"
               >
                 <span class="date">{{ day }}</span>
 
                 <ul v-for="x in search_find(day)" class="attendance-list">
-                  <li v-if="x['r1']"><IconClock class="icon icon-sm" /> {{ x['r1'] }}</li>
-                  <li v-if="x['r2']"><IconClock class="icon icon-sm" /> {{ x['r2'] }}</li>
-                  <li v-if="x['r3']"><IconClock class="icon icon-sm" /> {{ x['r3'] }}</li>
-                  <li v-if="x['r4']"><IconClock class="icon icon-sm" /> {{ x['r4'] }}</li>
-                  <li v-if="x['r5']"><IconClock class="icon icon-sm" /> {{ x['r5'] }}</li>
-                  <li v-if="x['r6']"><IconClock class="icon icon-sm" /> {{ x['r6'] }}</li>
-                  <li v-if="x['r7']"><IconClock class="icon icon-sm" /> {{ x['r7'] }}</li>
-                  <li v-if="x['r8']"><IconClock class="icon icon-sm" /> {{ x['r8'] }}</li>
+                  <li v-if="x['r1']">
+                    {{ (x['r1'] as string).substring(0, 5) }}
+                  </li>
+                  <li v-if="x['r2']">
+                    {{ (x['r2'] as string).substring(0, 5) }}
+                  </li>
+                  <li v-if="x['r3']">
+                    {{ (x['r3'] as string).substring(0, 5) }}
+                  </li>
+                  <li v-if="x['r4']">
+                    {{ (x['r4'] as string).substring(0, 5) }}
+                  </li>
+                  <li v-if="x['r5']">
+                    {{ (x['r5'] as string).substring(0, 5) }}
+                  </li>
+                  <li v-if="x['r6']">
+                    {{ (x['r6'] as string).substring(0, 5) }}
+                  </li>
+                  <li v-if="x['r7']">
+                    {{ (x['r7'] as string).substring(0, 5) }}
+                  </li>
+                  <li v-if="x['r8']">
+                    {{ (x['r8'] as string).substring(0, 5) }}
+                  </li>
                 </ul>
               </div>
             </div>
           </div>
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer p-0 m-0 py-1">
           <button
             type="button"
             @click="cerrar_modal"
@@ -98,7 +118,6 @@ import { computed, ref, watch } from 'vue'
 import { PanelLeftCloseIcon, PanelRightCloseIcon } from 'lucide-vue-next'
 import { Buscar_Asistencia } from '@wails/services/PersonalService'
 import { format, getDate, parseISO, addDays } from 'date-fns'
-import { IconClock } from '@tabler/icons-vue'
 
 const prop = defineProps({
   openmodal: { type: Boolean, required: true },
@@ -122,12 +141,14 @@ watch(isopen, async (newValue) => {
 const changeLoad = async () => {
   try {
     isLoading.value = true
+    asistencia.value = []
     totaldiasMes.value = new Date(currentYear.value, currentMonth.value + 1, 0).getDate()
     asistencia.value = await Buscar_Asistencia(prop.dni, currentMonth.value + 1, currentYear.value)
     fristnumday.value = new Date(currentYear.value, currentMonth.value, 1).getDay()
+
     isLoading.value = false
   } catch (error) {
-    console.log(error)
+    asistencia.value = []
   }
 }
 
@@ -188,7 +209,22 @@ const nextMonth = () => {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+ul {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 5px;
+  justify-content: space-around;
+  width: 100%;
+  li {
+    font-size: 0.68rem;
+    font-weight: 500;
+  }
+}
+.modal-dialog {
+  width: 100%;
+  max-width: 700px;
+}
 .calendar {
   display: grid;
   grid-template-rows: auto 1fr;
@@ -211,16 +247,13 @@ const nextMonth = () => {
 .calendar-day {
   border: 1px solid #ddd;
   border-radius: 4px;
+  width: 100%;
   padding: 5px;
-  min-height: 100px;
+  min-height: 70px;
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-.calendar-day.has-data {
-  background-color: #f8f9fa;
 }
 
 .calendar-day .date {
