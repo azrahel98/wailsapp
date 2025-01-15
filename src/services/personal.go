@@ -129,5 +129,48 @@ func (s *PersonalService) Buscar_Asistencia(dni string, mes int, año int) (*[]m
 	if err != nil {
 		return nil, err
 	}
-	return res, nil
+	asistenciaMap := make(map[string]*models.AsistenciaResponse)
+
+	for _, registro := range *res {
+		// Clave única por fecha
+		key := registro.Fecha
+
+		if _, exists := asistenciaMap[*key]; !exists {
+			// Inicializar una nueva entrada en el mapa
+			asistenciaMap[*key] = &models.AsistenciaResponse{
+				Dni:   registro.Dni,
+				Fecha: *registro.Fecha,
+			}
+		}
+
+		// Obtener referencia a la respuesta actual
+		asistencia := asistenciaMap[*key]
+
+		// Asignar horas dinámicamente
+		if asistencia.Record1 == nil {
+			asistencia.Record1 = registro.Hora
+		} else if asistencia.Record2 == nil {
+			asistencia.Record2 = registro.Hora
+		} else if asistencia.Record3 == nil {
+			asistencia.Record3 = registro.Hora
+		} else if asistencia.Record4 == nil {
+			asistencia.Record4 = registro.Hora
+		} else if asistencia.Record5 == nil {
+			asistencia.Record5 = registro.Hora
+		} else if asistencia.Record6 == nil {
+			asistencia.Record6 = registro.Hora
+		} else if asistencia.Record7 == nil {
+			asistencia.Record7 = registro.Hora
+		} else if asistencia.Record8 == nil {
+			asistencia.Record8 = registro.Hora
+		}
+	}
+
+	// Convertir el mapa a slice
+	var asistenciaList []models.AsistenciaResponse
+	for _, asistencia := range asistenciaMap {
+		asistenciaList = append(asistenciaList, *asistencia)
+	}
+
+	return &asistenciaList, nil
 }
