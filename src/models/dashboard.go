@@ -21,3 +21,8 @@ type Buscar_trabajador struct {
 	Estado string         `db:"estado"`
 	Sexo   string         `db:"sexo"`
 }
+
+type PersonaActivo struct {
+	Cantidad int `db:"cantidad"`
+	Activos  int `db:"activo"`
+}

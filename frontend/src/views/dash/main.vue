@@ -1,70 +1,170 @@
 <template>
-  <div class="main">
-    <div class="text-start pt-2">
-      <div class="page-pretitle">Overview</div>
-      <h2 class="page-title">Dashboard</h2>
+  <div class="page">
+    <!-- Page header -->
+    <div class="page-header d-print-none mb-2">
+      <div class="container-xl">
+        <div class="row g-2 align-items-center">
+          <div class="col">
+            <h2 class="page-title">Dashboard</h2>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="grid-items">
-      <C_regimen_res />
-      <c_sexo_res />
-      <Areas />
+
+    <!-- Page body -->
+    <div class="page-body">
+      <div class="container-xl">
+        <div class="row row-deck row-cards">
+          <!-- Summary Stats Cards -->
+          <div class="col-sm-6 col-lg-3">
+            <div class="card card-sm">
+              <div class="card-body">
+                <div class="d-flex align-items-center">
+                  <div class="subheader">Total Personal</div>
+                  <div class="ms-auto lh-1">
+                    <div class="text-muted">+5%</div>
+                  </div>
+                </div>
+                <div class="h1 mb-3">{{ regimenes.reduce((s, i) => s + i.Cantidad, 0) }}</div>
+                <div class="d-flex mb-2">
+                  <div>Activos</div>
+                  <div class="ms-auto">
+                    <span class="text-green d-inline-flex align-items-center lh-1"> 75% </span>
+                  </div>
+                </div>
+                <div class="progress progress-sm">
+                  <div
+                    class="progress-bar bg-primary"
+                    style="width: 75%"
+                    role="progressbar"
+                    aria-valuenow="75"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                    aria-label="75% Complete"
+                  >
+                    <span class="visually-hidden">75% Complete</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-3">
+            <div class="card card-sm">
+              <div class="card-body">
+                <div class="d-flex align-items-center">
+                  <div class="subheader">Sindicatos</div>
+                </div>
+                <div class="d-flex align-items-baseline">
+                  <div class="h1 mb-0 me-2">4</div>
+                  <div class="me-auto">
+                    <span class="text-yellow d-inline-flex align-items-center lh-1"> 0% </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-3">
+            <div class="card card-sm">
+              <div class="card-body">
+                <div class="d-flex align-items-center">
+                  <div class="subheader">Renuncias (Último mes)</div>
+                </div>
+                <div class="d-flex align-items-baseline">
+                  <div class="h1 mb-0 me-2">12</div>
+                  <div class="me-auto">
+                    <span class="text-red d-inline-flex align-items-center lh-1"> +3 </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-3">
+            <div class="card card-sm">
+              <div class="card-body">
+                <div class="d-flex align-items-center">
+                  <div class="subheader">Nuevas Contrataciones</div>
+                </div>
+                <div class="d-flex align-items-baseline">
+                  <div class="h1 mb-0 me-2">25</div>
+                  <div class="me-auto">
+                    <span class="text-green d-inline-flex align-items-center lh-1"> +8 </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-4">
+            <c_regimen_res :regim="regimenes" />
+          </div>
+          <div class="col-sm-6 col-lg-4">
+            <c_sexo_res />
+          </div>
+          <div class="col-12">
+            <c_areas_res />
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
+
 <script setup lang="ts">
-import Areas from '@comp/dashboard/areas.vue'
-import C_regimen_res from '@comp/dashboard/c_regimen_res.vue'
+import c_regimen_res from '@comp/dashboard/c_regimen_res.vue'
 import c_sexo_res from '@comp/dashboard/c_sexo_res.vue'
+import c_areas_res from '@comp/dashboard/areas.vue'
+import { onMounted, ref } from 'vue'
+import { Regimenes_resumen, Resumen_Dashboard } from '@wails/services/DashboardService'
+
+interface Regimen {
+  Cantidad: number
+  Nombre: string
+}
+
+const regimenes = ref<Array<Regimen>>([])
+
+const resumen = ref<any>()
+
+onMounted(async () => {
+  try {
+    regimenes.value = await Regimenes_resumen()
+    resumen.value = await Resumen_Dashboard()
+    console.log(resumen.value)
+  } catch (error) {
+    console.error('Error al cargar los datos:', error)
+  }
+})
 </script>
 
-<style lang="scss" scoped>
-.main {
-  height: 100vh;
-  display: grid;
-  max-width: 100vw;
-  grid-template-rows: min-content 1fr;
-  gap: 1rem;
-  padding: 1rem;
+<style scoped>
+.chart-lg {
+  height: 180px;
+}
 
-  .header {
-    text-align: start;
-    .page-pretitle {
-      font-size: 0.9rem;
-      color: #6c757d;
-      text-transform: uppercase;
-      margin-bottom: 0.5rem;
-    }
+.card-sm {
+  margin-bottom: 0.75rem;
+}
 
-    .page-title {
-      font-size: 1.5rem;
-      font-weight: 600;
-      color: #343a40;
-    }
-  }
+.card-sm .card-body {
+  padding: 0.75rem;
+}
 
-  .grid-items {
-    max-width: 100%;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
-    align-content: start;
-    gap: 1rem;
-    overflow-x: hidden;
+.subheader {
+  font-size: 0.625rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  line-height: 1.6;
+  color: #656d77;
+}
 
-    .card {
-      display: flex;
-      flex-direction: column;
-      background: #ffffff;
-      border: 1px solid #e9ecef;
-      border-radius: 0.5rem;
-      padding: 1rem;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-      transition: box-shadow 0.3s;
-      &:hover {
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      }
-      width: 100%;
-      height: min-content;
-    }
-  }
+.table td,
+.table th {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+}
+
+.chart-sparkline {
+  width: 4rem;
+  height: 1.5rem;
 }
 </style>

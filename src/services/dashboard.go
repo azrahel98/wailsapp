@@ -53,3 +53,23 @@ func (s *DashboardService) Trabajadore_Activos_Area() (*[]models.RegimenesCantid
 	}
 	return res, nil
 }
+
+func (s *DashboardService) Resumen_Dashboard() (*[]interface{}, error) {
+	res, err := s.repo.Cantidad_vincolos_activos(context.Background())
+	if err != nil {
+		return nil, err
+	}
+	renuncias, err := s.repo.Cantidad_renuncias_mes(context.Background())
+	if err != nil {
+		return nil, err
+	}
+
+	resSlice := []interface{}{res}
+	renunciasSlice := []interface{}{renuncias}
+
+	var result []interface{}
+	result = append(result, resSlice...)
+	result = append(result, renunciasSlice...)
+
+	return &result, nil
+}

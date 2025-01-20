@@ -1,5 +1,5 @@
 <template>
-  <div class="chart-container card">
+  <div class="chart-container card card-sm">
     <div class="card-body p-0 m-0">
       <div class="text-secondary subheader">Personal por regimen</div>
       <BarChart v-if="chartData" :chartData="chartData" :options="chartOptions" :height="200" />
@@ -50,32 +50,11 @@ const chartData = computed(() => {
 })
 
 const chartOptions = {
-  responsive: false,
-  maintainAspectRatio: true,
-  plugins: {
-    animations: {
-      tension: {
-        duration: 1000,
-        easing: 'linear',
-        from: 1,
-        to: 0,
-        loop: true
-      }
-    },
-    title: {
-      display: true,
-      padding: {
-        top: 0
-      }
-    },
-    legend: {
-      display: false,
-      position: 'bottom',
-      labels: {
-        pointStyle: 'circle',
-        usePointStyle: true
-      }
-    }
+  responsive: true,
+  plugins: { legend: { display: false } },
+  scales: {
+    y: { beginAtZero: true, ticks: { font: { size: 10 } } },
+    x: { ticks: { font: { size: 10 } } }
   }
 }
 

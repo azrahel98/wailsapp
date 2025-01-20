@@ -14,6 +14,10 @@ export function Regimenes_resumen() {
   return window['go']['services']['DashboardService']['Regimenes_resumen']();
 }
 
+export function Resumen_Dashboard() {
+  return window['go']['services']['DashboardService']['Resumen_Dashboard']();
+}
+
 export function Sexo_cantidad() {
   return window['go']['services']['DashboardService']['Sexo_cantidad']();
 }

@@ -7,6 +7,8 @@ export function Cumpleaños(arg1:number):Promise<any>;
 
 export function Regimenes_resumen():Promise<any>;
 
+export function Resumen_Dashboard():Promise<any>;
+
 export function Sexo_cantidad():Promise<any>;
 
 export function Trabajadore_Activos_Area():Promise<any>;

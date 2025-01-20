@@ -1,5 +1,5 @@
 <template>
-  <div class="chart-container card">
+  <div class="chart-container card card-sm">
     <div class="card-body p-0 m-0">
       <div class="text-secondary subheader">Personal por regimen</div>
       <DoughnutChart
@@ -15,8 +15,7 @@
 <script lang="ts" setup>
 import { DoughnutChart } from 'vue-chart-3'
 import { Chart, registerables } from 'chart.js'
-import { onMounted, ref, computed } from 'vue'
-import { Regimenes_resumen } from '@wails/services/DashboardService'
+import { computed } from 'vue'
 
 Chart.register(...registerables)
 
@@ -25,11 +24,13 @@ interface Regimen {
   Nombre: string
 }
 
-const regimenes = ref<Array<Regimen>>([])
+const prop = defineProps({
+  regim: { type: Array<Regimen>, required: true }
+})
 
 const chartData = computed(() => {
-  if (!regimenes.value?.length) return null
-  const sortedData = [...regimenes.value].sort((a, b) => b.Cantidad - a.Cantidad)
+  if (!prop.regim.length) return null
+  const sortedData = [...prop.regim].sort((a, b) => b.Cantidad - a.Cantidad)
 
   return {
     labels: sortedData.map((r) => r.Nombre),
@@ -48,7 +49,7 @@ const chartData = computed(() => {
 
 const chartOptions = {
   indexAxis: 'y' as const,
-  responsive: false,
+  responsive: true,
   maintainAspectRatio: true,
   plugins: {
     animations: {
@@ -86,14 +87,6 @@ const chartOptions = {
     }
   }
 }
-
-onMounted(async () => {
-  try {
-    regimenes.value = await Regimenes_resumen()
-  } catch (error) {
-    console.error('Error al cargar los datos:', error)
-  }
-})
 </script>
 
 <style scoped>

@@ -13,9 +13,53 @@ type DashboardRepository interface {
 	Cumpleaño_by_activos(ctx context.Context, mes int) (*[]models.Cumpleaños_Activos, error)
 	Buscar_by_nombre(ctx context.Context, nombre string) (*[]models.Buscar_trabajador, error)
 	Trabajadores_activos(ctx context.Context) (*[]models.RegimenesCantidad, error)
+	Cantidad_vincolos_activos(ctx context.Context) (*models.PersonaActivo, error)
+	Cantidad_renuncias_mes(ctx context.Context) (*[]models.PersonaActivo, error)
 }
 type dashboardRepository struct {
 	db *sqlx.DB
+}
+
+func (d *dashboardRepository) Cantidad_renuncias_mes(ctx context.Context) (*[]models.PersonaActivo, error) {
+	query := `select
+  count(d.id) cantidad,
+  month(d.fecha) activos
+from
+  Vinculo v
+  inner join Documento d on v.doc_ingreso_id = d.id
+WHERE
+  year(d.fecha) = year(now())
+GROUP by
+  month(d.fecha)`
+	var res *[]models.PersonaActivo
+
+	err := d.db.SelectContext(ctx, &res, query)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+func (d *dashboardRepository) Cantidad_vincolos_activos(ctx context.Context) (*models.PersonaActivo, error) {
+	query := `select
+count(*) cantidad,
+(
+  select
+	count(*) activos
+  from
+	Vinculo
+  where
+	estado = 'activo'
+) activos
+from
+Vinculo`
+	var res models.PersonaActivo
+
+	err := d.db.SelectContext(ctx, &res, query)
+	if err != nil {
+		return nil, err
+	}
+	return &res, nil
 }
 
 func (d *dashboardRepository) Trabajadores_activos(ctx context.Context) (*[]models.RegimenesCantidad, error) {
