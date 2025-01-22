@@ -15,34 +15,43 @@
     <div class="page-body">
       <div class="container-xl">
         <div class="row row-deck row-cards">
-          <!-- Summary Stats Cards -->
           <div class="col-sm-6 col-lg-3">
             <div class="card card-sm">
               <div class="card-body">
                 <div class="d-flex align-items-center">
-                  <div class="subheader">Total Personal</div>
-                  <div class="ms-auto lh-1">
-                    <div class="text-muted">+5%</div>
-                  </div>
+                  <div class="subheader">Total Personal Registrado</div>
                 </div>
                 <div class="h1 mb-3">{{ regimenes.reduce((s, i) => s + i.Cantidad, 0) }}</div>
                 <div class="d-flex mb-2">
                   <div>Activos</div>
                   <div class="ms-auto">
-                    <span class="text-green d-inline-flex align-items-center lh-1"> 75% </span>
+                    <span class="text-green d-inline-flex align-items-center lh-1">
+                      {{ ((resumen[0].Activos / resumen[0].Cantidad) * 100).toFixed() }} %
+                    </span>
                   </div>
                 </div>
                 <div class="progress progress-sm">
                   <div
                     class="progress-bar bg-primary"
-                    style="width: 75%"
+                    :style="{
+                      width:
+                        resumen[0] && resumen[0].Cantidad > 0
+                          ? ((resumen[0].Activos / resumen[0].Cantidad) * 100).toFixed() + '%'
+                          : '0%'
+                    }"
                     role="progressbar"
-                    aria-valuenow="75"
+                    :aria-valuenow="
+                      resumen[0] && resumen[0].Cantidad > 0
+                        ? ((resumen[0].Activos / resumen[0].Cantidad) * 100).toFixed()
+                        : 0
+                    "
                     aria-valuemin="0"
                     aria-valuemax="100"
-                    aria-label="75% Complete"
+                    aria-label="Progress"
                   >
-                    <span class="visually-hidden">75% Complete</span>
+                    <span class="visually-hidden">{{
+                      ((resumen[0].Activos / resumen[0].Cantidad) * 100).toFixed()
+                    }}</span>
                   </div>
                 </div>
               </div>
@@ -55,7 +64,7 @@
                   <div class="subheader">Sindicatos</div>
                 </div>
                 <div class="d-flex align-items-baseline">
-                  <div class="h1 mb-0 me-2">4</div>
+                  <div class="h1 mb-0 me-2">2</div>
                   <div class="me-auto">
                     <span class="text-yellow d-inline-flex align-items-center lh-1"> 0% </span>
                   </div>
@@ -70,7 +79,7 @@
                   <div class="subheader">Renuncias (Último mes)</div>
                 </div>
                 <div class="d-flex align-items-baseline">
-                  <div class="h1 mb-0 me-2">12</div>
+                  <div class="h1 mb-0 me-2">{{ resumen[1].Cantidad }}</div>
                   <div class="me-auto">
                     <span class="text-red d-inline-flex align-items-center lh-1"> +3 </span>
                   </div>

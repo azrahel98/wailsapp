@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"context"
+	"fmt"
 	"vesgoapp/src/models"
 
 	"github.com/jmoiron/sqlx"
@@ -31,13 +32,15 @@ WHERE
   year(d.fecha) = year(now())
 GROUP by
   month(d.fecha)`
-	var res *[]models.PersonaActivo
+	res := []models.PersonaActivo{}
 
 	err := d.db.SelectContext(ctx, &res, query)
 	if err != nil {
+		fmt.Println("aquii tenemos el error señor")
+		fmt.Println(err)
 		return nil, err
 	}
-	return res, nil
+	return &res, nil
 }
 
 func (d *dashboardRepository) Cantidad_vincolos_activos(ctx context.Context) (*models.PersonaActivo, error) {
@@ -55,7 +58,7 @@ from
 Vinculo`
 	var res models.PersonaActivo
 
-	err := d.db.SelectContext(ctx, &res, query)
+	err := d.db.GetContext(ctx, &res, query)
 	if err != nil {
 		return nil, err
 	}

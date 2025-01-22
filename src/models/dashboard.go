@@ -24,5 +24,5 @@ type Buscar_trabajador struct {
 
 type PersonaActivo struct {
 	Cantidad int `db:"cantidad"`
-	Activos  int `db:"activo"`
+	Activos  int `db:"activos"`
 }
