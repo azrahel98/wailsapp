@@ -46,6 +46,11 @@ import Buscar from '@views/dash/buscar.vue'
           path: 'add',
           name: 'add',
       component: () => import('@views/dash/add.vue')
+        },
+        {
+          path: 'inofarea/:area',
+          name: 'inofarea',
+      component: () => import('@views/dash/area_info.vue')
         }
       ]
     },

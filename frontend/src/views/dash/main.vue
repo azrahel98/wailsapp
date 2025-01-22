@@ -108,8 +108,8 @@
           <div class="col-sm-6 col-lg-4">
             <c_sexo_res />
           </div>
-          <div class="col-12">
-            <c_areas_res />
+          <div class="col-12 areas">
+            <c_areas_res :columns="columns" :rows="areas" />
           </div>
         </div>
       </div>
@@ -122,7 +122,11 @@ import c_regimen_res from '@comp/dashboard/c_regimen_res.vue'
 import c_sexo_res from '@comp/dashboard/c_sexo_res.vue'
 import c_areas_res from '@comp/dashboard/areas.vue'
 import { onMounted, ref } from 'vue'
-import { Regimenes_resumen, Resumen_Dashboard } from '@wails/services/DashboardService'
+import {
+  Regimenes_resumen,
+  Resumen_Dashboard,
+  Trabajadore_Activos_Area
+} from '@wails/services/DashboardService'
 
 interface Regimen {
   Cantidad: number
@@ -130,18 +134,23 @@ interface Regimen {
 }
 
 const regimenes = ref<Array<Regimen>>([])
-
 const resumen = ref<any>()
+const areas = ref(<any>[])
 
 onMounted(async () => {
   try {
     regimenes.value = await Regimenes_resumen()
     resumen.value = await Resumen_Dashboard()
-    console.log(resumen.value)
+    areas.value = await Trabajadore_Activos_Area()
   } catch (error) {
     console.error('Error al cargar los datos:', error)
   }
 })
+
+const columns = [
+  { field: 'Nombre', title: 'Area' },
+  { field: 'Cantidad', title: 'Trabajadores' }
+]
 </script>
 
 <style scoped>
@@ -175,5 +184,9 @@ onMounted(async () => {
 .chart-sparkline {
   width: 4rem;
   height: 1.5rem;
+}
+
+.areas {
+  max-height: 35vh;
 }
 </style>
