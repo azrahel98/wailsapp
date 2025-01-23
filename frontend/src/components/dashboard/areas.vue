@@ -39,13 +39,8 @@
           </tr>
         </thead>
         <tbody>
-          <tr
-            v-for="row in paginatedData"
-            :key="row.id"
-            class="text-danger fs-5"
-            @click="ruta(row.Nombre)"
-          >
-            <td v-for="column in columns" :key="column.field" class="text-start text-secondary">
+          <tr v-for="row in paginatedData" :key="row.id" class="fs-5" @click="ruta(row.Nombre)">
+            <td v-for="column in columns" :key="column.field" class="text-start fw-medium">
               {{ row[column.field] }}
             </td>
           </tr>

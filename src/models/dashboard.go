@@ -26,3 +26,11 @@ type PersonaActivo struct {
 	Cantidad int `db:"cantidad"`
 	Activos  int `db:"activos"`
 }
+
+type TrabajadoresArea struct {
+	Dni     int      `db:"dni" json:"dni"`
+	Nombre  int      `db:"nombre" json:"nombre"`
+	Area    int      `db:"area" json:"area"`
+	Sueldo  *float64 `db:"sueldo" json:"sueldo"`
+	Regimen int      `db:"regimen" json:"reg"`
+}
