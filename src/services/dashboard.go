@@ -70,3 +70,12 @@ func (s *DashboardService) Resumen_Dashboard() (*[]models.PersonaActivo, error) 
 
 	return &result, nil
 }
+
+func (s *DashboardService) Trabajadores_por_area(nombre string) (*[]models.TrabajadoresArea, error) {
+	res, err := s.repo.Trabajadores_area(context.Background(), nombre)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}

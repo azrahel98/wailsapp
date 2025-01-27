@@ -69,10 +69,13 @@ const chartOptions = {
     },
     legend: {
       display: true,
-      position: 'bottom',
+      position: 'left',
       labels: {
         pointStyle: 'circle',
-        usePointStyle: true
+        usePointStyle: true,
+        font: {
+          size: 9
+        }
       }
     },
     tooltip: {

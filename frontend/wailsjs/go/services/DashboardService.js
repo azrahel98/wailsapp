@@ -25,3 +25,7 @@ export function Sexo_cantidad() {
 export function Trabajadore_Activos_Area() {
   return window['go']['services']['DashboardService']['Trabajadore_Activos_Area']();
 }
+
+export function Trabajadores_por_area(arg1) {
+  return window['go']['services']['DashboardService']['Trabajadores_por_area'](arg1);
+}

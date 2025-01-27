@@ -16,8 +16,6 @@ type DashboardRepository interface {
 	Trabajadores_activos(ctx context.Context) (*[]models.RegimenesCantidad, error)
 	Cantidad_vincolos_activos(ctx context.Context) (*models.PersonaActivo, error)
 	Cantidad_renuncias_mes(ctx context.Context) (*[]models.PersonaActivo, error)
-	//areas
-	Cantidad_regimen_area(ctx context.Context, nombre string) (*[]models.RegimenesCantidad, error)
 	Trabajadores_area(ctx context.Context, nombre string) (*[]models.TrabajadoresArea, error)
 }
 type dashboardRepository struct {
@@ -27,11 +25,11 @@ type dashboardRepository struct {
 // Trabajadores_area implements DashboardRepository.
 func (d *dashboardRepository) Trabajadores_area(ctx context.Context, nombre string) (*[]models.TrabajadoresArea, error) {
 	query := `select
-  p.dni,
+   cast(p.dni as char) dni,
   concat(p.apaterno,' ',p.amaterno,' ',p.nombre) nombre,
-  cr.nombre,
+  cr.nombre cargo,
   d.sueldo,
-  r.nombre
+  r.nombre regimen
 from
   Vinculo v
   inner join Area ar on v.area_id = ar.id
@@ -41,35 +39,9 @@ from
     INNER JOIN Regimen r ON v.regimen = r.id
 where
   v.estado = 'activo'
-  and ar.nombre = ?`
+  and ar.nombre = ? order by d.sueldo desc`
 
 	res := []models.TrabajadoresArea{}
-
-	err := d.db.SelectContext(ctx, &res, query, nombre)
-	if err != nil {
-
-		return nil, err
-	}
-	return &res, nil
-}
-
-// Cantidad_regimen_area implements DashboardRepository.
-func (d *dashboardRepository) Cantidad_regimen_area(ctx context.Context, nombre string) (*[]models.RegimenesCantidad, error) {
-	query := `SELECT
-	COUNT(r.nombre) AS cantidad,
-	r.nombre nombre
-  FROM
-	Vinculo v
-	INNER JOIN Area ar ON v.area_id = ar.id
-	INNER JOIN Persona p ON v.dni = p.dni
-	INNER JOIN Regimen r ON v.regimen = r.id
-  WHERE
-	v.estado = 'activo'
-	AND ar.nombre = ?
-  GROUP BY
-	r.nombre;`
-
-	res := []models.RegimenesCantidad{}
 
 	err := d.db.SelectContext(ctx, &res, query, nombre)
 	if err != nil {

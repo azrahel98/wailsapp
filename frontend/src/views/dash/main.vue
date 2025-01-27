@@ -140,6 +140,7 @@ onMounted(async () => {
     regimenes.value = await Regimenes_resumen()
     resumen.value = await Resumen_Dashboard()
     areas.value = await Trabajadore_Activos_Area()
+    console.log(regimenes.value)
   } catch (error) {
     console.error('Error al cargar los datos:', error)
   }

@@ -28,9 +28,9 @@ type PersonaActivo struct {
 }
 
 type TrabajadoresArea struct {
-	Dni     int      `db:"dni" json:"dni"`
-	Nombre  int      `db:"nombre" json:"nombre"`
-	Area    int      `db:"area" json:"area"`
+	Dni     string   `db:"dni" json:"dni"`
+	Nombre  string   `db:"nombre" json:"nombre"`
+	Cargo   string   `db:"cargo" json:"area"`
 	Sueldo  *float64 `db:"sueldo" json:"sueldo"`
-	Regimen int      `db:"regimen" json:"reg"`
+	Regimen string   `db:"regimen" json:"reg"`
 }

@@ -12,3 +12,5 @@ export function Resumen_Dashboard():Promise<any>;
 export function Sexo_cantidad():Promise<any>;
 
 export function Trabajadore_Activos_Area():Promise<any>;
+
+export function Trabajadores_por_area(arg1:string):Promise<any>;
