@@ -29,15 +29,16 @@
         <IconUsers size="20" class="icon" /> <span v-if="isExpanded">Dashboard</span>
       </a>
     </nav>
-    <div class="sidebar-footer">
-      <a
-        href="#"
-        class="nav-item"
-        :class="{ active: activeItem === 'settings' }"
-        @click.stop="setActiveItem('settings')"
-      >
-        <IconSettings size="20" class="icon" /> <span v-if="isExpanded">Settings</span>
-      </a>
+    <div>
+      <nav class="sidebar-nav">
+        <a
+          class="nav-item"
+          :class="{ active: activeItem === 'settings' }"
+          @click.stop="setActiveItem('settings')"
+        >
+          <IconLogout size="20" class="icon" /> <span v-if="isExpanded">Salir</span>
+        </a>
+      </nav>
     </div>
   </aside>
 </template>
@@ -51,7 +52,8 @@ import {
   IconSettings,
   IconSearch,
   IconFile3d,
-  IconUsersPlus
+  IconUsersPlus,
+  IconLogout
 } from '@tabler/icons-vue'
 import { router } from '@router/router'
 

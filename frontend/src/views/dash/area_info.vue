@@ -7,22 +7,22 @@
     <div class="chart">
       <c_regimen_res :regim="regCount" />
     </div>
-    <div class="puestos">
-      <div class="d-flex">
-        <div class="ms-auto">
-          <div class="input-icon">
-            <span class="input-icon-addon">
-              <IconSearch class="icon" />
-            </span>
-            <input
-              v-model="searchQuery"
-              type="text"
-              class="form-control form-control-sm form-control-rounded"
-              placeholder="Busca..."
-            />
-          </div>
+    <div class="d-flex">
+      <div class="ms-auto">
+        <div class="input-icon">
+          <span class="input-icon-addon">
+            <IconSearch class="icon" />
+          </span>
+          <input
+            v-model="searchQuery"
+            type="text"
+            class="form-control form-control-sm form-control-rounded"
+            placeholder="Busca..."
+          />
         </div>
       </div>
+    </div>
+    <div class="puestos">
       <div class="card card-link p-0 m-0" v-for="x in filteredTrabajadores" :key="x.dni">
         <div class="card-body">
           <RouterLink class="text-black" :to="{ name: 'perfil', params: { dni: x.dni } }">
@@ -30,9 +30,9 @@
           </RouterLink>
           <div class="text-secondary fs-5">{{ x.dni }}</div>
           <div class="mt-1">
-            <span class="text-secondary fw-bold fs-5">{{ x.area }} </span>
+            <span class="text-secondary fw-bold">{{ x.area }} </span>
           </div>
-          <span class="badge fs-6 bg-success text-white fs-6">{{ x.reg }} </span>
+          <span class="badge fs-6 bg-primary text-white fs-6">{{ x.reg }} </span>
         </div>
       </div>
     </div>
@@ -55,7 +55,7 @@ onMounted(async () => {
     trabajadores.value = await Trabajadores_por_area(
       router.currentRoute.value.params.area.toString()
     )
-    filteredTrabajadores.value = trabajadores.value // Inicializar lista filtrada
+    filteredTrabajadores.value = trabajadores.value
     console.log(trabajadores.value)
   } catch (error) {
     console.log(error)
@@ -93,7 +93,7 @@ const regCount = computed<Regimen[]>(() => {
 <style lang="scss" scoped>
 .mains {
   display: grid;
-  grid-template-rows: min-content min-content 1fr;
+  grid-template-rows: min-content min-content min-content 1fr;
   grid-template-columns: 1fr;
   row-gap: 1vh;
   width: 100%;
@@ -103,14 +103,14 @@ const regCount = computed<Regimen[]>(() => {
 
   .chart {
     justify-self: center;
-    max-width: max-content;
+    max-width: 35vw;
   }
 
   .puestos {
     height: 100%;
     overflow-y: auto;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     row-gap: 2px;
     column-gap: 4px;
     justify-content: start;
@@ -120,6 +120,24 @@ const regCount = computed<Regimen[]>(() => {
     .card {
       height: 100%;
       width: 100%;
+      .card-body {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        .mt-1 {
+          height: min-content;
+
+          width: 100%;
+          span {
+            font-size: 0.7rem;
+            line-break: break-all;
+            white-space: wrap;
+            line-break: loose;
+            line-height: normal;
+          }
+        }
+      }
     }
   }
 }

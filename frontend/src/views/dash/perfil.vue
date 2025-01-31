@@ -77,7 +77,7 @@
                     </div>
                     <div class="page-subtitle">
                       <h4 class="p-0 m-0 fs-5">{{ x.Cargo }}</h4>
-                      <p class="text-secondary p-0 m-0 fs-5">
+                      <p class="text-secondary p-0 m-0 fs-6">
                         {{ x.Area }}
                       </p>
                     </div>
@@ -129,24 +129,24 @@
                             <div class="accordion-body pt-0">
                               <div class="detalles-collapse">
                                 <div class="ingreso">
-                                  <div class="mb-2">
+                                  <div class="mb-2 fs-5">
                                     <IconFileInfo class="icon text-info" />
-                                    Ingreso: <strong>{{ x.Doc_i }}-{{ x.Numero_doc_i }}</strong>
+                                    Ingreso: <strong>{{ x.Doc_i }} {{ x.Numero_doc_i }}</strong>
                                   </div>
-                                  <div class="mb-2">
+                                  <div class="mb-2 fs-5">
                                     <IconFileInfo class="icon text-info" />
                                     Descripcion: <strong>{{ x.Descrip_ingre }}</strong>
                                   </div>
-                                  <div class="mb-2">
+                                  <div class="mb-2 fs-5">
                                     <IconFileInfo class="icon text-info" />
                                     Regimen: <strong>{{ x.Regimen }}</strong>
                                   </div>
-                                  <div class="mb-2">
+                                  <div class="mb-2 fs-5">
                                     <IconFileInfo class="icon text-info" />
                                     Sueldo: <strong>S/.{{ x.Sueldo }}</strong>
                                   </div>
                                 </div>
-                                <div class="salida">
+                                <div class="salida fs-5">
                                   <div class="mb-2" v-if="x.Doc_s">
                                     <IconClipboardOff class="icon text-danger" />
                                     Salida: <strong>{{ x.Doc_s }}-{{ x.Numero_doc_s }}</strong>
@@ -193,7 +193,7 @@
                 <div class="card" v-if="!isloading">
                   <div class="card-body px-2 py-0 text-start">
                     <div class="card-title fs-4 p-0 m-0 py-2">Informacion Basica</div>
-                    <div class="mb-1">
+                    <div class="mb-1 fs-5">
                       <IconAddressBook class="icon me-2 text-secondary fs-6" />
                       Vive en: <strong v-if="perfil.Direccion">{{ perfil.Direccion }}</strong>
                       <div
@@ -201,7 +201,7 @@
                         class="status-dot status-dot-animated bg-youtube mx-2"
                       />
                     </div>
-                    <div class="mb-1">
+                    <div class="mb-1 fs-5">
                       <IconBriefcase class="icon me-2 text-secondary" />
                       Correo es: <strong v-if="perfil.Email">{{ perfil.Email }}</strong>
                       <div
@@ -209,7 +209,7 @@
                         class="status-dot status-dot-animated bg-youtube mx-2"
                       />
                     </div>
-                    <div class="mb-1">
+                    <div class="mb-1 fs-5">
                       <IconCashBanknote class="icon me-2 text-secondary" />
                       Ruc: <strong v-if="perfil.Ruc">{{ perfil.Ruc }}</strong>
                       <div
@@ -217,7 +217,7 @@
                         class="status-dot status-dot-animated bg-youtube mx-2"
                       />
                     </div>
-                    <div class="mb-1">
+                    <div class="mb-1 fs-5">
                       <IconPhoneCall class="icon me-2 text-secondary" />
                       Telefono:
                       <strong v-if="perfil.Telf1"
@@ -228,12 +228,12 @@
                         class="status-dot status-dot-animated bg-youtube mx-2"
                       />
                     </div>
-                    <div class="mb-1" v-if="perfil.Telf2">
+                    <div class="mb-1 fs-5" v-if="perfil.Telf2">
                       <IconPhoneCall class="icon me-2 text-secondary" />
                       Telefono 2:
                       <strong><span class="flag flag-country-si"></span> {{ perfil.Telf1 }}</strong>
                     </div>
-                    <div class="mb-1" v-if="parseISO(perfil.Nacimiento)">
+                    <div class="mb-1 fs-5" v-if="parseISO(perfil.Nacimiento)">
                       <CakeIcon class="icon me-2 text-secondary" />
                       Cumpleaños:
                       <strong>
@@ -244,7 +244,7 @@
                         }}
                       </strong>
                     </div>
-                    <div class="mb-1" v-if="parseISO(perfil.Nacimiento)">
+                    <div class="mb-1 fs-5" v-if="parseISO(perfil.Nacimiento)">
                       <IconMoodHappy class="icon me-2 text-secondary" />
                       Edad:
                       <strong>
