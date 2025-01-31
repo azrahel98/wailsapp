@@ -57,7 +57,7 @@
             <span
               class="badge fs-6"
               :class="[x.Estado == 'activo' ? 'bg-success text-white' : 'bg-danger text-white']"
-              >{{ x.Estado ? 'Activo' : 'Inactivo' }}</span
+              >{{ x.Estado == 'activo' ? 'Activo' : 'Inactivo' }}</span
             >
           </div>
         </div>

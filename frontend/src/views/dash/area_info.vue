@@ -8,7 +8,7 @@
       <c_regimen_res :regim="regCount" />
     </div>
     <div class="puestos">
-      <!-- <div class="d-flex">
+      <div class="d-flex">
         <div class="ms-auto">
           <div class="input-icon">
             <span class="input-icon-addon">
@@ -22,7 +22,7 @@
             />
           </div>
         </div>
-      </div> -->
+      </div>
       <div class="card card-link p-0 m-0" v-for="x in filteredTrabajadores" :key="x.dni">
         <div class="card-body">
           <RouterLink class="text-black" :to="{ name: 'perfil', params: { dni: x.dni } }">
@@ -103,14 +103,14 @@ const regCount = computed<Regimen[]>(() => {
 
   .chart {
     justify-self: center;
-    max-width: 20vw;
+    max-width: max-content;
   }
 
   .puestos {
     height: 100%;
     overflow-y: auto;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     row-gap: 2px;
     column-gap: 4px;
     justify-content: start;
