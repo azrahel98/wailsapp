@@ -355,6 +355,11 @@ onMounted(async () => {
       .vinculos {
         max-height: 100%;
         overflow-y: auto;
+        .timeline-event-icon {
+          height: 3.5vh;
+          margin: 0;
+          padding: 0;
+        }
       }
     }
     @media (max-width: 960px) {

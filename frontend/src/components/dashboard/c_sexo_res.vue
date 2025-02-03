@@ -10,21 +10,13 @@
 <script lang="ts" setup>
 import { BarChart } from 'vue-chart-3'
 import { Chart, registerables } from 'chart.js'
-import { onMounted, ref, computed } from 'vue'
-import { Sexo_cantidad } from '@wails/services/DashboardService'
+import { computed } from 'vue'
 
 Chart.register(...registerables)
 
-interface Regimen {
-  Cantidad: number
-  Nombre: string
-}
-
-const regimenes = ref<Array<Regimen>>([])
-
 const chartData = computed(() => {
-  if (!regimenes.value?.length) return null
-  const sortedData = [...regimenes.value].sort((a, b) => b.Cantidad - a.Cantidad)
+  if (!prop.regimes?.length) return null
+  const sortedData = [...prop.regimes].sort((a, b) => b.Cantidad - a.Cantidad)
 
   return {
     labels: sortedData.map((r) => r.Nombre),
@@ -39,8 +31,8 @@ const chartData = computed(() => {
       },
       {
         label: 'Femenino',
-        data: sortedData.map((r) => (r.Nombre == 'M' ? 1 : r.Cantidad)), // 1 para femenino, 0 para no femenino
-        backgroundColor: '#FF69B4', // Rosa para femenino
+        data: sortedData.map((r) => (r.Nombre == 'M' ? 1 : r.Cantidad)),
+        backgroundColor: '#FF69B4',
         borderColor: '#FFFFFF',
         borderWidth: 1,
         borderRadius: 4
@@ -58,12 +50,14 @@ const chartOptions = {
   }
 }
 
-onMounted(async () => {
-  try {
-    regimenes.value = await Sexo_cantidad()
-  } catch (error) {
-    console.error('Error al cargar los datos:', error)
-  }
+interface Regimen {
+  Cantidad: number
+  Nombre: string
+}
+
+const prop = defineProps({
+  regimes: { type: Array<Regimen>, required: true },
+  title: { type: String, default: 'Personal por regimen' }
 })
 </script>
 

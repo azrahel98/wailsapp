@@ -1,19 +1,13 @@
 <template>
-  <div class="chart-container card card-sm">
+  <div class="chart-container card">
     <div class="card-body p-0 m-0">
-      <div class="text-secondary subheader">Personal por regimen</div>
-      <DoughnutChart
-        v-if="chartData"
-        :chartData="chartData"
-        :options="chartOptions"
-        :height="200"
-      />
+      <PieChart v-if="chartData" :chartData="chartData" :options="chartOptions" :height="200" />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { DoughnutChart } from 'vue-chart-3'
+import { PieChart } from 'vue-chart-3'
 import { Chart, registerables } from 'chart.js'
 import { computed } from 'vue'
 
@@ -49,9 +43,9 @@ const chartData = computed(() => {
 })
 
 const chartOptions = {
-  indexAxis: 'y' as const,
   responsive: prop.responsive,
   maintainAspectRatio: true,
+
   plugins: {
     animations: {
       tension: {
@@ -63,7 +57,7 @@ const chartOptions = {
       }
     },
     title: {
-      display: true,
+      display: false,
       padding: {
         top: 1
       }
@@ -71,9 +65,17 @@ const chartOptions = {
     legend: {
       display: true,
       position: 'left',
+      fullSize: true,
+      padding: {
+        left: 0,
+        top: 0
+      },
+      align: 'start',
       labels: {
         pointStyle: 'circle',
         usePointStyle: true,
+        padding: 9,
+        boxWidth: 10,
         font: {
           size: 9
         }

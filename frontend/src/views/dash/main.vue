@@ -13,104 +13,17 @@
     <div class="page-body">
       <div class="container-xl">
         <div class="row row-deck row-cards">
-          <div class="col-sm-6 col-lg-3">
-            <div class="card card-sm">
-              <div class="card-body">
-                <div class="d-flex align-items-center">
-                  <div class="subheader">Total Personal Registrado</div>
-                </div>
-                <div class="h1 mb-3">{{ regimenes.reduce((s, i) => s + i.Cantidad, 0) }}</div>
-                <div class="d-flex mb-2">
-                  <div>Activos</div>
-                  <div class="ms-auto">
-                    <span class="text-green d-inline-flex align-items-center lh-1">
-                      {{ ((resumen[0].Activos / resumen[0].Cantidad) * 100).toFixed() }} %
-                    </span>
-                  </div>
-                </div>
-                <div class="progress progress-sm">
-                  <div
-                    class="progress-bar bg-primary"
-                    :style="{
-                      width:
-                        resumen[0] && resumen[0].Cantidad > 0
-                          ? ((resumen[0].Activos / resumen[0].Cantidad) * 100).toFixed() + '%'
-                          : '0%'
-                    }"
-                    role="progressbar"
-                    :aria-valuenow="
-                      resumen[0] && resumen[0].Cantidad > 0
-                        ? ((resumen[0].Activos / resumen[0].Cantidad) * 100).toFixed()
-                        : 0
-                    "
-                    aria-valuemin="0"
-                    aria-valuemax="100"
-                    aria-label="Progress"
-                  >
-                    <span class="visually-hidden">{{
-                      ((resumen[0].Activos / resumen[0].Cantidad) * 100).toFixed()
-                    }}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6 col-lg-3">
-            <div class="card card-sm">
-              <div class="card-body">
-                <div class="d-flex align-items-center">
-                  <div class="subheader">Sindicatos</div>
-                </div>
-                <div class="d-flex align-items-baseline">
-                  <div class="h1 mb-0 me-2">2</div>
-                  <div class="me-auto">
-                    <span class="text-yellow d-inline-flex align-items-center lh-1"> 0% </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6 col-lg-3">
-            <div class="card card-sm">
-              <div class="card-body">
-                <div class="d-flex align-items-center">
-                  <div class="subheader">Renuncias (Último mes)</div>
-                </div>
-                <div class="d-flex align-items-baseline">
-                  <div class="h1 mb-0 me-2">{{ resumen[1].Cantidad }}</div>
-                  <div class="me-auto">
-                    <span class="text-red d-inline-flex align-items-center lh-1"> +3 </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6 col-lg-3">
-            <div class="card card-sm">
-              <div class="card-body">
-                <div class="d-flex align-items-center">
-                  <div class="subheader">Nuevas Contrataciones</div>
-                </div>
-                <div class="d-flex align-items-baseline">
-                  <div class="h1 mb-0 me-2">25</div>
-                  <div class="me-auto">
-                    <span class="text-green d-inline-flex align-items-center lh-1"> +8 </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
           <div class="col-sm-6 col-lg-4">
             <c_regimen_res :regim="regimenes" />
           </div>
           <div class="col-sm-6 col-lg-4">
-            <c_sexo_res />
-          </div>
-          <div class="col-12 areas">
-            <c_areas_res :columns="columns" :rows="areas" />
+            <c_sexo_res :regimes="sexos" title="Personal por Sexo" />
           </div>
         </div>
       </div>
+    </div>
+    <div class="areas">
+      <c_areas_res :columns="columns" :rows="areas" />
     </div>
   </div>
 </template>
@@ -123,7 +36,8 @@ import { onMounted, ref } from 'vue'
 import {
   Regimenes_resumen,
   Resumen_Dashboard,
-  Trabajadore_Activos_Area
+  Trabajadore_Activos_Area,
+  Sexo_cantidad
 } from '@wails/services/DashboardService'
 
 interface Regimen {
@@ -133,6 +47,7 @@ interface Regimen {
 
 const regimenes = ref<Array<Regimen>>([])
 const resumen = ref<any>()
+const sexos = ref<any>([])
 const areas = ref(<any>[])
 
 onMounted(async () => {
@@ -140,7 +55,7 @@ onMounted(async () => {
     regimenes.value = await Regimenes_resumen()
     resumen.value = await Resumen_Dashboard()
     areas.value = await Trabajadore_Activos_Area()
-    console.log(regimenes.value)
+    sexos.value = await Sexo_cantidad()
   } catch (error) {
     console.error('Error al cargar los datos:', error)
   }
@@ -152,7 +67,16 @@ const columns = [
 ]
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.page {
+  display: grid !important;
+  grid-template-rows: min-content min-content auto;
+  height: 100vh;
+  .areas {
+    overflow-y: auto;
+  }
+}
+
 .chart-lg {
   height: 180px;
 }
@@ -183,9 +107,5 @@ const columns = [
 .chart-sparkline {
   width: 4rem;
   height: 1.5rem;
-}
-
-.areas {
-  max-height: 35vh;
 }
 </style>

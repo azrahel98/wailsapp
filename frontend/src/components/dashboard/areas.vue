@@ -13,7 +13,7 @@
             <input
               type="text"
               v-model="searchQuery"
-              class="form-control form-control-sm form-control-rounded"
+              class="form-control form-control form-control-rounded"
               placeholder="Busca..."
             />
           </div>
