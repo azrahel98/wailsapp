@@ -4,6 +4,16 @@ frontend/dist
 build/windows
 build/darwin
 
+Include/
+Lib/
+Scripts/
+pyvenv.cfg
+
+Include
+Lib
+Scripts
+
+
 .env
 env
 wailsjs
