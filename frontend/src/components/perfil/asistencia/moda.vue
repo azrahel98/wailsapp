@@ -10,7 +10,7 @@
   >
     <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header d-flex">
+        <div class="modal-header d-flex px-3 py-2">
           <div class="d-flex justify-content-around align-items-center pt-3 mb-3 w-100">
             <button class="btn btn-icon" @click="prevMonth" :disabled="isLoading">
               <PanelLeftCloseIcon class="icon" />
@@ -32,7 +32,7 @@
             aria-label="Close"
           ></button>
         </div>
-        <div class="modal-body p-0">
+        <div class="modal-body p-4">
           <div class="calendar px-2">
             <div class="calendar-header">
               <div class="day">Dom</div>

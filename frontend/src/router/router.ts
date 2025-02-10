@@ -10,6 +10,7 @@ import dashboard from '@views/dashboard.vue'
 import login from '@views/login.vue'
 import Main from '@views/dash/main.vue'
 import Buscar from '@views/dash/buscar.vue'
+import { userStore } from '../store/user'
   
   const routes: RouteRecordRaw[] = [
     {
@@ -56,18 +57,20 @@ import Buscar from '@views/dash/buscar.vue'
     },
   ]
   
+
   const middleware = async (
     _to: RouteLocationNormalized,
     _from: RouteLocationNormalized,
     next: NavigationGuardNext
   ) => {
+    const store = userStore()
     const token = localStorage.getItem('jwt')
-    console.log(token)
     if (token == null) {
       return next({
         name: 'login'
       })
     }
+    store.create(token)
   
     return next()
   }

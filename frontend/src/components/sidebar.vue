@@ -18,7 +18,7 @@
       <RouterLink :to="{ path: '/buscar' }" class="nav-item">
         <IconSearch size="20" class="icon" /> <span v-if="isExpanded">Buscar</span>
       </RouterLink>
-      <RouterLink :to="{ path: '/boleta' }" class="nav-item">
+      <RouterLink v-if="store.role == '1'" :to="{ path: '/boleta' }" class="nav-item">
         <IconFile3d size="20" class="icon" /> <span v-if="isExpanded">Boleta</span>
       </RouterLink>
       <RouterLink :to="{ path: '/add' }" class="nav-item">
@@ -31,11 +31,7 @@
     </nav>
     <div>
       <nav class="sidebar-nav">
-        <a
-          class="nav-item"
-          :class="{ active: activeItem === 'settings' }"
-          @click.stop="setActiveItem('settings')"
-        >
+        <a class="nav-item" :class="{ active: activeItem === 'settings' }" @click="store.logout()">
           <IconLogout size="20" class="icon" /> <span v-if="isExpanded">Salir</span>
         </a>
       </nav>
@@ -49,23 +45,18 @@ import {
   IconChevronRight,
   IconDashboard,
   IconUsers,
-  IconSettings,
   IconSearch,
   IconFile3d,
   IconUsersPlus,
   IconLogout
 } from '@tabler/icons-vue'
 import { router } from '@router/router'
+import { userStore } from '../store/user'
 
 const activeItem = ref('dashboard')
+const store = userStore()
 
 const sidebar = ref<HTMLElement | null>(null)
-
-const setActiveItem = (item: string) => {
-  activeItem.value = item
-}
-
-console.log(router.currentRoute.value)
 
 defineProps({
   isExpanded: { type: Boolean, required: false, default: false },

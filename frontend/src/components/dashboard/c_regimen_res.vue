@@ -1,7 +1,6 @@
 <template>
   <div class="chart-container card card-sm">
     <div class="card-body p-0 m-0">
-      <div class="text-secondary subheader">Personal por regimen</div>
       <DoughnutChart
         v-if="chartData"
         :chartData="chartData"
@@ -15,7 +14,7 @@
 <script lang="ts" setup>
 import { DoughnutChart } from 'vue-chart-3'
 import { Chart, registerables } from 'chart.js'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 
 Chart.register(...registerables)
 
@@ -24,14 +23,15 @@ interface Regimen {
   Nombre: string
 }
 
-const prop = defineProps({
+const props = defineProps({
   regim: { type: Array<Regimen>, required: true },
   responsive: { type: Boolean, default: true }
 })
 
 const chartData = computed(() => {
-  if (!prop.regim.length) return null
-  const sortedData = [...prop.regim].sort((a, b) => b.Cantidad - a.Cantidad)
+  if (!props.regim.length) return null
+
+  const sortedData = [...props.regim].sort((a, b) => b.Cantidad - a.Cantidad)
 
   return {
     labels: sortedData.map((r) => r.Nombre),
@@ -48,34 +48,19 @@ const chartData = computed(() => {
   }
 })
 
-const chartOptions = {
+const chartOptions = computed(() => ({
   indexAxis: 'y' as const,
-  responsive: prop.responsive,
+  responsive: props.responsive,
   maintainAspectRatio: true,
   plugins: {
-    animations: {
-      tension: {
-        duration: 1000,
-        easing: 'linear',
-        from: 1,
-        to: 0,
-        loop: true
-      }
-    },
-    title: {
-      display: true,
-      padding: {
-        top: 1
-      }
-    },
     legend: {
       display: true,
-      position: 'left',
+      position: 'right',
       labels: {
-        pointStyle: 'circle',
-        usePointStyle: true,
+        boxWidth: 10,
+        padding: 5,
         font: {
-          size: 9
+          size: 10
         }
       }
     },
@@ -90,7 +75,7 @@ const chartOptions = {
       }
     }
   }
-}
+}))
 </script>
 
 <style scoped>
@@ -98,10 +83,9 @@ const chartOptions = {
   position: relative;
   width: 100%;
   max-width: 900px;
-  height: 100%;
   margin: 0 auto;
   padding: 1rem;
-
   border-radius: 0.5rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 </style>
