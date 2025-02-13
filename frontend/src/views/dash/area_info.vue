@@ -1,6 +1,5 @@
 <template>
   <div class="mains">
-    <!-- Encabezado -->
     <div class="col text-start mb-4">
       <div class="page-pretitle fw-medium">Información del Área</div>
       <h2 class="page-title fs-4">{{ router.currentRoute.value.params.area }}</h2>
@@ -15,26 +14,24 @@
         </div>
         <div class="col-md-8">
           <div class="info">
-            <!-- Tarjeta: Trabajadores Totales -->
             <div class="card card-sm mb-3">
-              <div class="card-body">
+              <div class="card-body py-1 px-2">
                 <div class="row align-items-center">
                   <div class="col-auto">
-                    <span class="bg-primary text-white avatar">
-                      <IconUserBolt class="icon" />
+                    <span class="bg-primary text-white avatar avatar-sm">
+                      <IconUserBolt />
                     </span>
                   </div>
                   <div class="col">
                     <div class="font-weight-medium">{{ trabajadores.length }}</div>
-                    <div class="text-secondary">Trabajadores</div>
+                    <div class="text-secondary fs-5">Trabajadores</div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <!-- Tarjeta: Transitorios -->
             <div class="card card-sm mb-3">
-              <div class="card-body">
+              <div class="card-body py-1 px-2">
                 <div class="row align-items-center">
                   <div class="col-auto">
                     <span class="bg-instagram text-white avatar">
@@ -45,15 +42,14 @@
                     <div class="font-weight-medium">
                       {{ trabajadores.filter((e: any) => e.reg === 'CAS-D').length }}
                     </div>
-                    <div class="text-secondary">Transitorios</div>
+                    <div class="text-secondary fs-5">Transitorios</div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <!-- Tarjeta: Indeterminados -->
-            <div class="card card-sm">
-              <div class="card-body">
+            <div class="card card-sm mb-3">
+              <div class="card-body py-1 px-2">
                 <div class="row align-items-center">
                   <div class="col-auto">
                     <span class="bg-primary text-white avatar">
@@ -67,16 +63,14 @@
                         trabajadores.filter((e: any) => e.reg === 'CAS-D').length
                       }}
                     </div>
-                    <div class="text-secondary">Indeterminado</div>
+                    <div class="text-secondary fs-5">Indeterminado</div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Acciones -->
           <div class="acciones d-flex justify-content-between mt-3">
-            <!-- Barra de búsqueda -->
             <div class="input-icon">
               <span class="input-icon-addon">
                 <IconSearch class="icon" />
@@ -89,7 +83,6 @@
               />
             </div>
 
-            <!-- Botón de exportar -->
             <button class="btn btn-green rounded-5 btn-icon" @click="exportar">
               <IconDownload />
             </button>
@@ -98,7 +91,6 @@
       </div>
     </div>
 
-    <!-- Lista de trabajadores -->
     <div class="puestos">
       <div class="card card-link p-0 m-0 mb-3" v-for="x in filteredTrabajadores" :key="x.dni">
         <div class="card-body p-3">
@@ -188,7 +180,7 @@ const regCount = computed<Regimen[]>(() => {
 .mains {
   display: grid;
   height: 100vh;
-  grid-template-rows: auto 1fr;
+  grid-template-rows: min-content auto;
   gap: 1rem;
   padding: 1rem;
 
@@ -199,13 +191,13 @@ const regCount = computed<Regimen[]>(() => {
 
     .info {
       display: flex;
-
       flex-wrap: wrap;
-      justify-content: space-between;
+      justify-content: end;
       gap: 1rem;
 
       .card {
-        max-width: max-content;
+        width: 18vw;
+        height: max-content;
       }
     }
 

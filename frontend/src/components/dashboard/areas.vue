@@ -60,7 +60,7 @@
 
     <!-- Paginación -->
     <div class="card-footer d-flex justify-content-between align-items-center">
-      <div class="pagination-info text-muted">
+      <div class="pagination-info text-muted fs-6">
         Mostrando {{ paginatedData.length }} de {{ filteredRows.length }} registros
       </div>
       <nav aria-label="Page navigation">

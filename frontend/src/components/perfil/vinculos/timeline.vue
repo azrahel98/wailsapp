@@ -16,8 +16,8 @@
           }}
         </div>
         <div class="page-subtitle">
-          <h5 class="p-0 m-0">{{ x.Cargo }}</h5>
-          <p class="text-secondary p-0 m-0 fs-5">
+          <h4 class="p-0 m-0">{{ x.Cargo }}</h4>
+          <p class="text-secondary p-0 py-1 m-0 fs-5">
             {{ x.Area }}
           </p>
         </div>
