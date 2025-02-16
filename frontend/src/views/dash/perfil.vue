@@ -1,11 +1,11 @@
 <template>
   <div class="main">
-    <div class="col text-start mb-4 p-3">
+    <div class="col text-start pt-3">
       <div class="page-pretitle fw-medium">Perfil e Informacion Personal</div>
     </div>
 
     <div
-      class="row align-items-center align-content-end text-start pt-2 p-4"
+      class="row align-items-center align-content-end text-start p-4 pt-0"
       style="max-width: 80vw"
     >
       <div class="col-auto">

@@ -16,7 +16,7 @@
           }}
         </div>
         <div class="page-subtitle">
-          <h4 class="p-0 m-0">{{ x.Cargo }}</h4>
+          <h5 class="p-0 m-0">{{ x.Cargo }}</h5>
           <p class="text-secondary p-0 py-1 m-0 fs-5">
             {{ x.Area }}
           </p>
@@ -77,24 +77,24 @@
                 <div class="accordion-body pt-0">
                   <div class="detalles-collapse">
                     <div class="ingreso">
-                      <div class="mb-2 fs-5">
+                      <div class="mb-2">
                         <IconFileInfo class="icon text-info" />
                         Ingreso: <strong>{{ x.Doc_i }} {{ x.Numero_doc_i }}</strong>
                       </div>
-                      <div class="mb-2 fs-5">
+                      <div class="mb-2">
                         <IconFileInfo class="icon text-info" />
                         Descripcion: <strong>{{ x.Descrip_ingre }}</strong>
                       </div>
-                      <div class="mb-2 fs-5">
+                      <div class="mb-2">
                         <IconFileInfo class="icon text-info" />
                         Regimen: <strong>{{ x.Regimen }}</strong>
                       </div>
-                      <div class="mb-2 fs-5">
+                      <div class="mb-2">
                         <IconFileInfo class="icon text-info" />
                         Sueldo: <strong>S/.{{ x.Sueldo }}</strong>
                       </div>
                     </div>
-                    <div class="salida fs-5">
+                    <div class="salida">
                       <div class="mb-2" v-if="x.Doc_s">
                         <IconClipboardOff class="icon text-danger" />
                         Salida: <strong>{{ x.Doc_s }}-{{ x.Numero_doc_s }}</strong>
@@ -148,3 +148,23 @@ defineProps({
   click_collapse: { type: Function, required: true }
 })
 </script>
+
+<style lang="scss" scoped>
+.detalles-collapse {
+  width: 80%;
+  justify-content: space-between;
+  display: flex;
+  flex-wrap: wrap;
+  .ingreso,
+  .salida {
+    .mb-2 {
+      font-size: 0.85rem;
+      text-decoration: dashed;
+      strong {
+        font-size: 0.81rem;
+        font-weight: 500;
+      }
+    }
+  }
+}
+</style>

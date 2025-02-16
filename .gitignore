@@ -13,6 +13,8 @@ Include
 Lib
 Scripts
 
+bun.lockb
+package.json.md5
 
 .env
 env

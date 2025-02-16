@@ -70,9 +70,10 @@ const columns = [
 <style lang="scss" scoped>
 .page {
   display: grid !important;
-  grid-template-rows: min-content min-content auto;
+  grid-template-rows: min-content min-content min-content;
   height: 100vh;
   .areas {
+    max-height: 100%;
     overflow-y: auto;
   }
 }

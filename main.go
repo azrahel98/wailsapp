@@ -49,7 +49,6 @@ func main() {
 	err := wails.Run(&options.App{
 		Title:    "vesgoapp",
 		Width:    1024,
-		Height:   500,
 		MinWidth: 500,
 		AssetServer: &assetserver.Options{
 			Assets: assets,

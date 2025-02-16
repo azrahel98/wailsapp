@@ -7,12 +7,12 @@
 
     <div class="graficos pb-3">
       <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-4 col-sm-6">
           <div class="chart">
             <c_regimen_res :regim="regCount" :responsive="true" />
           </div>
         </div>
-        <div class="col-md-8">
+        <div class="col-md-8 col-sm-6">
           <div class="info">
             <div class="card card-sm mb-3">
               <div class="card-body py-1 px-2">
@@ -212,6 +212,7 @@ const regCount = computed<Regimen[]>(() => {
     gap: 1rem;
     height: 100%;
     overflow-y: auto;
+    background-color: red;
 
     .card {
       width: 100%;
