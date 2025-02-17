@@ -19,11 +19,11 @@
           <div class="col-sm-6 col-lg-4">
             <c_sexo_res :regimes="sexos" title="Personal por Sexo" />
           </div>
+          <div class="col-sm-6 col-lg-6">
+            <c_areas_res :columns="columns" :rows="areas" />
+          </div>
         </div>
       </div>
-    </div>
-    <div class="areas">
-      <c_areas_res :columns="columns" :rows="areas" />
     </div>
   </div>
 </template>
@@ -72,10 +72,6 @@ const columns = [
   display: grid !important;
   grid-template-rows: min-content min-content min-content;
   height: 100vh;
-  .areas {
-    max-height: 100%;
-    overflow-y: auto;
-  }
 }
 
 .chart-lg {

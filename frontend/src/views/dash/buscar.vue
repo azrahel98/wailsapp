@@ -19,7 +19,6 @@
         />
       </div>
     </div>
-
     <div class="resultados">
       <div class="card placeholder-glow" v-for="_ in 5" v-if="loading">
         <div class="ratio ratio-21x9 card-img-top placeholder"></div>
@@ -31,10 +30,6 @@
       </div>
 
       <div v-else class="card" v-for="x in trabajadores">
-        <div
-          class="card-status-top"
-          :class="[x.Estado == 'activo' ? 'bg-facebook' : 'bg-youtube']"
-        ></div>
         <div class="card-body pt-2 text-center">
           <span class="avatar avatar-md mb-3 rounded">
             <img :src="`${x.Foto.String}`" class="border-1 border-secondary" v-if="x.Foto.Valid" />
@@ -46,7 +41,7 @@
           /></span>
 
           <RouterLink
-            class="text-black"
+            class="text-black bg-azure"
             :to="{ name: 'perfil', params: { dni: x.Dni.toString() } }"
             @click="console.log(`Navigating to /perfil/${x.Dni}`)"
           >
@@ -64,12 +59,15 @@
       </div>
     </div>
   </div>
+  <Toast ref="toastRef" />
 </template>
 <script setup lang="ts">
+import Toast from '@comp/toast.vue'
 import { IconSearch } from '@tabler/icons-vue'
 import { Buscar_trabajador } from '@wails/services/DashboardService'
 import { ref } from 'vue'
 
+const toastRef = ref<InstanceType<typeof Toast> | null>(null)
 const trabajadores = ref<Array<any>>([])
 const busqueda = ref('')
 const loading = ref(false)
@@ -81,8 +79,12 @@ const realizarBusqueda = async () => {
       loading.value = true
       const res: any = await Buscar_trabajador(busqueda.value)
       trabajadores.value = res
+      if (trabajadores.value.length < 1) {
+        throw 'No hay trabajadores'
+      }
     }
   } catch (error) {
+    toastRef.value?.showToast('No se encontraron trabajadores')
     trabajadores.value = []
   } finally {
     loading.value = false

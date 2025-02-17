@@ -27,7 +27,7 @@ import { userStore } from '../store/user'
         {
           path: '/',
           name: 'dashboard',
-          component: Main
+          component: () => import('@views/dash/main.vue')
         },
         {
           path: '/buscar',

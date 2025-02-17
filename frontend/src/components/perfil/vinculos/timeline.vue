@@ -7,22 +7,32 @@
       <IconBriefcase class="icon" :class="x.Estado !== 'activo' ? 'text-white' : 'text-white'" />
     </div>
     <div class="card timeline-event-card">
-      <div class="card-body p-0 m-0 mx-2 my-1">
-        <div class="float-end fs-5 text-secondary">
-          {{
-            x.Fecha_ingreso
-              ? format(addDays(parseISO(x.Fecha_ingreso), 1), 'yyyy/MM/dd')
-              : 'Fecha no disponible'
-          }}
+      <div class="card-body p-0 m-0 mx-2 my-1 py-1">
+        <div class="float-end text-secondary fw-medium d-flex flex-column gap-2">
+          <span v-if="x.Fecha_salida" class="badge bg-primary-lt">
+            {{
+              x.Fecha_ingreso
+                ? format(addDays(parseISO(x.Fecha_salida), 1), 'yyyy/MM/dd')
+                : 'Fecha no disponible'
+            }}
+          </span>
+          <span class="badge bg-secondary-lt">
+            {{
+              x.Fecha_ingreso
+                ? format(addDays(parseISO(x.Fecha_ingreso), 1), 'yyyy/MM/dd')
+                : 'Fecha no disponible'
+            }}</span
+          >
         </div>
-        <div class="page-subtitle">
-          <h5 class="p-0 m-0">{{ x.Cargo }}</h5>
+
+        <div>
+          <h4 class="p-0 m-0 fw-bold">{{ x.Cargo }}</h4>
           <p class="text-secondary p-0 py-1 m-0 fs-5">
             {{ x.Area }}
           </p>
         </div>
 
-        <div class="info p-0 m-0">
+        <div class="info p-0 m-0 pt-2">
           <div class="accordion" id="accordion-example">
             <div class="accordion-item border-0 p-0 m-0">
               <div
@@ -70,7 +80,7 @@
               </div>
               <div
                 :id="'collapse' + x.Id"
-                class="accordion-collapse collapse"
+                class="accordion-collapse collapse pt-3"
                 data-bs-parent="#accordion-example"
                 style=""
               >
@@ -78,8 +88,11 @@
                   <div class="detalles-collapse">
                     <div class="ingreso">
                       <div class="mb-2">
-                        <IconFileInfo class="icon text-info" />
-                        Ingreso: <strong>{{ x.Doc_i }} {{ x.Numero_doc_i }}</strong>
+                        <div class="badge badge-pill bg-primary-lt">
+                          <IconFileInfo class="icon text-info" />
+                          Ingreso:
+                        </div>
+                        <strong>{{ x.Doc_i }} {{ x.Numero_doc_i }}</strong>
                       </div>
                       <div class="mb-2">
                         <IconFileInfo class="icon text-info" />
@@ -96,16 +109,21 @@
                     </div>
                     <div class="salida">
                       <div class="mb-2" v-if="x.Doc_s">
-                        <IconClipboardOff class="icon text-danger" />
-                        Salida: <strong>{{ x.Doc_s }}-{{ x.Numero_doc_s }}</strong>
+                        <div class="badge bg-danger-lt text-danger">
+                          <IconClipboardOff class="icon" />
+                          Salida:
+                        </div>
+                        <strong>{{ x.Doc_s }} - {{ x.Numero_doc_s }}</strong>
                       </div>
                       <div class="mb-2" v-if="x.Doc_s">
                         <IconClipboardOff class="icon text-danger" />
                         Descripcion: <strong>{{ x.Descrip_s }}</strong>
                       </div>
                       <div class="mb-2" v-if="x.Doc_s">
-                        <IconClipboardOff class="icon text-danger" />
-                        Fecha Renuncia:
+                        <div class="badge badge-pill bg-danger-lt">
+                          <IconClipboardOff class="icon" />
+                          Fecha Renuncia:
+                        </div>
                         <strong>
                           {{
                             x.Fecha_salida
@@ -158,11 +176,11 @@ defineProps({
   .ingreso,
   .salida {
     .mb-2 {
-      font-size: 0.85rem;
       text-decoration: dashed;
+
       strong {
-        font-size: 0.81rem;
-        font-weight: 500;
+        padding-left: 2vh;
+        font-weight: 400;
       }
     }
   }

@@ -1,7 +1,7 @@
 <template>
   <div class="main">
-    <div class="col text-start pt-3">
-      <div class="page-pretitle fw-medium">Perfil e Informacion Personal</div>
+    <div class="col text-start py-4">
+      <div class="page-pretitle text-uppercase fw-medium">Informacion Personal</div>
     </div>
 
     <div
@@ -17,7 +17,7 @@
       </div>
       <div class="col-6">
         <h2 class="fw-bold m-0">{{ perfil.Nombre }} {{ perfil.Apaterno }} {{ perfil.Amaterno }}</h2>
-        <div class="p-0 m-0 fs-4">
+        <div class="p-0 m-0">
           <IconCardboards class="icon" /> DNI:
           {{ perfil.Dni }}
         </div>
@@ -51,7 +51,7 @@
         </div>
       </div>
     </div>
-    <div class="page-body">
+    <div class="page-body pt-4">
       <div class="container-xl">
         <div class="row gap-3">
           <div class="col vinculos" v-if="!isloading">
@@ -69,17 +69,17 @@
             <div class="row row-cards">
               <div class="col-12">
                 <div class="card" v-if="!isloading">
-                  <div class="card-body px-2 py-0 text-start">
-                    <div class="card-title fs-4 p-0 m-0 py-2">Informacion Basica</div>
-                    <div class="mb-1 fs-5">
-                      <IconAddressBook class="icon me-2 text-secondary fs-6" />
+                  <div class="card-body px-2 py-0 text-start fs-3">
+                    <div class="card-title p-0 m-0 py-2">Informacion Basica</div>
+                    <div class="mb-1">
+                      <IconAddressBook class="icon me-2 text-secondary" />
                       Vive en: <strong v-if="perfil.Direccion">{{ perfil.Direccion }}</strong>
                       <div
                         v-if="!perfil.Direccion"
                         class="status-dot status-dot-animated bg-youtube mx-2"
                       />
                     </div>
-                    <div class="mb-1 fs-5">
+                    <div class="mb-1">
                       <IconBriefcase class="icon me-2 text-secondary" />
                       Correo es: <strong v-if="perfil.Email">{{ perfil.Email }}</strong>
                       <div
@@ -87,7 +87,7 @@
                         class="status-dot status-dot-animated bg-youtube mx-2"
                       />
                     </div>
-                    <div class="mb-1 fs-5">
+                    <div class="mb-1">
                       <IconCashBanknote class="icon me-2 text-secondary" />
                       Ruc: <strong v-if="perfil.Ruc">{{ perfil.Ruc }}</strong>
                       <div
@@ -95,7 +95,7 @@
                         class="status-dot status-dot-animated bg-youtube mx-2"
                       />
                     </div>
-                    <div class="mb-1 fs-5">
+                    <div class="mb-1">
                       <IconPhoneCall class="icon me-2 text-secondary" />
                       Telefono:
                       <strong v-if="perfil.Telf1"
@@ -106,12 +106,12 @@
                         class="status-dot status-dot-animated bg-youtube mx-2"
                       />
                     </div>
-                    <div class="mb-1 fs-5" v-if="perfil.Telf2">
+                    <div class="mb-1" v-if="perfil.Telf2">
                       <IconPhoneCall class="icon me-2 text-secondary" />
                       Telefono 2:
                       <strong><span class="flag flag-country-si"></span> {{ perfil.Telf1 }}</strong>
                     </div>
-                    <div class="mb-1 fs-5" v-if="parseISO(perfil.Nacimiento)">
+                    <div class="mb-1" v-if="parseISO(perfil.Nacimiento)">
                       <CakeIcon class="icon me-2 text-secondary" />
                       Cumpleaños:
                       <strong>
@@ -122,7 +122,7 @@
                         }}
                       </strong>
                     </div>
-                    <div class="mb-1 fs-5" v-if="parseISO(perfil.Nacimiento)">
+                    <div class="mb-1" v-if="parseISO(perfil.Nacimiento)">
                       <IconMoodHappy class="icon me-2 text-secondary" />
                       Edad:
                       <strong>
@@ -214,7 +214,7 @@ onMounted(async () => {
 .main {
   max-height: 100vh;
   display: grid;
-  grid-template-rows: 2vh 18vh 80vh;
+  grid-template-rows: min-content min-content 80vh;
 
   .page-body {
     max-height: 100%;
@@ -224,14 +224,12 @@ onMounted(async () => {
     .container-xl,
     .row {
       height: 100%;
-
       .vinculos {
         max-height: 60vh;
         overflow-y: auto;
         .timeline-event-icon {
           height: 3.5vh;
           margin: 0;
-
           padding: 0;
         }
       }
@@ -247,7 +245,7 @@ onMounted(async () => {
     }
   }
   strong {
-    font-size: 0.8rem;
+    font-size: 0.95rem;
   }
 }
 </style>

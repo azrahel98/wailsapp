@@ -83,8 +83,8 @@
               />
             </div>
 
-            <button class="btn btn-green rounded-5 btn-icon" @click="exportar">
-              <IconDownload />
+            <button class="btn btn-outline-green btn-icon" @click="exportar">
+              <IconFileTypeXls />
             </button>
           </div>
         </div>
@@ -112,7 +112,7 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { Trabajadores_por_area } from '@wails/services/DashboardService'
-import { IconDownload, IconSearch, IconUserBolt } from '@tabler/icons-vue'
+import { IconFileTypeXls, IconSearch, IconUserBolt } from '@tabler/icons-vue'
 import * as XLSX from 'xlsx'
 import c_regimen_res from '@comp/dashboard/c_regimen_res.vue'
 
@@ -180,11 +180,12 @@ const regCount = computed<Regimen[]>(() => {
 .mains {
   display: grid;
   height: 100vh;
-  grid-template-rows: min-content auto;
+  grid-template-rows: min-content max-content;
   gap: 1rem;
   padding: 1rem;
 
   .graficos {
+    height: min-content;
     .chart {
       max-width: 100%;
     }
@@ -207,15 +208,18 @@ const regCount = computed<Regimen[]>(() => {
   }
 
   .puestos {
+    align-self: flex-start;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 1rem;
+    row-gap: 0vh;
+    column-gap: 1vh;
     height: 100%;
+    align-content: start;
     overflow-y: auto;
-    background-color: red;
 
     .card {
       width: 100%;
+      height: max-content;
     }
   }
 }
