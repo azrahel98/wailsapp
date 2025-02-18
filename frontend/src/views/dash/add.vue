@@ -1,8 +1,12 @@
 <template>
   <div class="container">
-    <div class="col text-start mt-4">
-      <div class="page-pretitle fw-medium">Registrar a un nuevo</div>
-      <h2 class="page-title">Trabajador</h2>
+    <div class="px-4 pt-2">
+      <div class="max-w-7xl mx-auto">
+        <div class="space-y-1">
+          <span class="text-sm font-medium"> Registrar a un nuevo personal </span>
+          <h2 class="font-bold text-gray tracking-tight">Agregar</h2>
+        </div>
+      </div>
     </div>
     <div class="row">
       <div class="col-sm-12 col-md-auto px-3 steps-app">

@@ -1,7 +1,12 @@
 <template>
   <div class="main">
-    <div class="col text-start py-4">
-      <div class="page-pretitle text-uppercase fw-medium">Informacion Personal</div>
+    <div class="px-4 pt-2">
+      <div class="max-w-7xl mx-auto">
+        <div class="space-y-1">
+          <span class="text-sm font-medium"> Informacion Personal </span>
+          <h2 class="font-bold text-gray tracking-tight">Perfil</h2>
+        </div>
+      </div>
     </div>
 
     <div
@@ -69,7 +74,7 @@
             <div class="row row-cards">
               <div class="col-12">
                 <div class="card" v-if="!isloading">
-                  <div class="card-body px-2 py-0 text-start fs-3">
+                  <div class="card-body px-2 py-0 text-start">
                     <div class="card-title p-0 m-0 py-2">Informacion Basica</div>
                     <div class="mb-1">
                       <IconAddressBook class="icon me-2 text-secondary" />

@@ -32,7 +32,7 @@ import { userStore } from '../store/user'
         {
           path: '/buscar',
           name: 'buscar',
-          component: Buscar
+          component: () => import('@views/dash/buscar.vue')
         },
         {
           path: 'perfil/:dni',

@@ -1,8 +1,12 @@
 <template>
   <div class="mains">
-    <div class="col text-start">
-      <div class="page-pretitle fw-medium">Buscar por nombres</div>
-      <h2 class="page-title">Buscar</h2>
+    <div class="px-4">
+      <div class="max-w-7xl mx-auto">
+        <div class="space-y-1">
+          <span class="text-sm font-medium"> Buscar Trabajadores </span>
+          <h2 class="font-bold text-gray tracking-tight">Buscar</h2>
+        </div>
+      </div>
     </div>
     <div class="search">
       <div class="input-icon w-33">
@@ -13,7 +17,7 @@
           type="text"
           v-model="busqueda"
           @keyup.enter="realizarBusqueda"
-          class="form-control"
+          class="form-control text-center"
           placeholder="Search…"
           aria-label="Search in website"
         />
@@ -31,7 +35,7 @@
 
       <div v-else class="card" v-for="x in trabajadores">
         <div class="card-body pt-2 text-center">
-          <span class="avatar avatar-md mb-3 rounded">
+          <span class="avatar avatar-xl mb-3 rounded">
             <img :src="`${x.Foto.String}`" class="border-1 border-secondary" v-if="x.Foto.Valid" />
             <img
               src="../../assets/images/man.svg"
@@ -45,13 +49,13 @@
             :to="{ name: 'perfil', params: { dni: x.Dni.toString() } }"
             @click="console.log(`Navigating to /perfil/${x.Dni}`)"
           >
-            <h5 class="m-0 mb-1">{{ x.Nombre }}</h5>
+            <h4 class="m-0 mb-1">{{ x.Nombre }}</h4>
           </RouterLink>
           <div class="text-secondary">{{ x.Dni }}</div>
           <div class="mt-1">
             <span
-              class="badge fs-6"
-              :class="[x.Estado == 'activo' ? 'bg-success text-white' : 'bg-danger text-white']"
+              class="badge fs-5"
+              :class="[x.Estado == 'activo' ? 'bg-primary text-white' : 'bg-secondary text-white']"
               >{{ x.Estado == 'activo' ? 'Activo' : 'Inactivo' }}</span
             >
           </div>
