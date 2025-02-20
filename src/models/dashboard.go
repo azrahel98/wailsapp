@@ -34,3 +34,10 @@ type TrabajadoresArea struct {
 	Sueldo  *float64 `db:"sueldo" json:"sueldo"`
 	Regimen string   `db:"regimen" json:"reg"`
 }
+
+type ResumenIndicadores struct {
+	Personalregistrado PersonaActivo       `json:"personalregistrado"`
+	RenunciasMes       []PersonaActivo     `json:"renunciasmes"`
+	Regimenes          []RegimenesCantidad `json:"regimenescantidad"`
+	Sexo               []RegimenesCantidad `json:"sexo"`
+}

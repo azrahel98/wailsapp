@@ -22,7 +22,6 @@ type dashboardRepository struct {
 	db *sqlx.DB
 }
 
-// Trabajadores_area implements DashboardRepository.
 func (d *dashboardRepository) Trabajadores_area(ctx context.Context, nombre string) (*[]models.TrabajadoresArea, error) {
 	query := `select
    cast(p.dni as char) dni,
@@ -198,19 +197,22 @@ func (d *dashboardRepository) Cantidad_by_regimen(ctx context.Context) (*[]model
 	var res []models.RegimenesCantidad
 
 	query := `
-        select
-		count(v.id) cantidad,
-		r.decreto nombre
-		from
-		Vinculo v
-		inner join Regimen r on v.regimen = r.id
-		WHERE
-		v.estado = "activo"
-		GROUP by
-		r.estructura
-		ORDER by
-		r.nombre
+ select
+  count(v.id) cantidad,
+  r.decreto nombre
+from
+  Vinculo v
+  inner join Regimen r on v.regimen = r.id
+WHERE
+  v.estado = "activo"
+  and r.decreto = 'D.L 1057'
+  or  r.decreto = 'D.L 1057 - T'
+GROUP by
+  r.estructura
+ORDER by
+  r.nombre
     `
+	// solo cas - sin cas de confianza
 
 	err := d.db.SelectContext(ctx, &res, query)
 	if err != nil {

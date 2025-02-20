@@ -35,7 +35,7 @@
 
       <div v-else class="card" v-for="x in trabajadores">
         <div class="card-body pt-2 text-center">
-          <span class="avatar avatar-xl mb-3 rounded">
+          <span class="avatar avatar-lg mb-3 rounded">
             <img :src="`${x.Foto.String}`" class="border-1 border-secondary" v-if="x.Foto.Valid" />
             <img
               src="../../assets/images/man.svg"

@@ -32,7 +32,7 @@ const handleOutsideClick = (event: MouseEvent) => {
 }
 .main-content {
   flex: 1;
-  margin-left: 60px;
+  padding-left: 60px;
   background-color: #f4f6fa;
   transition: margin-left 0.3s ease;
   width: 100%;

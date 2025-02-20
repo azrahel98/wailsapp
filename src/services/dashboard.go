@@ -14,22 +14,6 @@ func NewDashboardService(r repositories.DashboardRepository) *DashboardService {
 	return &DashboardService{repo: r}
 }
 
-func (s *DashboardService) Regimenes_resumen() (*[]models.RegimenesCantidad, error) {
-	res, err := s.repo.Cantidad_by_regimen(context.Background())
-	if err != nil {
-		return nil, err
-	}
-	return res, nil
-}
-
-func (s *DashboardService) Sexo_cantidad() (*[]models.RegimenesCantidad, error) {
-	res, err := s.repo.Cantidad_by_sexo(context.Background())
-	if err != nil {
-		return nil, err
-	}
-	return res, nil
-}
-
 func (s *DashboardService) Cumpleaños(mes int) (*[]models.Cumpleaños_Activos, error) {
 	res, err := s.repo.Cumpleaño_by_activos(context.Background(), mes)
 	if err != nil {
@@ -54,7 +38,7 @@ func (s *DashboardService) Trabajadore_Activos_Area() (*[]models.RegimenesCantid
 	return res, nil
 }
 
-func (s *DashboardService) Resumen_Dashboard() (*[]models.PersonaActivo, error) {
+func (s *DashboardService) Resumen_Dashboard() (*models.ResumenIndicadores, error) {
 	res, err := s.repo.Cantidad_vincolos_activos(context.Background())
 	if err != nil {
 		return nil, err
@@ -63,10 +47,20 @@ func (s *DashboardService) Resumen_Dashboard() (*[]models.PersonaActivo, error) 
 	if err != nil {
 		return nil, err
 	}
+	regimenes, err := s.repo.Cantidad_by_regimen(context.Background())
+	if err != nil {
+		return nil, err
+	}
+	sex, err := s.repo.Cantidad_by_sexo(context.Background())
+	if err != nil {
+		return nil, err
+	}
+	var result models.ResumenIndicadores
 
-	var result []models.PersonaActivo
-	result = append(result, *res)
-	result = append(result, *renuncias...)
+	result.Personalregistrado = *res
+	result.RenunciasMes = *renuncias
+	result.Regimenes = *regimenes
+	result.Sexo = *sex
 
 	return &result, nil
 }
