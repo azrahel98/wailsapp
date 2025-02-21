@@ -8,6 +8,8 @@ export function Cumpleaños(arg1:number):Promise<any>;
 
 export function Resumen_Dashboard():Promise<models.ResumenIndicadores>;
 
+export function Resumen_Regiemenes():Promise<any>;
+
 export function Trabajadore_Activos_Area():Promise<any>;
 
 export function Trabajadores_por_area(arg1:string):Promise<any>;

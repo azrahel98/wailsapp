@@ -73,3 +73,12 @@ func (s *DashboardService) Trabajadores_por_area(nombre string) (*[]models.Traba
 
 	return res, nil
 }
+
+func (s *DashboardService) Resumen_Regiemenes() (*[]models.RegimenesResumen, error) {
+	res, err := s.repo.Resumen_regimenes_activos(context.Background())
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}

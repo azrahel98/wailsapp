@@ -7,6 +7,12 @@ type RegimenesCantidad struct {
 	Nombre   string `db:"nombre"`
 }
 
+type RegimenesResumen struct {
+	Cantidad   int     `db:"cantidad" json:"cantidad"`
+	Nombre     string  `db:"nombre" json:"nombre"`
+	Porcentaje float64 `db:"porcentaje" json:"porcentaje"`
+}
+
 type Cumpleaños_Activos struct {
 	Dni        string `db:"dni"`
 	Nombre     string `db:"nombre"`

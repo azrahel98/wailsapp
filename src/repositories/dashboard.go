@@ -17,9 +17,43 @@ type DashboardRepository interface {
 	Cantidad_vincolos_activos(ctx context.Context) (*models.PersonaActivo, error)
 	Cantidad_renuncias_mes(ctx context.Context) (*[]models.PersonaActivo, error)
 	Trabajadores_area(ctx context.Context, nombre string) (*[]models.TrabajadoresArea, error)
+	Resumen_regimenes_activos(ctx context.Context) (*[]models.RegimenesResumen, error)
 }
 type dashboardRepository struct {
 	db *sqlx.DB
+}
+
+func (d *dashboardRepository) Resumen_regimenes_activos(ctx context.Context) (*[]models.RegimenesResumen, error) {
+	var res []models.RegimenesResumen
+
+	query := `
+SELECT
+  COUNT(v.id) AS cantidad,
+  r.decreto AS nombre,
+  (COUNT(v.id) * 100.0) / (
+    SELECT
+      COUNT(id)
+    FROM
+      Vinculo
+    WHERE
+      estado = "activo"
+  ) AS porcentaje
+FROM
+  Vinculo v
+  INNER JOIN Regimen r ON v.regimen = r.id
+WHERE
+  v.estado = "activo"
+GROUP BY
+  r.estructura
+ORDER BY
+  r.nombre;
+    `
+	err := d.db.SelectContext(ctx, &res, query)
+	if err != nil {
+		return nil, err
+	}
+
+	return &res, nil
 }
 
 func (d *dashboardRepository) Trabajadores_area(ctx context.Context, nombre string) (*[]models.TrabajadoresArea, error) {
@@ -185,6 +219,8 @@ func (d *dashboardRepository) Cumpleaño_by_activos(ctx context.Context, mes int
 	v.estado = 'activo' and month(p.fecha_nacimiento) = ?
 	GROUP by
 	p.dni
+	order by
+	day(p.fecha_nacimiento),YEAR(CURRENT_DATE) - year(p.fecha_nacimiento) asc
 	`
 	err := d.db.SelectContext(ctx, &res, query, mes)
 	if err != nil {

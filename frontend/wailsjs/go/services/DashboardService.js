@@ -14,6 +14,10 @@ export function Resumen_Dashboard() {
   return window['go']['services']['DashboardService']['Resumen_Dashboard']();
 }
 
+export function Resumen_Regiemenes() {
+  return window['go']['services']['DashboardService']['Resumen_Regiemenes']();
+}
+
 export function Trabajadore_Activos_Area() {
   return window['go']['services']['DashboardService']['Trabajadore_Activos_Area']();
 }
