@@ -241,8 +241,7 @@ from
   inner join Regimen r on v.regimen = r.id
 WHERE
   v.estado = "activo"
-  and r.decreto = 'D.L 1057'
-  or  r.decreto = 'D.L 1057 - T'
+  and r.estructura <= 2
 GROUP by
   r.estructura
 ORDER by

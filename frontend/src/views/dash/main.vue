@@ -11,38 +11,46 @@
     <div class="row row-deck row-cards">
       <div class="col-12">
         <div class="row row-cards">
-          <card_info
-            :title="`${resumen.personalregistrado?.Cantidad} Personas`"
-            :cantidad="resumen.personalregistrado?.Activos"
-            descripcion=" activos"
-          >
-            <span class="text-white avatar bg-primary">
-              <IconUsersGroup stroke="1.1" class="icon" />
-            </span>
-          </card_info>
-          <card_info
-            title="Renuncias del mes"
-            :cantidad="resumen.renunciasmes?.[0].Cantidad"
-            descripcion=" renuncias"
-          >
-            <span class="text-white avatar bg-warning">
-              <IconUserOff stroke="1.1" class="icon" />
-            </span>
-          </card_info>
-          <card_info title="Puestos CAP - 2015" :cantidad="175">
-            <span class="text-white avatar bg-facebook">
-              <IconBriefcase2 stroke="1.1" class="icon" />
-            </span>
-          </card_info>
-          <card_info
-            :cantidad="(resumen.regimenescantidad?.reduce((x:any, i:any) => x + i.Cantidad, 0) + 175) * 0.05"
-            descripcion=" disponibles"
-            :title="`${resumen.regimenescantidad?.reduce((x:any, i:any) => x + i.Cantidad, 0)} puestos CAS`"
-          >
-            <span class="text-white avatar bg-secondary">
-              <IconCalculator stroke="1.1" class="icon" />
-            </span>
-          </card_info>
+          <div class="col-sm-6 col-lg-3">
+            <card_info
+              :title="`${resumen.personalregistrado?.Cantidad} Personas`"
+              :cantidad="resumen.personalregistrado?.Activos"
+              descripcion=" activos"
+            >
+              <span class="text-white avatar bg-primary">
+                <IconUsersGroup stroke="1.1" class="icon" />
+              </span>
+            </card_info>
+          </div>
+          <div class="col-sm-6 col-lg-3">
+            <card_info
+              title="Renuncias del mes"
+              :cantidad="resumen.renunciasmes?.[0].Cantidad"
+              descripcion=" renuncias"
+            >
+              <span class="text-white avatar bg-warning">
+                <IconUserOff stroke="1.1" class="icon" />
+              </span>
+            </card_info>
+          </div>
+          <div class="col-sm-6 col-lg-3">
+            <card_info title="Puestos CAP - 2015" :cantidad="175">
+              <span class="text-white avatar bg-facebook">
+                <IconBriefcase2 stroke="1.1" class="icon" />
+              </span>
+            </card_info>
+          </div>
+          <div class="col-sm-6 col-lg-3">
+            <card_info
+              :cantidad="(resumen.regimenescantidad?.reduce((x:any, i:any) => x + i.Cantidad, 0) + 175) * 0.05"
+              descripcion=" disponibles"
+              :title="`${resumen.regimenescantidad?.reduce((x:any, i:any) => x + i.Cantidad, 0)} puestos CAS`"
+            >
+              <span class="text-white avatar bg-secondary">
+                <IconCalculator stroke="1.1" class="icon" />
+              </span>
+            </card_info>
+          </div>
         </div>
       </div>
       <div class="col-md-6 col-lg-4">

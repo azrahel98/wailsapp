@@ -2,106 +2,78 @@
   <div class="mains">
     <div class="col text-start mb-4">
       <div class="page-pretitle fw-medium">Información del Área</div>
-      <h2 class="page-title fs-4">{{ router.currentRoute.value.params.area }}</h2>
+      <h3 class="">{{ router.currentRoute.value.params.area }}</h3>
     </div>
 
-    <div class="graficos pb-3">
-      <div class="row">
-        <div class="col-md-4 col-sm-6">
-          <div class="chart">
-            <c_regimen_res :regim="regCount" :responsive="true" />
+    <div class="container-xl">
+      <div class="row row-card" style="row-gap: 0.2vh">
+        <div class="col-md-4">
+          <RegimenesMedia :reg="resumenregimenes" :header="false" />
+        </div>
+        <div class="col-md-4">
+          <div class="row row-card justify-content-between gap-2">
+            <div class="col-sm-12 col-lg-12">
+              <Card_info title="Trabajadores" :cantidad="trabajadores.length" descripcion="activos">
+                <span class="text-white avatar bg-primary">
+                  <IconUserCheck stroke="1.1" class="icon" /> </span
+              ></Card_info>
+            </div>
+            <div class="col-sm-12 col-lg-12 text-center">
+              <button class="btn btn-md btn-green" @click="exportar">
+                <span class="h-50">
+                  <IconFileTypeXls stroke="2" class="icon text-white icon-md" />
+                </span>
+                <h4 class="m-0 fw-normal small">Descargar</h4>
+              </button>
+            </div>
           </div>
         </div>
-        <div class="col-md-8 col-sm-6">
-          <div class="info">
-            <div class="card card-sm mb-3">
-              <div class="card-body py-1 px-2">
-                <div class="row align-items-center">
-                  <div class="col-auto">
-                    <span class="bg-primary text-white avatar avatar-sm">
-                      <IconUserBolt />
-                    </span>
-                  </div>
-                  <div class="col">
-                    <div class="font-weight-medium">{{ trabajadores.length }}</div>
-                    <div class="text-secondary fs-5">Trabajadores</div>
-                  </div>
-                </div>
+        <div class="col-sm-6 col-lg-4">
+          <div class="card">
+            <div class="card-body">
+              <div class="input-icon">
+                <span class="input-icon-addon">
+                  <IconSearch class="icon" />
+                </span>
+                <input
+                  v-model="searchQuery"
+                  type="text"
+                  class="form-control form-control-rounded"
+                  placeholder="Busca..."
+                />
               </div>
             </div>
-
-            <div class="card card-sm mb-3">
-              <div class="card-body py-1 px-2">
-                <div class="row align-items-center">
-                  <div class="col-auto">
-                    <span class="bg-instagram text-white avatar">
-                      <IconUserBolt class="icon" />
-                    </span>
-                  </div>
-                  <div class="col">
-                    <div class="font-weight-medium">
-                      {{ trabajadores.filter((e: any) => e.reg === 'CAS-D').length }}
-                    </div>
-                    <div class="text-secondary fs-5">Transitorios</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="card card-sm mb-3">
-              <div class="card-body py-1 px-2">
-                <div class="row align-items-center">
-                  <div class="col-auto">
-                    <span class="bg-primary text-white avatar">
-                      <IconUserBolt class="icon" />
-                    </span>
-                  </div>
-                  <div class="col">
-                    <div class="font-weight-medium">
-                      {{
-                        trabajadores.length -
-                        trabajadores.filter((e: any) => e.reg === 'CAS-D').length
-                      }}
-                    </div>
-                    <div class="text-secondary fs-5">Indeterminado</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="acciones d-flex justify-content-between mt-3">
-            <div class="input-icon">
-              <span class="input-icon-addon">
-                <IconSearch class="icon" />
-              </span>
-              <input
-                v-model="searchQuery"
-                type="text"
-                class="form-control form-control-rounded"
-                placeholder="Busca..."
-              />
-            </div>
-
-            <button class="btn btn-outline-green btn-icon" @click="exportar">
-              <IconFileTypeXls />
-            </button>
           </div>
         </div>
       </div>
     </div>
 
     <div class="puestos">
-      <div class="card card-link p-0 m-0 mb-3" v-for="x in filteredTrabajadores" :key="x.dni">
-        <div class="card-body p-3">
-          <RouterLink class="text-dark" :to="{ name: 'perfil', params: { dni: x.dni } }">
-            <h5 class="m-0 mb-2 fw-bold">{{ x.nombre }}</h5>
-          </RouterLink>
-          <div class="text-muted small mb-2">{{ x.dni }}</div>
-          <div class="text-muted mb-2 fs-5">{{ x.area }}</div>
-          <span class="badge bg-primary text-white fs-6 py-1">
-            {{ x.reg }}
-          </span>
+      <div class="card card-sm" v-for="x in filteredTrabajadores" :key="x.dni">
+        <div class="card-body d-flex flex-column justify-content-between text-center py-4">
+          <div class="">
+            <span class="avatar avatar-lg mb-3 rounded">{{
+              obtenerInicialesApellidos(x.nombre)
+            }}</span>
+            <RouterLink
+              class="text-dark mb-2 cursor-pointer pt-0 mt-0"
+              :to="{ name: 'perfil', params: { dni: x.dni } }"
+            >
+              <h4 class="fw-bold mb-1">{{ x.nombre }}</h4>
+            </RouterLink>
+            <div class="text-secondary pt-0 mt-0">{{ x.area }}</div>
+          </div>
+          <div class="mt-3">
+            <span
+              class="badge text-white fs-6 py-1 align-self-start"
+              :style="{
+                backgroundColor:
+                  resumenregimenes.find((e) => e.nombre === x.reg)?.color || '#6c757d'
+              }"
+            >
+              {{ x.reg }}
+            </span>
+          </div>
         </div>
       </div>
     </div>
@@ -112,12 +84,29 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { Trabajadores_por_area } from '@wails/services/DashboardService'
-import { IconFileTypeXls, IconSearch, IconUserBolt } from '@tabler/icons-vue'
+import { IconUserCheck, IconSearch, IconFileTypeXls } from '@tabler/icons-vue'
 import * as XLSX from 'xlsx'
-import c_regimen_res from '@comp/dashboard/c_regimen_res.vue'
+import Card_info from '@comp/dashboard/card_info.vue'
+import RegimenesMedia from '@comp/dashboard/regimenes-media.vue'
+
+const regresum = () => {
+  ;([...new Set(trabajadores.value.map((e) => e.reg))] as Array<any>).forEach((e) => {
+    var cantidad = trabajadores.value.filter((x) => x.reg == e).length
+    resumenregimenes.value.push({
+      nombre: e,
+      cantidad: cantidad,
+      porcentaje: (100 * cantidad) / trabajadores.value.length,
+      color: `#00${Math.floor(Math.random() * 256)
+        .toString(16)
+        .padStart(2, '0')}FF`
+    })
+  })
+}
 
 const router = useRouter()
 const trabajadores = ref<any[]>([])
+const resumenregimenes = ref<any[]>([])
+
 const searchQuery = ref('')
 
 const filteredTrabajadores = computed(() => {
@@ -135,12 +124,22 @@ onMounted(async () => {
     trabajadores.value = await Trabajadores_por_area(
       router.currentRoute.value.params.area.toString()
     )
+    regresum()
   } catch (error) {
     console.error(error)
   }
 })
 
 watch(searchQuery, () => {})
+
+const obtenerInicialesApellidos = (nombreCompleto: string) => {
+  const palabras = nombreCompleto.trim().split(/\s+/)
+  if (palabras.length < 2) return ''
+  const apellido1 = palabras[palabras.length - 2][0] || ''
+  const apellido2 = palabras[palabras.length - 1][0] || ''
+
+  return apellido1.toUpperCase() + apellido2.toUpperCase()
+}
 
 const exportar = () => {
   const worksheet = XLSX.utils.json_to_sheet(trabajadores.value)
@@ -159,21 +158,6 @@ const exportar = () => {
   URL.revokeObjectURL(url)
   document.body.removeChild(a)
 }
-
-interface Regimen {
-  Cantidad: number
-  Nombre: string
-}
-const regCount = computed<Regimen[]>(() => {
-  const counts = trabajadores.value.reduce((acc: Record<string, number>, obj: any) => {
-    acc[obj.reg] = (acc[obj.reg] || 0) + 1
-    return acc
-  }, {})
-  return Object.entries(counts).map(([Nombre, Cantidad]) => ({
-    Nombre,
-    Cantidad: Number(Cantidad)
-  }))
-})
 </script>
 
 <style lang="scss" scoped>
@@ -184,42 +168,22 @@ const regCount = computed<Regimen[]>(() => {
   gap: 1rem;
   padding: 1rem;
 
-  .graficos {
-    height: min-content;
-    .chart {
-      max-width: 100%;
-    }
-
-    .info {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: end;
-      gap: 1rem;
-
-      .card {
-        width: 18vw;
-        height: max-content;
-      }
-    }
-
-    .acciones {
-      gap: 1rem;
-    }
-  }
-
   .puestos {
     align-self: flex-start;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    row-gap: 0vh;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    row-gap: 2vh;
     column-gap: 1vh;
     height: 100%;
     align-content: start;
+    justify-content: center;
+    align-items: center;
+    justify-items: center;
     overflow-y: auto;
-
     .card {
-      width: 100%;
-      height: max-content;
+      max-width: 200px;
+      min-height: 200px;
+      max-height: 220px;
     }
   }
 }

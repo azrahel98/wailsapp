@@ -1,6 +1,6 @@
 <template>
   <div class="card">
-    <div class="card-header">
+    <div class="card-header" v-if="header">
       <h3 class="card-title">Regimenes Laborales</h3>
     </div>
     <table class="table card-table table-vcenter">
@@ -16,7 +16,10 @@
           <td>{{ x.cantidad }}</td>
           <td class="w-50">
             <div class="progress progress-xs">
-              <div class="progress-bar bg-primary" :style="`width:${x.porcentaje}%`"></div>
+              <div
+                class="progress-bar"
+                :style="{ width: `${x.porcentaje}%`, backgroundColor: `${x.color}` }"
+              ></div>
             </div>
           </td>
         </tr>
@@ -27,6 +30,7 @@
 
 <script lang="ts" setup>
 defineProps({
-  reg: { type: Array, required: true }
+  reg: { type: Array, required: true },
+  header: { type: Boolean, default: true }
 })
 </script>
