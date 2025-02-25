@@ -49,10 +49,10 @@
                 <label for="cuenta" class="form-label">Fecha del Documento</label>
                 <input
                   type="date"
-                  v-model="doc.fecha"
+                  v-model="doc.fechaValida"
                   id="date"
                   class="form-control"
-                  :class="errors?.fecha ? 'is-invalid' : ''"
+                  :class="errors?.fechaValida ? 'is-invalid' : ''"
                   placeholder="Fecha"
                   required
                 />
@@ -65,14 +65,14 @@
                   id="date"
                   class="form-control"
                   required
-                  v-model="doc.fechaValida"
-                  :class="errors?.fechaValida ? 'is-invalid' : ''"
+                  v-model="doc.fecha"
+                  :class="errors?.fecha ? 'is-invalid' : ''"
                   placeholder="Fecha"
                 />
                 <span
-                  v-if="errors?.fechaValida"
+                  v-if="errors?.fecha"
                   class="invalid-feedback fs-6"
-                  v-for="x in errors.fechaValida._errors"
+                  v-for="x in errors.fecha._errors"
                   >{{ x }}</span
                 >
               </div>

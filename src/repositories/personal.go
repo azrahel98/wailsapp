@@ -110,7 +110,7 @@ func (p *personalRepository) Search_Cargo_count(ctx context.Context, cargo strin
 	Vinculo v
 	INNER JOIN Cargo ar ON v.cargo_id = ar.id
   WHERE
-	v.estado = 'activo' AND ar.activo = 1 AND ar.nombre LIKE ?
+	ar.activo = 1 AND ar.nombre LIKE ?
   GROUP BY
 	v.cargo_id`
 	nombreLike := "%" + cargo + "%"
@@ -131,7 +131,7 @@ func (p *personalRepository) Search_Areas_count(ctx context.Context, area string
 from
   Vinculo v
   inner join Area ar on v.area_id = ar.id
-  where v.estado = 'activo' and ar.activo = 1 and ar.nombre like ?
+  where ar.activo = 1 and ar.nombre like ?
 GROUP by
   v.area_id`
 	nombreLike := "%" + area + "%"

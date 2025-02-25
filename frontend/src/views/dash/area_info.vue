@@ -23,7 +23,7 @@
                 <span class="h-50">
                   <IconFileTypeXls stroke="2" class="icon text-white icon-md" />
                 </span>
-                <h4 class="m-0 fw-normal small">Descargar</h4>
+                <h4 class="m-0 fw-normal">Descargar</h4>
               </button>
             </div>
           </div>

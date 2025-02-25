@@ -48,27 +48,27 @@
           <div class="col-md-4">
             <label class="form-label">Fecha del Documento</label>
             <input
-              v-model="formData.fecha"
-              type="date"
-              :class="errors?.fecha ? 'is-invalid' : ''"
-              class="form-control"
-              required
-            />
-            <span v-if="errors?.fecha">
-              <p class="text-danger fs-6" v-for="x in errors.fecha._errors">{{ x }}</p>
-            </span>
-          </div>
-          <div class="col-md-4">
-            <label class="form-label">Fecha del Documento</label>
-            <input
               v-model="formData.fechaValida"
-              :class="errors?.fechaValida ? 'is-invalid' : ''"
               type="date"
+              :class="errors?.fechaValida ? 'is-invalid' : ''"
               class="form-control"
               required
             />
             <span v-if="errors?.fechaValida">
               <p class="text-danger fs-6" v-for="x in errors.fechaValida._errors">{{ x }}</p>
+            </span>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Fecha del Documento</label>
+            <input
+              v-model="formData.fecha"
+              :class="errors?.fecha ? 'is-invalid' : ''"
+              type="date"
+              class="form-control"
+              required
+            />
+            <span v-if="errors?.fecha">
+              <p class="text-danger fs-6" v-for="x in errors.fecha._errors">{{ x }}</p>
             </span>
           </div>
           <div class="col-md-4">

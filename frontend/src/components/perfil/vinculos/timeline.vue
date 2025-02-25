@@ -26,8 +26,8 @@
         </div>
 
         <div>
-          <h4 class="p-0 m-0 fw-bold">{{ x.Cargo }}</h4>
-          <p class="text-secondary p-0 py-1 m-0 fs-5">
+          <h4 class="p-0 m-0 fw-semibold">{{ x.Cargo }}</h4>
+          <p class="text-secondary p-0 py-1 m-0">
             {{ x.Area }}
           </p>
         </div>
@@ -88,10 +88,8 @@
                   <div class="detalles-collapse">
                     <div class="ingreso">
                       <div class="mb-2">
-                        <div class="badge badge-pill bg-primary-lt">
-                          <IconFileInfo class="icon text-info" />
-                          Ingreso:
-                        </div>
+                        <IconFileInfo class="icon text-info" />
+                        Ingreso:
                         <strong>{{ x.Doc_i }} {{ x.Numero_doc_i }}</strong>
                       </div>
                       <div class="mb-2">
