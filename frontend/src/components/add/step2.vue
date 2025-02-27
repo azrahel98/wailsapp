@@ -6,6 +6,7 @@
           <div class="col-md-6">
             <label class="form-label">Tipo de Doc</label>
             <select
+              v-if="sueldo"
               v-model="formData.tipoDocumento"
               :class="errors?.tipoDocumento ? 'is-invalid' : ''"
               class="form-select"
@@ -15,6 +16,18 @@
               <option value="Resolucion">Resolucion</option>
               <option value="Acta">Acta</option>
             </select>
+            <select
+              v-else
+              v-model="formData.tipoDocumento"
+              :class="errors?.tipoDocumento ? 'is-invalid' : ''"
+              class="form-select"
+              required
+            >
+              <option value="Carta">Carta</option>
+              <option value="Doc.Adm">Otros</option>
+              <option value="Memorando">Memorando</option>
+            </select>
+
             <span v-if="errors?.tipoDocumento">
               <p class="text-danger fs-6" v-for="x in errors.tipoDocumento._errors">{{ x }}</p>
             </span>
@@ -71,7 +84,7 @@
               <p class="text-danger fs-6" v-for="x in errors.fecha._errors">{{ x }}</p>
             </span>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-4" v-if="sueldo">
             <label class="form-label">Sueldo</label>
             <input
               v-model="formData.sueldo"
@@ -118,6 +131,10 @@ import { getYear } from 'date-fns'
 import { reactive, ref } from 'vue'
 import { z } from 'zod'
 
+defineProps({
+  sueldo: { type: Boolean, required: false, default: true }
+})
+
 const emit = defineEmits(['nextStep', 'prevStep'])
 
 const schema_validate = z.object({
@@ -131,6 +148,7 @@ const schema_validate = z.object({
     .number()
     .positive('El sueldo debe ser mayor a 0')
     .max(15600, 'El sueldo no puede ser mayor a 15600')
+    .nullable()
 })
 type schema_validateType = z.infer<typeof schema_validate>
 const errors = ref<z.ZodFormattedError<schema_validateType> | null>(null)
@@ -141,7 +159,7 @@ const formData = reactive({
   numeroDocumento: '',
   descripcion: '',
   fechaValida: '',
-  sueldo: 0,
+  sueldo: null,
   fecha: ''
 })
 
@@ -150,6 +168,7 @@ const submit = () => {
   const success = schema_validate.safeParse(formData)
   if (!success.success) {
     errors.value = success.error.format()
+    console.log(errors.value)
   } else {
     if (
       getYear(new Date(formData.añoDocumento)) > getYear(new Date(formData.fecha)) ||

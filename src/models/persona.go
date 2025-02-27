@@ -31,19 +31,20 @@ type Vinculos struct {
 	Fecha_salida  *string  `db:"fecha_salida"`
 	Descrip_s     *string  `db:"descrip_salida"`
 	Numero_doc_s  *string  `db:"numero_doc_salida"`
+	Sindicato     *string  `db:"sindicato"`
 }
 
 type Documento struct {
-	Id           *int    `db:"id" json:"id"`
-	Tipo         string  `db:"tipo" json:"tipoDocumento"`
-	Numero       *int    `db:"numero" json:"numeroDocumento"`
-	Año          *int    `db:"year" json:"añoDocumento"`
-	Fecha        string  `db:"fecha" json:"fecha"`
-	Fecha_Valida *string `db:"fecha_valida" json:"fechaValida"`
-	Conv         *int64  `db:"conv" json:"conv"`
-	Descripcion  string  `db:"descripcion" json:"descripcion"`
-	Funcion      *int64  `db:"funcion" json:"funcion"`
-	Sueldo       float64 `db:"sueldo" json:"sueldo"`
+	Id           *int     `db:"id" json:"id"`
+	Tipo         string   `db:"tipo" json:"tipoDocumento"`
+	Numero       *int     `db:"numero" json:"numeroDocumento"`
+	Año          *int     `db:"year" json:"añoDocumento"`
+	Fecha        string   `db:"fecha" json:"fecha"`
+	Fecha_Valida *string  `db:"fecha_valida" json:"fechaValida"`
+	Conv         *int64   `db:"conv" json:"conv"`
+	Descripcion  string   `db:"descripcion" json:"descripcion"`
+	Funcion      *int64   `db:"funcion" json:"funcion"`
+	Sueldo       *float64 `db:"sueldo" json:"sueldo"`
 }
 
 type Vinculo struct {

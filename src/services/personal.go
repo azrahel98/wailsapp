@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+	"fmt"
 	"vesgoapp/src/models"
 	"vesgoapp/src/repositories"
 )
@@ -124,6 +125,38 @@ func (s *PersonalService) Crear_nuevoTrabajador(info models.Data, existe bool) (
 	}
 }
 
+func (s *PersonalService) Crear_vinculoSindical(documento models.Documento, id_vinculo int, sindicato int) (*int64, error) {
+	tx, err := s.repo.TxBegin(context.Background())
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		if p := recover(); p != nil {
+			tx.Rollback()
+			panic(p)
+		} else if err != nil {
+			tx.Rollback()
+		} else {
+			err = tx.Commit()
+		}
+	}()
+
+	doc, err := s.repo.Create_documento(tx, documento)
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+	idx, err := s.repo.Crear_VinculoSindicato(tx, id_vinculo, int(*doc), sindicato)
+	if err != nil {
+		tx.Rollback()
+		fmt.Println("El error esta aquii !!!!!!!!")
+		return nil, err
+	}
+
+	return idx, nil
+
+}
+
 func (s *PersonalService) Buscar_Asistencia(dni string, mes int, año int) (*[]models.AsistenciaResponse, error) {
 	res, err := s.repo.Buscar_Asistencia(context.Background(), dni, mes, año)
 	if err != nil {
@@ -132,21 +165,18 @@ func (s *PersonalService) Buscar_Asistencia(dni string, mes int, año int) (*[]m
 	asistenciaMap := make(map[string]*models.AsistenciaResponse)
 
 	for _, registro := range *res {
-		// Clave única por fecha
+
 		key := registro.Fecha
 
 		if _, exists := asistenciaMap[*key]; !exists {
-			// Inicializar una nueva entrada en el mapa
+
 			asistenciaMap[*key] = &models.AsistenciaResponse{
 				Dni:   registro.Dni,
 				Fecha: *registro.Fecha,
 			}
 		}
-
-		// Obtener referencia a la respuesta actual
 		asistencia := asistenciaMap[*key]
 
-		// Asignar horas dinámicamente
 		if asistencia.Record1 == nil {
 			asistencia.Record1 = registro.Hora
 		} else if asistencia.Record2 == nil {
@@ -165,12 +195,9 @@ func (s *PersonalService) Buscar_Asistencia(dni string, mes int, año int) (*[]m
 			asistencia.Record8 = registro.Hora
 		}
 	}
-
-	// Convertir el mapa a slice
 	var asistenciaList []models.AsistenciaResponse
 	for _, asistencia := range asistenciaMap {
 		asistenciaList = append(asistenciaList, *asistencia)
 	}
-
 	return &asistenciaList, nil
 }

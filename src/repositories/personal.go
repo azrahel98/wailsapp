@@ -27,11 +27,26 @@ type PersonalRepository interface {
 	Create_newIUser(ctx *sqlx.Tx, perfil models.Perfil) (*models.Perfil, error)
 	Create_documento(ctx *sqlx.Tx, documento models.Documento) (*int64, error)
 	Crear_Vinculo(ctx *sqlx.Tx, vinculo models.Vinculo) (*int64, error)
+	Crear_VinculoSindicato(ctx *sqlx.Tx, id_vinculo int, id_documento int, sindicato int) (*int64, error)
 	TxBegin(ctx context.Context) (*sqlx.Tx, error)
 }
 
 type personalRepository struct {
 	Db *sqlx.DB
+}
+
+func (p *personalRepository) Crear_VinculoSindicato(ctx *sqlx.Tx, id_vinculo int, id_documento int, sindicato int) (*int64, error) {
+	query := `INSERT INTO vinculo_sindicato (vinculo_id, sindicato_id, documento_afiliacion) VALUES (?, ?, ?)`
+
+	row, err := ctx.Exec(query, id_vinculo, sindicato, id_documento)
+	if err != nil {
+		return nil, err
+	}
+	last, err := row.LastInsertId()
+	if err != nil {
+		return nil, err
+	}
+	return &last, nil
 }
 
 func (p *personalRepository) Buscar_Asistencia(ctx context.Context, dni string, mes int, año int) (*[]models.AsistenciaDb, error) {

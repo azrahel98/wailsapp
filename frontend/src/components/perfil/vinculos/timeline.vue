@@ -27,9 +27,22 @@
 
         <div>
           <h4 class="p-0 m-0 fw-semibold">{{ x.Cargo }}</h4>
-          <p class="text-secondary p-0 py-1 m-0">
-            {{ x.Area }}
-          </p>
+          <div class="d-flex gap-1 w-100">
+            <p class="text-secondary p-0 py-1 m-0" style="width: auto">
+              {{ x.Area }}
+            </p>
+            <span
+              v-if="x.Sindicato"
+              class="badge bg-warning-lt text-white align-middle"
+              style="
+                width: auto;
+                word-wrap: break-word;
+                white-space: normal;
+                vertical-align: middle;
+              "
+              >{{ x.Sindicato }}</span
+            >
+          </div>
         </div>
 
         <div class="info p-0 m-0 pt-2">
@@ -59,6 +72,16 @@
                   >
                     <IconTrashX class="icon text-youtube" />
                   </button>
+                  <button
+                    class="btn-action btn btn-icon btn-sm"
+                    style="height: min-content"
+                    data-bs-toggle="modal"
+                    :data-bs-target="`#sindicato-${x.Id}`"
+                    v-if="store.role == '1' && x.Estado == 'activo' && !x.Sindicato"
+                  >
+                    <IconCopyPlus class="icon text-primary" />
+                  </button>
+                  <sindicato :id="x.Id" />
                   <button
                     class="btn-action btn-sm btn btn-icon"
                     style="height: min-content"
@@ -145,9 +168,11 @@
 <script lang="ts" setup>
 import { format, addDays, parseISO } from 'date-fns'
 import renunciaModal from '@comp/perfil/vinculos/renuncia-modal.vue'
+import sindicato from './sindicato.vue'
 import {
   IconBriefcase,
   IconClipboardOff,
+  IconCopyPlus,
   IconEdit,
   IconEyePlus,
   IconEyeX,

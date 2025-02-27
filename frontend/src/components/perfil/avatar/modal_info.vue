@@ -101,7 +101,7 @@
                 >
               </div>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer bg-transparent">
               <button type="button" class="btn" data-bs-dismiss="modal" aria-label="Close">
                 Cancelar
               </button>

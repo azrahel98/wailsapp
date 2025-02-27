@@ -38,7 +38,7 @@ export namespace models {
 	    conv?: number;
 	    descripcion: string;
 	    funcion?: number;
-	    sueldo: number;
+	    sueldo?: number;
 	
 	    static createFrom(source: any = {}) {
 	        return new Documento(source);

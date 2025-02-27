@@ -30,6 +30,10 @@ export function Crear_nuevoTrabajador(arg1, arg2) {
   return window['go']['services']['PersonalService']['Crear_nuevoTrabajador'](arg1, arg2);
 }
 
+export function Crear_vinculoSindical(arg1, arg2, arg3) {
+  return window['go']['services']['PersonalService']['Crear_vinculoSindical'](arg1, arg2, arg3);
+}
+
 export function EditByDni(arg1, arg2, arg3, arg4, arg5, arg6) {
   return window['go']['services']['PersonalService']['EditByDni'](arg1, arg2, arg3, arg4, arg5, arg6);
 }

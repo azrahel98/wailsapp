@@ -54,7 +54,7 @@ const handleSubmit = async () => {
     localStorage.clear()
     localStorage.setItem('jwt', r)
 
-    router.replace({ name: 'home' })
+    router.replace({ name: 'dashboard' })
   } catch (error) {
     console.log(error)
   }
