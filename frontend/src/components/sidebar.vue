@@ -21,7 +21,7 @@
       <RouterLink v-if="store.role == '1'" :to="{ path: '/boleta' }" class="nav-item">
         <IconFile3d size="20" class="icon" /> <span v-if="isExpanded">Boleta</span>
       </RouterLink>
-      <RouterLink :to="{ path: '/add' }" class="nav-item">
+      <RouterLink v-if="store.role == '1'" :to="{ path: '/add' }" class="nav-item">
         <IconUsersPlus size="20" class="icon" /> <span v-if="isExpanded">Boleta</span>
       </RouterLink>
 

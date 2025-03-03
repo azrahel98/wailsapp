@@ -52,6 +52,11 @@ import { userStore } from '../store/user'
           path: 'inofarea/:area',
           name: 'inofarea',
       component: () => import('@views/dash/area_info.vue')
+        },
+        {
+          path: 'data/:title/:data',
+          name: 'datapage',
+      component: () => import('@views/dash/data.vue')
         }
       ]
     },

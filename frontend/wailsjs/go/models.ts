@@ -177,6 +177,7 @@ export namespace models {
 	    renunciasmes: PersonaActivo[];
 	    regimenescantidad: RegimenesCantidad[];
 	    sexo: RegimenesCantidad[];
+	    sindicatos: RegimenesCantidad[];
 	
 	    static createFrom(source: any = {}) {
 	        return new ResumenIndicadores(source);
@@ -188,6 +189,7 @@ export namespace models {
 	        this.renunciasmes = this.convertValues(source["renunciasmes"], PersonaActivo);
 	        this.regimenescantidad = this.convertValues(source["regimenescantidad"], RegimenesCantidad);
 	        this.sexo = this.convertValues(source["sexo"], RegimenesCantidad);
+	        this.sindicatos = this.convertValues(source["sindicatos"], RegimenesCantidad);
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {

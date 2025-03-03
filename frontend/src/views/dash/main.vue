@@ -51,6 +51,28 @@
               </span>
             </card_info>
           </div>
+          <div class="col-sm-4 offset-2 col-lg-3">
+            <card_info
+              :cantidad="resumen.sindicatos?.[0].Cantidad"
+              descripcion="afiliados"
+              title="SUTRAMUVES"
+            >
+              <span class="text-white avatar bg-success">
+                <IconBrandMinecraft stroke="1.1" class="icon" />
+              </span>
+            </card_info>
+          </div>
+          <div class="col-sm-4 offset-2 col-lg-3">
+            <card_info
+              :cantidad="resumen.sindicatos?.[1].Cantidad"
+              descripcion="afiliados"
+              title="SOMUVES"
+            >
+              <span class="text-white avatar bg-dribbble">
+                <IconBuilding stroke="1.1" class="icon" />
+              </span>
+            </card_info>
+          </div>
         </div>
       </div>
       <div class="col-md-6 col-lg-4">
@@ -76,7 +98,14 @@ import {
   Resumen_Regiemenes,
   Cumpleaños
 } from '@wails/services/DashboardService'
-import { IconBriefcase2, IconCalculator, IconUserOff, IconUsersGroup } from '@tabler/icons-vue'
+import {
+  IconBrandMinecraft,
+  IconBriefcase2,
+  IconBuilding,
+  IconCalculator,
+  IconUserOff,
+  IconUsersGroup
+} from '@tabler/icons-vue'
 
 const resumen = ref<any>([])
 const areas = ref(<any>[])
@@ -89,6 +118,7 @@ onMounted(async () => {
     areas.value = await Trabajadore_Activos_Area()
     mediaregimenes.value = await Resumen_Regiemenes()
     cumpleaños.value = await Cumpleaños(new Date().getMonth() + 1)
+    console.log(resumen.value)
   } catch (error) {
     console.error('Error al cargar los datos:', error)
   }

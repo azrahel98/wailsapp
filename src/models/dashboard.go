@@ -46,4 +46,5 @@ type ResumenIndicadores struct {
 	RenunciasMes       []PersonaActivo     `json:"renunciasmes"`
 	Regimenes          []RegimenesCantidad `json:"regimenescantidad"`
 	Sexo               []RegimenesCantidad `json:"sexo"`
+	Sindicatos         []RegimenesCantidad `json:"sindicatos"`
 }

@@ -55,12 +55,17 @@ func (s *DashboardService) Resumen_Dashboard() (*models.ResumenIndicadores, erro
 	if err != nil {
 		return nil, err
 	}
+	sindicatos, err := s.repo.Cantidad_Activos_Sindicato(context.Background())
+	if err != nil {
+		return nil, err
+	}
 	var result models.ResumenIndicadores
 
 	result.Personalregistrado = *res
 	result.RenunciasMes = *renuncias
 	result.Regimenes = *regimenes
 	result.Sexo = *sex
+	result.Sindicatos = *sindicatos
 
 	return &result, nil
 }

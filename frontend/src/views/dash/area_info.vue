@@ -50,9 +50,9 @@
 
     <div class="puestos">
       <div class="card card-sm" v-for="x in filteredTrabajadores" :key="x.dni">
-        <div class="card-body d-flex flex-column justify-content-between text-center py-4">
+        <div class="card-body d-flex flex-column justify-content-between text-center py-2">
           <div class="">
-            <span class="avatar avatar-lg mb-3 rounded">{{
+            <span class="avatar avatar-md mb-3 rounded">{{
               obtenerInicialesApellidos(x.nombre)
             }}</span>
             <RouterLink
@@ -61,7 +61,7 @@
             >
               <h4 class="fw-bold mb-1">{{ x.nombre }}</h4>
             </RouterLink>
-            <div class="text-secondary pt-0 mt-0">{{ x.area }}</div>
+            <div class="text-secondary pt-0 mt-0 small">{{ x.area }}</div>
           </div>
           <div class="mt-3">
             <span
@@ -96,7 +96,7 @@ const regresum = () => {
       nombre: e,
       cantidad: cantidad,
       porcentaje: (100 * cantidad) / trabajadores.value.length,
-      color: `#00${Math.floor(Math.random() * 256)
+      color: `#01${Math.floor(Math.random() * 256)
         .toString(16)
         .padStart(2, '0')}FF`
     })
@@ -181,9 +181,7 @@ const exportar = () => {
     justify-items: center;
     overflow-y: auto;
     .card {
-      max-width: 200px;
-      min-height: 200px;
-      max-height: 220px;
+      max-width: 180px;
     }
   }
 }

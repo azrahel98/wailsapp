@@ -9,25 +9,25 @@
     <div class="card timeline-event-card">
       <div class="card-body p-0 m-0 mx-2 my-1 py-1">
         <div class="float-end text-secondary fw-medium d-flex flex-column gap-2">
-          <span v-if="x.Fecha_salida" class="badge bg-primary-lt">
-            {{
-              x.Fecha_ingreso
-                ? format(addDays(parseISO(x.Fecha_salida), 1), 'yyyy/MM/dd')
-                : 'Fecha no disponible'
-            }}
-          </span>
-          <span class="badge bg-secondary-lt">
+          <span class="badge bg-primary-lt">
             {{
               x.Fecha_ingreso
                 ? format(addDays(parseISO(x.Fecha_ingreso), 1), 'yyyy/MM/dd')
                 : 'Fecha no disponible'
             }}</span
           >
+          <span v-if="x.Fecha_salida" class="badge bg-secondary-lt">
+            {{
+              x.Fecha_salida
+                ? format(addDays(parseISO(x.Fecha_salida), 1), 'yyyy/MM/dd')
+                : 'Fecha no disponible'
+            }}
+          </span>
         </div>
 
         <div>
           <h4 class="p-0 m-0 fw-semibold">{{ x.Cargo }}</h4>
-          <div class="d-flex gap-1 w-100">
+          <div class="is-sindicato">
             <p class="text-secondary p-0 py-1 m-0" style="width: auto">
               {{ x.Area }}
             </p>
@@ -206,6 +206,17 @@ defineProps({
         font-weight: 400;
       }
     }
+  }
+}
+.is-sindicato {
+  display: grid;
+  grid-template-columns: auto min-content;
+  width: 100%;
+  .badge {
+    justify-self: center;
+    align-self: center;
+    vertical-align: middle;
+    text-align: center;
   }
 }
 </style>

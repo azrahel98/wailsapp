@@ -54,7 +54,7 @@
           <div class="text-secondary">{{ x.Dni }}</div>
           <div class="mt-1">
             <span
-              class="badge badge-pill px-3 py-1 small align-middle"
+              class="badge px-3 py-1 small align-middle"
               :class="[x.Estado == 'activo' ? 'bg-primary text-white' : 'bg-secondary text-white']"
               >{{ x.Estado == 'activo' ? 'Activo' : 'Inactivo' }}</span
             >

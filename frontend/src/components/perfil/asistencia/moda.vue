@@ -62,7 +62,7 @@
                 class="calendar-day"
                 v-for="day in totaldiasMes"
                 :class="{
-                  'bg-primary-lt text-dark': search_find(day).length > 0,
+                  'bg-white text-dark': search_find(day).length > 0,
                   'bg-secondary-lt': search_find(day).length === 0
                 }"
               >

@@ -2,7 +2,6 @@ package repositories
 
 import (
 	"context"
-	"fmt"
 	"vesgoapp/src/models"
 
 	"github.com/jmoiron/sqlx"
@@ -17,10 +16,31 @@ type DashboardRepository interface {
 	Cantidad_vincolos_activos(ctx context.Context) (*models.PersonaActivo, error)
 	Cantidad_renuncias_mes(ctx context.Context) (*[]models.PersonaActivo, error)
 	Trabajadores_area(ctx context.Context, nombre string) (*[]models.TrabajadoresArea, error)
+	Cantidad_Activos_Sindicato(ctx context.Context) (*[]models.RegimenesCantidad, error)
 	Resumen_regimenes_activos(ctx context.Context) (*[]models.RegimenesResumen, error)
 }
 type dashboardRepository struct {
 	db *sqlx.DB
+}
+
+func (d *dashboardRepository) Cantidad_Activos_Sindicato(ctx context.Context) (*[]models.RegimenesCantidad, error) {
+	var res []models.RegimenesCantidad
+	query := `
+	 select
+  count(*) cantidad,
+  s.nombre nombre
+from
+  Vinculo v
+  inner join vinculo_sindicato vs on vs.vinculo_id = v.id
+  inner join Sindicato s on vs.sindicato_id = s.id
+  where v.estado = 'activo'
+GROUP by
+  vs.sindicato_id`
+	err := d.db.SelectContext(ctx, &res, query)
+	if err != nil {
+		return nil, err
+	}
+	return &res, nil
 }
 
 func (d *dashboardRepository) Resumen_regimenes_activos(ctx context.Context) (*[]models.RegimenesResumen, error) {
@@ -99,8 +119,6 @@ GROUP by
 
 	err := d.db.SelectContext(ctx, &res, query)
 	if err != nil {
-		fmt.Println("aquii tenemos el error señor")
-		fmt.Println(err)
 		return nil, err
 	}
 	return &res, nil
@@ -247,7 +265,6 @@ GROUP by
 ORDER by
   r.nombre
     `
-	// solo cas - sin cas de confianza
 
 	err := d.db.SelectContext(ctx, &res, query)
 	if err != nil {
