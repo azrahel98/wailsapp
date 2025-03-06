@@ -124,6 +124,7 @@ onMounted(async () => {
     trabajadores.value = await Trabajadores_por_area(
       router.currentRoute.value.params.area.toString()
     )
+    console.log(trabajadores.value)
     regresum()
   } catch (error) {
     console.error(error)

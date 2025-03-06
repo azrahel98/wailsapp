@@ -10,6 +10,18 @@ export function Cumpleaños(arg1) {
   return window['go']['services']['DashboardService']['Cumpleaños'](arg1);
 }
 
+export function Reporte_Activos() {
+  return window['go']['services']['DashboardService']['Reporte_Activos']();
+}
+
+export function Reporte_Renuncias(arg1) {
+  return window['go']['services']['DashboardService']['Reporte_Renuncias'](arg1);
+}
+
+export function Reporte_Sindicato(arg1) {
+  return window['go']['services']['DashboardService']['Reporte_Sindicato'](arg1);
+}
+
 export function Resumen_Dashboard() {
   return window['go']['services']['DashboardService']['Resumen_Dashboard']();
 }

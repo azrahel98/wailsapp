@@ -6,6 +6,12 @@ export function Buscar_trabajador(arg1:string):Promise<any>;
 
 export function Cumpleaños(arg1:number):Promise<any>;
 
+export function Reporte_Activos():Promise<any>;
+
+export function Reporte_Renuncias(arg1:number):Promise<any>;
+
+export function Reporte_Sindicato(arg1:number):Promise<any>;
+
 export function Resumen_Dashboard():Promise<models.ResumenIndicadores>;
 
 export function Resumen_Regiemenes():Promise<any>;

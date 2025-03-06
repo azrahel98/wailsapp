@@ -18,9 +18,99 @@ type DashboardRepository interface {
 	Trabajadores_area(ctx context.Context, nombre string) (*[]models.TrabajadoresArea, error)
 	Cantidad_Activos_Sindicato(ctx context.Context) (*[]models.RegimenesCantidad, error)
 	Resumen_regimenes_activos(ctx context.Context) (*[]models.RegimenesResumen, error)
+	Reporte_personal_by_sindicato(ctx context.Context, sindicato int) (*[]models.Reporte_Trabajadores, error)
+	Reporte_personal_by_renunciasAño(ctx context.Context, año int) (*[]models.Reporte_Trabajadores, error)
+	Reporte_personal_by_activo(ctx context.Context) (*[]models.Reporte_Trabajadores, error)
 }
 type dashboardRepository struct {
 	db *sqlx.DB
+}
+
+func (d *dashboardRepository) Reporte_personal_by_activo(ctx context.Context) (*[]models.Reporte_Trabajadores, error) {
+	var res []models.Reporte_Trabajadores
+	query := `select
+  p.dni,
+  concat (p.apaterno, " ", p.amaterno, " ", p.nombre) nombre,
+  dc.fecha ingreso,
+  dcs.fecha renuncia,
+  ar.nombre area,
+  cr.nombre cargo,
+  s.nombre sindicato,
+  rg.nombre regimen
+from
+  Vinculo v
+  inner join Persona p on v.dni = p.dni
+  inner join Cargo cr on v.cargo_id = cr.id
+  inner join Area ar on v.area_id = ar.id
+  inner join Documento dc on v.doc_ingreso_id = dc.id
+  inner join Regimen rg on v.regimen = rg.id
+  left join Documento dcs on v.doc_salida_id = dcs.id
+  left join vinculo_sindicato vs on vs.vinculo_id = v.id
+  left join Sindicato s on vs.sindicato_id = s.id where v.estado = 'activo'`
+	err := d.db.SelectContext(ctx, &res, query)
+	if err != nil {
+		return nil, err
+	}
+	return &res, nil
+}
+
+func (d *dashboardRepository) Reporte_personal_by_renunciasAño(ctx context.Context, año int) (*[]models.Reporte_Trabajadores, error) {
+	var res []models.Reporte_Trabajadores
+	query := `select
+  p.dni,
+  concat (p.apaterno, " ", p.amaterno, " ", p.nombre) nombre,
+  dc.fecha ingreso,
+  dcs.fecha renuncia,
+  ar.nombre area,
+  cr.nombre cargo,
+  s.nombre sindicato,
+  rg.nombre regimen
+from
+  Vinculo v
+  inner join Persona p on v.dni = p.dni
+  inner join Cargo cr on v.cargo_id = cr.id
+  inner join Area ar on v.area_id = ar.id
+  inner join Documento dc on v.doc_ingreso_id = dc.id
+  inner join Regimen rg on v.regimen = rg.id
+  left join Documento dcs on v.doc_salida_id = dcs.id
+  left join vinculo_sindicato vs on vs.vinculo_id = v.id
+  left join Sindicato s on vs.sindicato_id = s.id where year(dcs.fecha) = ?`
+	err := d.db.SelectContext(ctx, &res, query, año)
+	if err != nil {
+		return nil, err
+	}
+	return &res, nil
+}
+
+func (d *dashboardRepository) Reporte_personal_by_sindicato(ctx context.Context, sindicato int) (*[]models.Reporte_Trabajadores, error) {
+	var res []models.Reporte_Trabajadores
+	query := `select
+  p.dni,
+  concat (p.apaterno, " ", p.amaterno, " ", p.nombre) nombre,
+  dc.fecha ingreso,
+  dcs.fecha renuncia,
+  ar.nombre area,
+  cr.nombre cargo,
+  s.nombre sindicato,
+  rg.nombre regimen
+from
+  Vinculo v
+  inner join Persona p on v.dni = p.dni
+  inner join Cargo cr on v.cargo_id = cr.id
+  inner join Area ar on v.area_id = ar.id
+  inner join Documento dc on v.doc_ingreso_id = dc.id
+  inner join Regimen rg on v.regimen = rg.id
+  left join Documento dcs on v.doc_salida_id = dcs.id
+  left join vinculo_sindicato vs on vs.vinculo_id = v.id
+  left join Sindicato s on vs.sindicato_id = s.id
+where
+  v.estado = 'activo'
+  and s.id = ?`
+	err := d.db.SelectContext(ctx, &res, query, sindicato)
+	if err != nil {
+		return nil, err
+	}
+	return &res, nil
 }
 
 func (d *dashboardRepository) Cantidad_Activos_Sindicato(ctx context.Context) (*[]models.RegimenesCantidad, error) {

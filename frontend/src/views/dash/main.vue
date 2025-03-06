@@ -15,6 +15,8 @@
             <card_info
               :title="`${resumen.personalregistrado?.Cantidad} Personas`"
               :cantidad="resumen.personalregistrado?.Activos"
+              :descarga="true"
+              :funcion="exportar_activos"
               descripcion=" activos"
             >
               <span class="text-white avatar bg-primary">
@@ -22,24 +24,7 @@
               </span>
             </card_info>
           </div>
-          <div class="col-sm-6 col-lg-3">
-            <card_info
-              title="Renuncias del mes"
-              :cantidad="resumen.renunciasmes?.[0].Cantidad"
-              descripcion=" renuncias"
-            >
-              <span class="text-white avatar bg-warning">
-                <IconUserOff stroke="1.1" class="icon" />
-              </span>
-            </card_info>
-          </div>
-          <div class="col-sm-6 col-lg-3">
-            <card_info title="Puestos CAP - 2015" :cantidad="175">
-              <span class="text-white avatar bg-facebook">
-                <IconBriefcase2 stroke="1.1" class="icon" />
-              </span>
-            </card_info>
-          </div>
+
           <div class="col-sm-6 col-lg-3">
             <card_info
               :cantidad="(resumen.regimenescantidad?.reduce((x:any, i:any) => x + i.Cantidad, 0) + 175) * 0.05"
@@ -51,21 +36,25 @@
               </span>
             </card_info>
           </div>
-          <div class="col-sm-4 offset-2 col-lg-3">
+          <div class="col-sm-4 col-lg-3">
             <card_info
               :cantidad="resumen.sindicatos?.[0].Cantidad"
               descripcion="afiliados"
               title="SUTRAMUVES"
+              :funcion="() => exportar_sindicato(2)"
+              :descarga="true"
             >
               <span class="text-white avatar bg-success">
                 <IconBrandMinecraft stroke="1.1" class="icon" />
               </span>
             </card_info>
           </div>
-          <div class="col-sm-4 offset-2 col-lg-3">
+          <div class="col-sm-4 col-lg-3">
             <card_info
               :cantidad="resumen.sindicatos?.[1].Cantidad"
               descripcion="afiliados"
+              :funcion="() => exportar_sindicato(1)"
+              :descarga="true"
               title="SOMUVES"
             >
               <span class="text-white avatar bg-dribbble">
@@ -96,16 +85,12 @@ import {
   Resumen_Dashboard,
   Trabajadore_Activos_Area,
   Resumen_Regiemenes,
-  Cumpleaños
+  Cumpleaños,
+  Reporte_Activos,
+  Reporte_Sindicato
 } from '@wails/services/DashboardService'
-import {
-  IconBrandMinecraft,
-  IconBriefcase2,
-  IconBuilding,
-  IconCalculator,
-  IconUserOff,
-  IconUsersGroup
-} from '@tabler/icons-vue'
+import { IconBrandMinecraft, IconBuilding, IconCalculator, IconUsersGroup } from '@tabler/icons-vue'
+import * as XLSX from 'xlsx'
 
 const resumen = ref<any>([])
 const areas = ref(<any>[])
@@ -123,6 +108,53 @@ onMounted(async () => {
     console.error('Error al cargar los datos:', error)
   }
 })
+
+const exportar_activos = async () => {
+  try {
+    const data = await Reporte_Activos()
+    const worksheet = XLSX.utils.json_to_sheet(data)
+    const workbook = XLSX.utils.book_new()
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Datos')
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' })
+    const blob = new Blob([excelBuffer], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `trabajadores_activos.xlsx`
+    document.body.appendChild(a)
+    a.click()
+    URL.revokeObjectURL(url)
+    document.body.removeChild(a)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const exportar_sindicato = async (sindicato: number) => {
+  try {
+    const data = await Reporte_Sindicato(sindicato)
+    const worksheet = XLSX.utils.json_to_sheet(data)
+    const workbook = XLSX.utils.book_new()
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Datos')
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' })
+    const blob = new Blob([excelBuffer], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `trabajadores_activos.xlsx`
+    document.body.appendChild(a)
+    a.click()
+    URL.revokeObjectURL(url)
+    document.body.removeChild(a)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 const columns = [
   { field: 'Nombre', title: 'Area' },
   { field: 'Cantidad', title: 'Trabajadores' }
@@ -130,11 +162,11 @@ const columns = [
 </script>
 
 <style lang="scss" scoped>
-.page {
+.pagcontainer-xl {
   display: grid !important;
   width: 100%;
   max-width: 100%;
-  grid-template-rows: min-content min-content min-content;
+  grid-template-rows: min-content auto;
   height: 100vh;
 }
 </style>

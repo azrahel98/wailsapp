@@ -48,3 +48,14 @@ type ResumenIndicadores struct {
 	Sexo               []RegimenesCantidad `json:"sexo"`
 	Sindicatos         []RegimenesCantidad `json:"sindicatos"`
 }
+
+type Reporte_Trabajadores struct {
+	Dni       string  `db:"dni" json:"dni"`
+	Nombre    string  `db:"nombre" json:"nombre"`
+	Ingreso   string  `db:"ingreso" json:"ingreso"`
+	Renuncia  *string `db:"renuncia" json:"renuncia"`
+	Area      string  `db:"area" json:"area"`
+	Cargo     string  `db:"cargo" json:"cargo"`
+	Sindicato *string `db:"sindicato" json:"sindicato"`
+	Regimen   string  `db:"regimen" json:"regimen"`
+}

@@ -87,3 +87,30 @@ func (s *DashboardService) Resumen_Regiemenes() (*[]models.RegimenesResumen, err
 
 	return res, nil
 }
+
+func (s *DashboardService) Reporte_Sindicato(sindicato int) (*[]models.Reporte_Trabajadores, error) {
+	res, err := s.repo.Reporte_personal_by_sindicato(context.Background(), sindicato)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
+
+func (s *DashboardService) Reporte_Activos() (*[]models.Reporte_Trabajadores, error) {
+	res, err := s.repo.Reporte_personal_by_activo(context.Background())
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
+
+func (s *DashboardService) Reporte_Renuncias(año int) (*[]models.Reporte_Trabajadores, error) {
+	res, err := s.repo.Reporte_personal_by_renunciasAño(context.Background(), año)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}

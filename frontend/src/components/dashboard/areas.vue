@@ -3,7 +3,7 @@
     <div class="card-header">
       <h3 class="card-title">Organos / Unidades</h3>
     </div>
-    <div class="card-body border-bottom py-3">
+    <div class="card-body border-bottom py-1">
       <div class="d-flex">
         <div class="ms-auto text-secondary">
           Buscar:
@@ -110,6 +110,7 @@ const sortBy = (column: string) => {
 <style scoped>
 .table-responsive {
   max-height: 30vh;
+  height: 100%;
   overflow: scroll;
 }
 .table th {
