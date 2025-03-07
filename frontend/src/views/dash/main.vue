@@ -72,11 +72,13 @@
         <areasresumen :columns="columns" :rows="areas" />
       </div>
     </div>
+    <Toast ref="toastRef" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
+import Toast from '@comp/toast.vue'
 import card_info from '@comp/dashboard/card_info.vue'
 import regimenesMedia from '@comp/dashboard/regimenes-media.vue'
 import areasresumen from '@comp/dashboard/areas.vue'
@@ -97,15 +99,15 @@ const areas = ref(<any>[])
 const mediaregimenes = ref(<any>[])
 const cumpleaños = ref<Array<any>>([])
 
+const toastRef = ref<InstanceType<typeof Toast> | null>(null)
 onMounted(async () => {
   try {
     resumen.value = await Resumen_Dashboard()
     areas.value = await Trabajadore_Activos_Area()
     mediaregimenes.value = await Resumen_Regiemenes()
     cumpleaños.value = await Cumpleaños(new Date().getMonth() + 1)
-    console.log(resumen.value)
   } catch (error) {
-    console.error('Error al cargar los datos:', error)
+    toastRef.value?.showToast(error as string)
   }
 })
 
@@ -128,7 +130,7 @@ const exportar_activos = async () => {
     URL.revokeObjectURL(url)
     document.body.removeChild(a)
   } catch (error) {
-    console.log(error)
+    toastRef.value?.showToast(error as string)
   }
 }
 
@@ -151,7 +153,7 @@ const exportar_sindicato = async (sindicato: number) => {
     URL.revokeObjectURL(url)
     document.body.removeChild(a)
   } catch (error) {
-    console.log(error)
+    toastRef.value?.showToast(error as string)
   }
 }
 
