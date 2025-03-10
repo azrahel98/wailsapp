@@ -14,6 +14,10 @@ export function Reporte_Activos() {
   return window['go']['services']['DashboardService']['Reporte_Activos']();
 }
 
+export function Reporte_Organigrama(arg1) {
+  return window['go']['services']['DashboardService']['Reporte_Organigrama'](arg1);
+}
+
 export function Reporte_Renuncias(arg1) {
   return window['go']['services']['DashboardService']['Reporte_Renuncias'](arg1);
 }

@@ -59,3 +59,10 @@ type Reporte_Trabajadores struct {
 	Sindicato *string `db:"sindicato" json:"sindicato"`
 	Regimen   string  `db:"regimen" json:"regimen"`
 }
+
+type Reporte_Funcionarios struct {
+	Id     int     `db:"id" json:"id"`
+	Area   string  `db:"area" json:"area"`
+	Nombre *string `db:"nombre" json:"nombre"`
+	Nivel  *int    `db:"nivel" json:"nivel"`
+}

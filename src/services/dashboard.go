@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+
 	"vesgoapp/src/models"
 	"vesgoapp/src/repositories"
 )
@@ -113,4 +114,62 @@ func (s *DashboardService) Reporte_Renuncias(año int) (*[]models.Reporte_Trabaj
 	}
 
 	return res, nil
+}
+
+type Organigrama struct {
+	Id           int
+	Area         string
+	Jefe         *string
+	Subgerencias []Organigrama
+}
+
+func (s *DashboardService) Reporte_Organigrama(año int) (*[]Organigrama, error) {
+	res, err := s.repo.Report_funcionarios(context.Background())
+	if err != nil {
+		return nil, err
+	}
+	var organigrama []Organigrama
+
+	for _, item := range *res {
+		if item.Nivel == nil {
+			org := Organigrama{
+				Id:   item.Id,
+				Area: item.Area,
+				Jefe: item.Nombre,
+			}
+			organigrama = append(organigrama, org)
+		}
+	}
+
+	for _, item := range *res {
+		if item.Nivel != nil {
+			for i := range organigrama {
+				if organigrama[i].Id == *item.Nivel {
+					sub := Organigrama{
+						Id:           item.Id,
+						Area:         item.Area,
+						Jefe:         item.Nombre,
+						Subgerencias: nil,
+					}
+					organigrama[i].Subgerencias = append(organigrama[i].Subgerencias, sub)
+				}
+			}
+		}
+	}
+
+	for i := range organigrama {
+		for j := range organigrama[i].Subgerencias {
+			for _, item := range *res {
+				if item.Nivel != nil && organigrama[i].Subgerencias[j].Id == *item.Nivel {
+					organigrama[i].Subgerencias[j].Subgerencias = append(organigrama[i].Subgerencias[j].Subgerencias, Organigrama{
+						Id:   item.Id,
+						Area: item.Area,
+						Jefe: item.Nombre,
+					})
+				}
+			}
+		}
+	}
+
+	return &organigrama, nil
 }

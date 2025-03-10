@@ -8,6 +8,8 @@ export function Cumpleaños(arg1:number):Promise<any>;
 
 export function Reporte_Activos():Promise<any>;
 
+export function Reporte_Organigrama(arg1:number):Promise<any>;
+
 export function Reporte_Renuncias(arg1:number):Promise<any>;
 
 export function Reporte_Sindicato(arg1:number):Promise<any>;

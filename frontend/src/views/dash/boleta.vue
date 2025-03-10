@@ -4,9 +4,7 @@
     <div class="nivel nivel-1">
       <div class="card node">
         <div class="card-body text-center">
-          <img :src="generalManager.image" class="rounded-circle mb-2" alt="Gerente General" />
-          <h5 class="card-title">{{ generalManager.name }}</h5>
-          <p class="card-text">{{ generalManager.position }}</p>
+          <h5 class="card-title">{{ generalManager.Area }}</h5>
         </div>
       </div>
     </div>
@@ -15,34 +13,28 @@
     <div class="nivel nivel-2">
       <div class="linea-vertical"></div>
       <div class="grid-container">
-        <div v-for="gerente in gerentes" :key="gerente.id" class="card-container">
+        <div v-for="gerencia in gerencias" :key="gerencia.Id" class="card-container">
           <div class="linea-vertical-item"></div>
           <div class="card node">
             <div class="card-body text-center">
-              <img :src="gerente.image" class="rounded-circle mb-2" :alt="gerente.name" />
-              <h6 class="card-title">{{ gerente.name }}</h6>
-              <p class="card-text">{{ gerente.position }}</p>
+              <h6 class="card-title">{{ gerencia.Area }}</h6>
+              <p class="card-text" v-if="gerencia.Jefe">Jefe: {{ gerencia.Jefe }}</p>
             </div>
           </div>
 
           <!-- Nivel 3: Subgerencias -->
-          <div class="nivel nivel-3" v-if="gerente.subgerencias.length">
+          <div class="nivel nivel-3" v-if="gerencia.Subgerencias && gerencia.Subgerencias.length">
             <div class="grid-container">
               <div
-                v-for="subgerente in gerente.subgerencias"
-                :key="subgerente.id"
+                v-for="subgerencia in gerencia.Subgerencias"
+                :key="subgerencia.Id"
                 class="card-container"
               >
                 <div class="linea-vertical-item"></div>
                 <div class="card node">
                   <div class="card-body text-center">
-                    <img
-                      :src="subgerente.image"
-                      class="rounded-circle mb-2"
-                      :alt="subgerente.name"
-                    />
-                    <h6 class="card-title">{{ subgerente.name }}</h6>
-                    <p class="card-text">{{ subgerente.position }}</p>
+                    <h6 class="card-title">{{ subgerencia.Area }}</h6>
+                    <p class="card-text" v-if="subgerencia.Jefe">Jefe: {{ subgerencia.Jefe }}</p>
                   </div>
                 </div>
               </div>
@@ -55,89 +47,20 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { Reporte_Organigrama } from '@wails/services/DashboardService'
 
-const generalManager = ref({
-  id: 1,
-  name: 'Juan Pérez',
-  position: 'Gerente General',
-  image: '/path/to/general-manager.jpg'
-})
+const generalManager = ref({ Id: 5, Area: 'GERENCIA MUNICIPAL' })
+const gerencias = ref([])
 
-const gerentes = ref([
-  {
-    id: 2,
-    name: 'Carlos Rodríguez',
-    position: 'Gerente de Rentas',
-    image: '/path/to/gerente1.jpg',
-    subgerencias: [
-      {
-        id: 5,
-        name: 'Luis Gómez',
-        position: 'Subgerente de Recaudación',
-        image: '/path/to/subgerente1.jpg'
-      },
-      {
-        id: 6,
-        name: 'Ana Torres',
-        position: 'Subgerente de Fiscalización',
-        image: '/path/to/subgerente2.jpg'
-      }
-    ]
-  },
-  {
-    id: 3,
-    name: 'María Sánchez',
-    position: 'Gerente de Administración',
-    image: '/path/to/gerente2.jpg',
-    subgerencias: [
-      {
-        id: 7,
-        name: 'Pedro Ramírez',
-        position: 'Subgerente de Recursos Humanos',
-        image: '/path/to/subgerente3.jpg'
-      },
-      {
-        id: 8,
-        name: 'Carmen López',
-        position: 'Subgerente de Tesorería',
-        image: '/path/to/subgerente4.jpg'
-      }
-    ]
-  },
-  {
-    id: 4,
-    name: 'Fernando Morales',
-    position: 'Gerente de Seguridad Ciudadana',
-    image: '/path/to/gerente3.jpg',
-    subgerencias: [
-      {
-        id: 9,
-        name: 'Andrea Castro',
-        position: 'Subgerente de Serenazgo',
-        image: '/path/to/subgerente5.jpg'
-      },
-      {
-        id: 10,
-        name: 'Miguel Ruiz',
-        position: 'Subgerente de Transporte',
-        image: '/path/to/subgerente6.jpg'
-      },
-      {
-        id: 11,
-        name: 'Andrea Castro',
-        position: 'Subgerente de Serenazgo',
-        image: '/path/to/subgerente5.jpg'
-      },
-      {
-        id: 12,
-        name: 'Miguel Ruiz',
-        position: 'Subgerente de Transporte',
-        image: '/path/to/subgerente6.jpg'
-      }
-    ]
+onMounted(async () => {
+  try {
+    const data = await Reporte_Organigrama()
+    gerencias.value = data[0]?.Subgerencias || []
+  } catch (error) {
+    console.log(error)
   }
-])
+})
 </script>
 
 <style scoped>
@@ -183,18 +106,11 @@ const gerentes = ref([
 
 .node {
   width: 100%;
-  max-width: 180px;
+  max-width: 250px;
   border: none;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   background-color: white;
-}
-
-.linea-horizontal {
-  width: 100%;
-  height: 2px;
-  background-color: #dee2e6;
-  position: absolute;
-  top: 50%;
-  left: 0;
+  padding: 10px;
+  text-align: center;
 }
 </style>

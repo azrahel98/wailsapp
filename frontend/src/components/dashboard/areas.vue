@@ -3,16 +3,16 @@
     <div class="card-header">
       <h3 class="card-title">Organos / Unidades</h3>
     </div>
-    <div class="card-body border-bottom py-1">
-      <div class="d-flex">
-        <div class="ms-auto text-secondary">
-          Buscar:
-          <div class="ms-2 d-inline-block">
-            <input type="text" v-model="searchQuery" class="form-control" />
-          </div>
+
+    <div class="d-flex py-2 px-2">
+      <div class="ms-auto text-secondary">
+        Buscar:
+        <div class="ms-2 d-inline-block">
+          <input type="text" v-model="searchQuery" class="form-control" />
         </div>
       </div>
     </div>
+
     <div class="table-responsive">
       <table class="table card-table table-vcenter text-nowrap datatable">
         <thead>
@@ -109,7 +109,7 @@ const sortBy = (column: string) => {
 
 <style scoped>
 .table-responsive {
-  max-height: 30vh;
+  max-height: 35vh;
   height: 100%;
   overflow: scroll;
 }

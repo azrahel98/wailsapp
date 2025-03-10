@@ -3,9 +3,9 @@
     <div class="card-header">
       <h3 class="card-title">Cumpleaños</h3>
     </div>
-    <div class="table-responsive table-responsive-sm">
-      <table class="table card-table table-vcenter table-hover">
-        <tbody>
+    <div class="limites">
+      <table class="table table-vcenter table-hover">
+        <tbody style="height: 100%">
           <tr v-for="x in filteredInfo(info)" @click="getperfil(x.Dni)">
             <td class="w-100">
               <a @click="getperfil(x.Dni)" class="small text-reset">{{ x.Nombre }}</a>
@@ -65,8 +65,11 @@ const getperfil = async (dni: string) => {
 </script>
 
 <style lang="scss" scoped>
-.table-responsive {
-  max-height: 20vh;
-  overflow: scroll;
+.card {
+  height: 100%;
+  .limites {
+    overflow-y: auto;
+    max-height: 22vh;
+  }
 }
 </style>

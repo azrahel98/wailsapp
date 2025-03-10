@@ -18,11 +18,11 @@
       <RouterLink :to="{ path: '/buscar' }" class="nav-item">
         <IconSearch size="20" class="icon" /> <span v-if="isExpanded">Buscar</span>
       </RouterLink>
-      <RouterLink v-if="store.role == '1'" :to="{ path: '/boleta' }" class="nav-item">
-        <IconFile3d size="20" class="icon" /> <span v-if="isExpanded">Boleta</span>
+      <RouterLink :to="{ path: '/boleta' }" class="nav-item">
+        <IconFile3d size="20" class="icon" /> <span v-if="isExpanded">Organigrama</span>
       </RouterLink>
       <RouterLink v-if="store.role == '1'" :to="{ path: '/add' }" class="nav-item">
-        <IconUsersPlus size="20" class="icon" /> <span v-if="isExpanded">Boleta</span>
+        <IconUsersPlus size="20" class="icon" /> <span v-if="isExpanded">add</span>
       </RouterLink>
 
       <a class="nav-item active" v-if="router.currentRoute.value.name === 'perfil'">

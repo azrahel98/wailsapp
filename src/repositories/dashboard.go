@@ -21,9 +21,35 @@ type DashboardRepository interface {
 	Reporte_personal_by_sindicato(ctx context.Context, sindicato int) (*[]models.Reporte_Trabajadores, error)
 	Reporte_personal_by_renunciasAño(ctx context.Context, año int) (*[]models.Reporte_Trabajadores, error)
 	Reporte_personal_by_activo(ctx context.Context) (*[]models.Reporte_Trabajadores, error)
+	Report_funcionarios(ctx context.Context) (*[]models.Reporte_Funcionarios, error)
 }
 type dashboardRepository struct {
 	db *sqlx.DB
+}
+
+func (d *dashboardRepository) Report_funcionarios(ctx context.Context) (*[]models.Reporte_Funcionarios, error) {
+	var res []models.Reporte_Funcionarios
+
+	query := `select
+  a.id,
+  a.nombre area,
+  concat(p.apaterno, " ", p.amaterno, " ", p.nombre) nombre,
+  a.nivel nivel
+from
+  Area a
+  left join Vinculo v on a.id = v.area_id
+  and v.estado = 'activo'
+  and v.cargo_id in (30, 381, 614)
+  left join Persona p on v.dni = p.dni
+where
+  a.activo = 1
+GROUP by
+  a.id`
+	err := d.db.SelectContext(ctx, &res, query)
+	if err != nil {
+		return nil, err
+	}
+	return &res, nil
 }
 
 func (d *dashboardRepository) Reporte_personal_by_activo(ctx context.Context) (*[]models.Reporte_Trabajadores, error) {

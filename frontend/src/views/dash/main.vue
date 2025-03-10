@@ -1,5 +1,5 @@
 <template>
-  <div class="container-xl">
+  <div class="container-xl main-page">
     <div class="px-4 pt-2">
       <div class="max-w-7xl mx-auto">
         <div class="space-y-1">
@@ -8,8 +8,8 @@
         </div>
       </div>
     </div>
-    <div class="row row-deck row-cards">
-      <div class="col-12">
+    <div class="items">
+      <div class="uno">
         <div class="row row-cards">
           <div class="col-sm-6 col-lg-3">
             <card_info
@@ -64,11 +64,15 @@
           </div>
         </div>
       </div>
-      <div class="col-md-6 col-lg-4">
-        <regimenesMedia :reg="mediaregimenes" />
+      <div class="dos">
+        <div class="row row-cards">
+          <div class="col-md-6 col-lg-4">
+            <regimenesMedia :reg="mediaregimenes" />
+          </div>
+          <div class="col-md-12 col-lg-8"><cumpleañosCard :info="cumpleaños" /></div>
+        </div>
       </div>
-      <div class="col-md-12 col-lg-8"><cumpleañosCard :info="cumpleaños" /></div>
-      <div class="col-12">
+      <div class="row row-cards">
         <areasresumen :columns="columns" :rows="areas" />
       </div>
     </div>
@@ -164,11 +168,29 @@ const columns = [
 </script>
 
 <style lang="scss" scoped>
-.pagcontainer-xl {
-  display: grid !important;
-  width: 100%;
-  max-width: 100%;
-  grid-template-rows: min-content auto;
+.main-page {
   height: 100vh;
+  display: grid;
+  width: 100%;
+  grid-template-rows: min-content auto;
+  grid-template-columns: 1fr;
+  .items {
+    display: grid;
+    grid-template-rows: min-content min-content auto;
+    grid-template-columns: 1fr;
+    row-gap: 2vh;
+    max-height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 100%;
+    .uno,
+    .dos {
+      width: 100%;
+    }
+    .dos {
+      height: 100%;
+      max-height: 100%;
+    }
+  }
 }
 </style>
