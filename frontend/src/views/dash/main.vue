@@ -41,7 +41,7 @@
               :cantidad="resumen.sindicatos?.[0].Cantidad"
               descripcion="afiliados"
               title="SUTRAMUVES"
-              :funcion="() => exportar_sindicato(2)"
+              :funcion="() => exportar_sindicato(1)"
               :descarga="true"
             >
               <span class="text-white avatar bg-success">
@@ -53,7 +53,7 @@
             <card_info
               :cantidad="resumen.sindicatos?.[1].Cantidad"
               descripcion="afiliados"
-              :funcion="() => exportar_sindicato(1)"
+              :funcion="() => exportar_sindicato(2)"
               :descarga="true"
               title="SOMUVES"
             >
@@ -151,7 +151,7 @@ const exportar_sindicato = async (sindicato: number) => {
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `trabajadores_activos.xlsx`
+    a.download = sindicato == 1 ? `sindicato_sutramuves.xlsx` : `sindicato_somuves.xlsx`
     document.body.appendChild(a)
     a.click()
     URL.revokeObjectURL(url)

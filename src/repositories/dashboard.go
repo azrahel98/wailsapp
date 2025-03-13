@@ -55,7 +55,7 @@ GROUP by
 func (d *dashboardRepository) Reporte_personal_by_activo(ctx context.Context) (*[]models.Reporte_Trabajadores, error) {
 	var res []models.Reporte_Trabajadores
 	query := `select
-  p.dni,
+  cast(p.dni as char) dni,
   concat (p.apaterno, " ", p.amaterno, " ", p.nombre) nombre,
   dc.fecha ingreso,
   dcs.fecha renuncia,
@@ -83,7 +83,7 @@ from
 func (d *dashboardRepository) Reporte_personal_by_renunciasAño(ctx context.Context, año int) (*[]models.Reporte_Trabajadores, error) {
 	var res []models.Reporte_Trabajadores
 	query := `select
-  p.dni,
+  cast(p.dni as char) dni,
   concat (p.apaterno, " ", p.amaterno, " ", p.nombre) nombre,
   dc.fecha ingreso,
   dcs.fecha renuncia,
@@ -111,7 +111,7 @@ from
 func (d *dashboardRepository) Reporte_personal_by_sindicato(ctx context.Context, sindicato int) (*[]models.Reporte_Trabajadores, error) {
 	var res []models.Reporte_Trabajadores
 	query := `select
-  p.dni,
+  cast(p.dni as char) dni,
   concat (p.apaterno, " ", p.amaterno, " ", p.nombre) nombre,
   dc.fecha ingreso,
   dcs.fecha renuncia,
