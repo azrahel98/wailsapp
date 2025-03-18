@@ -6,7 +6,7 @@
     <table class="table card-table table-vcenter">
       <thead>
         <tr>
-          <th>Regimenes</th>
+          <th>{{ title }}</th>
           <th colspan="2">Servidores</th>
         </tr>
       </thead>
@@ -29,8 +29,11 @@
 </template>
 
 <script lang="ts" setup>
+import { Title } from 'chart.js'
+
 defineProps({
   reg: { type: Array, required: true },
-  header: { type: Boolean, default: true }
+  header: { type: Boolean, default: true },
+  title: { type: String, default: 'REGIMENES' }
 })
 </script>

@@ -56,7 +56,7 @@ func (d *dashboardRepository) Reporte_personal_by_activo(ctx context.Context) (*
 	var res []models.Reporte_Trabajadores
 	query := `select
   cast(p.dni as char) dni,
-  concat (p.apaterno, " ", p.amaterno, " ", p.nombre) nombre,
+  concat(p.apaterno, " ", p.amaterno, " ", p.nombre) nombre,
   dc.fecha ingreso,
   dcs.fecha renuncia,
   ar.nombre area,
@@ -84,7 +84,7 @@ func (d *dashboardRepository) Reporte_personal_by_renunciasAño(ctx context.Cont
 	var res []models.Reporte_Trabajadores
 	query := `select
   cast(p.dni as char) dni,
-  concat (p.apaterno, " ", p.amaterno, " ", p.nombre) nombre,
+  concat(p.apaterno, " ", p.amaterno, " ", p.nombre) nombre,
   dc.fecha ingreso,
   dcs.fecha renuncia,
   ar.nombre area,
@@ -112,7 +112,7 @@ func (d *dashboardRepository) Reporte_personal_by_sindicato(ctx context.Context,
 	var res []models.Reporte_Trabajadores
 	query := `select
   cast(p.dni as char) dni,
-  concat (p.apaterno, " ", p.amaterno, " ", p.nombre) nombre,
+  concat(p.apaterno, " ", p.amaterno, " ", p.nombre) nombre,
   dc.fecha ingreso,
   dcs.fecha renuncia,
   ar.nombre area,
@@ -194,18 +194,21 @@ ORDER BY
 
 func (d *dashboardRepository) Trabajadores_area(ctx context.Context, nombre string) (*[]models.TrabajadoresArea, error) {
 	query := `select
-   cast(p.dni as char) dni,
-  concat(p.apaterno,' ',p.amaterno,' ',p.nombre) nombre,
+  cast(p.dni as char) dni,
+  concat(p.apaterno, ' ', p.amaterno, ' ', p.nombre) nombre,
   cr.nombre cargo,
   d.sueldo,
-  r.nombre regimen
+  r.nombre regimen,
+  s.nombre sindicato
 from
   Vinculo v
   inner join Area ar on v.area_id = ar.id
   inner join Persona p on v.dni = p.dni
   inner join Cargo cr on v.cargo_id = cr.id
   inner join Documento d on v.doc_ingreso_id = d.id
-    INNER JOIN Regimen r ON v.regimen = r.id
+  INNER JOIN Regimen r ON v.regimen = r.id
+  left join vinculo_sindicato vs on vs.vinculo_id = v.id
+  left join Sindicato s on vs.sindicato_id = s.id
 where
   v.estado = 'activo'
   and ar.nombre = ? order by d.sueldo desc`

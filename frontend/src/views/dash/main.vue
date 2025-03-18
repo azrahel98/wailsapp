@@ -72,8 +72,10 @@
           <div class="col-md-12 col-lg-8"><cumpleañosCard :info="cumpleaños" /></div>
         </div>
       </div>
-      <div class="row row-cards">
-        <areasresumen :columns="columns" :rows="areas" />
+      <div class="tres">
+        <div class="row row-cards">
+          <areasresumen :columns="columns" :rows="areas" />
+        </div>
       </div>
     </div>
     <Toast ref="toastRef" />
@@ -179,17 +181,21 @@ const columns = [
     grid-template-rows: min-content min-content auto;
     grid-template-columns: 1fr;
     row-gap: 2vh;
-    max-height: 100%;
+    height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
     width: 100%;
     .uno,
-    .dos {
+    .dos,
+    .tres {
       width: 100%;
     }
-    .dos {
+    .dos,
+    .tres {
       height: 100%;
       max-height: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
     }
   }
 }

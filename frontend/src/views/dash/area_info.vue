@@ -11,12 +11,26 @@
           <RegimenesMedia :reg="resumenregimenes" :header="false" />
         </div>
         <div class="col-md-4">
+          <RegimenesMedia :reg="sindicato_resumen()" :header="false" title="SINDICATO" />
+        </div>
+        <div class="col-md-4">
           <div class="row row-card justify-content-between gap-2">
             <div class="col-sm-12 col-lg-12">
-              <Card_info title="Trabajadores" :cantidad="trabajadores.length" descripcion="activos">
-                <span class="text-white avatar bg-primary">
-                  <IconUserCheck stroke="1.1" class="icon" /> </span
-              ></Card_info>
+              <div class="card">
+                <div class="card-body">
+                  <div class="input-icon">
+                    <span class="input-icon-addon">
+                      <IconSearch class="icon" />
+                    </span>
+                    <input
+                      v-model="searchQuery"
+                      type="text"
+                      class="form-control form-control-rounded"
+                      placeholder="Busca..."
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="col-sm-12 col-lg-12 text-center">
               <button class="btn btn-md btn-green" @click="exportar">
@@ -28,42 +42,25 @@
             </div>
           </div>
         </div>
-        <div class="col-sm-6 col-lg-4">
-          <div class="card">
-            <div class="card-body">
-              <div class="input-icon">
-                <span class="input-icon-addon">
-                  <IconSearch class="icon" />
-                </span>
-                <input
-                  v-model="searchQuery"
-                  type="text"
-                  class="form-control form-control-rounded"
-                  placeholder="Busca..."
-                />
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
 
     <div class="puestos">
       <div class="card card-sm" v-for="x in filteredTrabajadores" :key="x.dni">
-        <div class="card-body d-flex flex-column justify-content-between text-center py-2">
-          <div class="">
-            <span class="avatar avatar-md mb-3 rounded">{{
+        <div class="card-body d-flex flex-column justify-content-between text-center">
+          <div class="d-flex flex-column align-items-center justify-content-start">
+            <span class="avatar avatar-lg rounded fs-4">{{
               obtenerInicialesApellidos(x.nombre)
             }}</span>
             <RouterLink
-              class="text-dark mb-2 cursor-pointer pt-0 mt-0"
+              class="text-dark cursor-pointer pt-0 mt-2"
               :to="{ name: 'perfil', params: { dni: x.dni } }"
             >
-              <h4 class="fw-bold mb-1">{{ x.nombre }}</h4>
+              <h4 class="fw-bold">{{ x.nombre }}</h4>
             </RouterLink>
             <div class="text-secondary pt-0 mt-0 small">{{ x.area }}</div>
           </div>
-          <div class="mt-3">
+          <div>
             <span
               class="badge text-white fs-6 py-1 align-self-start"
               :style="{
@@ -96,9 +93,7 @@ const regresum = () => {
       nombre: e,
       cantidad: cantidad,
       porcentaje: (100 * cantidad) / trabajadores.value.length,
-      color: `#01${Math.floor(Math.random() * 256)
-        .toString(16)
-        .padStart(2, '0')}FF`
+      color: `#01${((Math.random() * 255) | 0).toString(16).padStart(2, '0')}FF`
     })
   })
 }
@@ -131,14 +126,38 @@ onMounted(async () => {
   }
 })
 
-watch(searchQuery, () => {})
+const sindicato_resumen = () => {
+  return [
+    {
+      nombre: 'SUTRAMUVES',
+      cantidad: trabajadores.value.filter((x) => x.sindicato == 'SUTRAMUVES').length,
+      porcentaje:
+        (100 * trabajadores.value.filter((x) => x.sindicato == 'SUTRAMUVES').length) /
+        trabajadores.value.length,
+      color: `#01${((Math.random() * 255) | 0).toString(16).padStart(2, '0')}FF`
+    },
+    {
+      nombre: 'SOMUVES',
+      cantidad: trabajadores.value.filter((x) => x.sindicato == 'SOMUVES').length,
+      porcentaje:
+        (100 * trabajadores.value.filter((x) => x.sindicato == 'SOMUVES').length) /
+        trabajadores.value.length,
+      color: `#01${((Math.random() * 255) | 0).toString(16).padStart(2, '0')}FF`
+    },
+    {
+      nombre: 'TOTAL',
+      cantidad: trabajadores.value.length,
+      porcentaje: (100 * trabajadores.value.length) / trabajadores.value.length,
+      color: `#01${((Math.random() * 255) | 0).toString(16).padStart(2, '0')}FF`
+    }
+  ]
+}
 
 const obtenerInicialesApellidos = (nombreCompleto: string) => {
   const palabras = nombreCompleto.trim().split(/\s+/)
   if (palabras.length < 2) return ''
   const apellido1 = palabras[palabras.length - 2][0] || ''
   const apellido2 = palabras[palabras.length - 1][0] || ''
-
   return apellido1.toUpperCase() + apellido2.toUpperCase()
 }
 
@@ -182,7 +201,9 @@ const exportar = () => {
     justify-items: center;
     overflow-y: auto;
     .card {
+      width: 100%;
       max-width: 180px;
+      height: 180px;
     }
   }
 }

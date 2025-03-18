@@ -13,7 +13,6 @@
         <div class="toast-header bg-primary-lt text-warning">
           <span class="avatar avatar-xs me-2"></span>
           <strong class="me-auto">{{ store.username }}</strong>
-
           <button
             type="button"
             class="ms-2 btn-close"

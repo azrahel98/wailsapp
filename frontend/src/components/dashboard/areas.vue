@@ -108,11 +108,6 @@ const sortBy = (column: string) => {
 </script>
 
 <style scoped>
-.table-responsive {
-  max-height: 35vh;
-  height: 100%;
-  overflow: scroll;
-}
 .table th {
   cursor: pointer;
 }
