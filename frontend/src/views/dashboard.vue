@@ -11,6 +11,7 @@
           </router-view>
         </div>
       </div>
+      <FloatingChat />
     </div>
   </div>
 </template>
@@ -19,16 +20,18 @@ import Sidebar from '@comp/sidebar.vue'
 import { onMounted, ref } from 'vue'
 import { Consulta_IA } from '@wails/services/IaService'
 
+import FloatingChat from '@comp/chat.vue'
+
 const isExpanded = ref(false)
 
-onMounted(async () => {
-  try {
-    var s = await Consulta_IA('cuantos areas activas hay?')
-    console.log(s)
-  } catch (error) {
-    console.log(error)
-  }
-})
+// onMounted(async () => {
+//   try {
+//     var s = await Consulta_IA('cuantos areas activas hay?')
+//     console.log(s)
+//   } catch (error) {
+//     console.log(error)
+//   }
+// })
 
 const togglesidebar = () => {
   isExpanded.value = !isExpanded.value

@@ -3,7 +3,8 @@ package repositories
 import (
 	"context"
 	"fmt"
-	"os"
+	"time"
+	"vesgoapp/src/models"
 
 	"github.com/jmoiron/sqlx"
 	"github.com/sashabaranov/go-openai"
@@ -20,13 +21,35 @@ type iaRepository struct {
 }
 
 func (i *iaRepository) Humanizar_Response(prompt string, respuesta []map[string]any) (*string, error) {
-	client := openai.NewClient(os.Getenv("OPENIA"))
+	client := openai.NewClient(models.CHATGPKEY)
 
 	resp, err := client.CreateChatCompletion(context.Background(), openai.ChatCompletionRequest{
 		Model:       openai.GPT4oMini,
 		Temperature: 0,
 		Messages: []openai.ChatCompletionMessage{
-			{Role: "system", Content: "Una persona esta preguntando " + prompt + " y la respuesta de la base de datos es " + fmt.Sprintf("%v", respuesta) + " humaniza esta respuesta y respondela de manera amigable"},
+			{
+				Role: "system",
+				Content: fmt.Sprintf(`Eres un asistente conversacional amigable que presenta información de bases de datos de manera accesible y humana. 
+    
+    El usuario ha preguntado: "%s"
+    
+    Los datos técnicos obtenidos de la base de datos son: 
+    %v
+    
+    Instrucciones:
+    1. Transforma esta información técnica en una respuesta conversacional amigable y comprensible.
+    2. Utiliza HTML para estructurar la respuesta cuando sea apropiado:
+       - Usa <ul> y <li> para listas
+       - Usa <table>, <tr>, <th> y <td> para tablas
+       - Usa <b> o <strong> para destacar información importante
+       - Usa <p> para párrafos
+    3. Mantén un tono cordial y servicial.
+    4. Sé conciso pero completo.
+    5. Asegúrate de que toda la información importante de los datos técnicos esté incluida en tu respuesta.
+    6. Usa bootstrap para dar formato a la tabla si es necesario (class="table table-striped")
+    
+    NO menciones que estás formateando la respuesta o que estás usando HTML.`, prompt, respuesta),
+			},
 			{Role: "user", Content: prompt},
 		},
 	})
@@ -39,7 +62,6 @@ func (i *iaRepository) Humanizar_Response(prompt string, respuesta []map[string]
 }
 
 func (i *iaRepository) Ejecutar_Query(ctx context.Context, query string) ([]map[string]any, error) {
-
 	rows, err := i.db.QueryContext(ctx, query)
 	if err != nil {
 		return nil, fmt.Errorf("error ejecutando consulta SQL: %w", err)
@@ -48,33 +70,59 @@ func (i *iaRepository) Ejecutar_Query(ctx context.Context, query string) ([]map[
 
 	cols, err := rows.Columns()
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("error obteniendo nombres de columnas: %w", err)
 	}
 
-	var results []map[string]any
+	results := make([]map[string]any, 0)
+
 	for rows.Next() {
 		columns := make([]any, len(cols))
 		columnPointers := make([]any, len(cols))
+
 		for i := range columns {
 			columnPointers[i] = &columns[i]
 		}
-
 		if err := rows.Scan(columnPointers...); err != nil {
-			return nil, err
+			return nil, fmt.Errorf("error escaneando fila: %w", err)
 		}
 
 		rowMap := make(map[string]any)
 		for i, colName := range cols {
-			rowMap[colName] = columns[i]
+			val := columns[i]
+			switch v := val.(type) {
+			case []byte:
+				rowMap[colName] = string(v)
+			case nil:
+				rowMap[colName] = nil
+			case time.Time:
+
+				rowMap[colName] = v.Format("2006-01-02 15:04:05")
+			default:
+
+				rowMap[colName] = v
+			}
 		}
+
 		results = append(results, rowMap)
 	}
-	return results, nil
 
+	if err = rows.Err(); err != nil {
+		return nil, fmt.Errorf("error durante la iteración de filas: %w", err)
+	}
+
+	for i, result := range results {
+		for key, value := range result {
+			if byteArray, ok := value.([]byte); ok {
+				results[i][key] = string(byteArray)
+			}
+		}
+	}
+
+	return results, nil
 }
 
 func (i *iaRepository) Crear_Query(prompt string) (*string, error) {
-	client := openai.NewClient(os.Getenv("OPENIA"))
+	client := openai.NewClient(models.CHATGPKEY)
 
 	estructuraDB := `
 	Estructura de la base de datos:
@@ -284,7 +332,37 @@ ALTER TABLE 'HistorialAcademico' ADD CONSTRAINT 'HistorialAcademico_ibfk_2' FORE
 		Model:       openai.GPT4oMini,
 		Temperature: 0,
 		Messages: []openai.ChatCompletionMessage{
-			{Role: "system", Content: "Eres un asistente que genera exclusivamente consultas SQL basadas en la siguiente estructura de base de datos:\n\n" + estructuraDB + "\n\nTu respuesta debe ser única y exclusivamente la consulta SQL, sin explicaciones, comentarios, formato adicional o texto introductorio."},
+			{
+				Role: "system",
+				Content: fmt.Sprintf(`Eres un asistente especializado en generar exclusivamente consultas SQL de tipo SELECT. Bajo ninguna circunstancia debes generar consultas que modifiquen la base de datos (INSERT, UPDATE, DELETE, DROP, ALTER, etc.).
+
+Tu tarea es crear consultas SQL basadas en la siguiente estructura de base de datos:
+
+%s
+
+Reglas para búsqueda de personas:
+1. Cuando busques personas por nombre, SIEMPRE implementa una búsqueda flexible que incluya todas las partes del nombre:
+ - Usa CONCAT_WS(' ', apaterno, amaterno, nombre) AS nombre_completo para formar el nombre completo
+ - Divide el término de búsqueda en palabras individuales y usa múltiples condiciones LIKE
+ - Asegúrate de buscar en cada uno de los campos: apaterno, amaterno y nombre individualmente
+
+2. Para cualquier búsqueda por nombre de persona, implementa una consulta como:
+ SELECT dni, apaterno, amaterno, nombre, fecha_nacimiento, sexo, ruc, pension_id
+ FROM Persona
+ WHERE 
+   apaterno LIKE '%%término1%%' OR 
+   amaterno LIKE '%%término1%%' OR 
+   nombre LIKE '%%término1%%' OR
+   (Si hay más términos de búsqueda, repite con término2, término3, etc.)
+   
+3. NUNCA incluyas en los resultados los campos sensibles: direccion, telf1, telf2, email y foto
+
+4. Ordena siempre los resultados por apaterno, amaterno, nombre para facilitar la lectura
+
+Reglas generales:
+1. Tu respuesta debe contener ÚNICAMENTE la consulta SQL, sin explicaciones, comentarios ni texto adicional
+2. Sólo genera consultas de tipo SELECT que recuperen información sin modificar la base de datos`, estructuraDB),
+			},
 			{Role: "user", Content: prompt},
 		},
 	})

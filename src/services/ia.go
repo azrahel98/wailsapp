@@ -18,15 +18,18 @@ func NewIaRepository(r repositories.IaRepository) *IaService {
 func (s *IaService) Consulta_IA(prompt string) (*string, error) {
 	res, err := s.repo.Crear_Query(prompt)
 	if err != nil {
+		fmt.Println(err)
 		return nil, fmt.Errorf("el error es este generando la consulta")
 	}
 
 	limpio := strings.TrimPrefix(*res, "```sql\n")
 	limpio = strings.TrimSuffix(limpio, "```")
+
 	query, err := s.repo.Ejecutar_Query(context.Background(), limpio)
 	if err != nil {
 		return nil, fmt.Errorf("el error es: %s y la consulta es: %s", err, *res)
 	}
+	fmt.Println(query)
 
 	response, err := s.repo.Humanizar_Response(prompt, query)
 	if err != nil {
