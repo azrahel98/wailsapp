@@ -47,7 +47,7 @@ func main() {
 	boletaService := services.NewBoletaService(boletaRepo, repositories.CreatePersonalRepository(dbt))
 
 	iarepo := repositories.CreateRepoIa(dbt)
-	iaService := services.NewIaRepository(iarepo)
+	iaService := services.NewIaRepository(iarepo, repositories.CreatedashboardRepository(dbt), repositories.CreatePersonalRepository(dbt))
 
 	err := wails.Run(&options.App{
 		Title:    "vesgoapp",

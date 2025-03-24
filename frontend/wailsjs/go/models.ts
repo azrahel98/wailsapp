@@ -213,3 +213,153 @@ export namespace models {
 
 }
 
+export namespace openai {
+	
+	export class ToolCall {
+	    index?: number;
+	    id?: string;
+	    type: string;
+	    function: FunctionCall;
+	
+	    static createFrom(source: any = {}) {
+	        return new ToolCall(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.index = source["index"];
+	        this.id = source["id"];
+	        this.type = source["type"];
+	        this.function = this.convertValues(source["function"], FunctionCall);
+	    }
+	
+		convertValues(a: any, classs: any, asMap: boolean = false): any {
+		    if (!a) {
+		        return a;
+		    }
+		    if (a.slice && a.map) {
+		        return (a as any[]).map(elem => this.convertValues(elem, classs));
+		    } else if ("object" === typeof a) {
+		        if (asMap) {
+		            for (const key of Object.keys(a)) {
+		                a[key] = new classs(a[key]);
+		            }
+		            return a;
+		        }
+		        return new classs(a);
+		    }
+		    return a;
+		}
+	}
+	export class FunctionCall {
+	    name?: string;
+	    arguments?: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new FunctionCall(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.name = source["name"];
+	        this.arguments = source["arguments"];
+	    }
+	}
+	export class ChatMessageImageURL {
+	    url?: string;
+	    detail?: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new ChatMessageImageURL(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.url = source["url"];
+	        this.detail = source["detail"];
+	    }
+	}
+	export class ChatMessagePart {
+	    type?: string;
+	    text?: string;
+	    image_url?: ChatMessageImageURL;
+	
+	    static createFrom(source: any = {}) {
+	        return new ChatMessagePart(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.type = source["type"];
+	        this.text = source["text"];
+	        this.image_url = this.convertValues(source["image_url"], ChatMessageImageURL);
+	    }
+	
+		convertValues(a: any, classs: any, asMap: boolean = false): any {
+		    if (!a) {
+		        return a;
+		    }
+		    if (a.slice && a.map) {
+		        return (a as any[]).map(elem => this.convertValues(elem, classs));
+		    } else if ("object" === typeof a) {
+		        if (asMap) {
+		            for (const key of Object.keys(a)) {
+		                a[key] = new classs(a[key]);
+		            }
+		            return a;
+		        }
+		        return new classs(a);
+		    }
+		    return a;
+		}
+	}
+	export class ChatCompletionMessage {
+	    role: string;
+	    content?: string;
+	    refusal?: string;
+	    MultiContent: ChatMessagePart[];
+	    name?: string;
+	    function_call?: FunctionCall;
+	    tool_calls?: ToolCall[];
+	    tool_call_id?: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new ChatCompletionMessage(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.role = source["role"];
+	        this.content = source["content"];
+	        this.refusal = source["refusal"];
+	        this.MultiContent = this.convertValues(source["MultiContent"], ChatMessagePart);
+	        this.name = source["name"];
+	        this.function_call = this.convertValues(source["function_call"], FunctionCall);
+	        this.tool_calls = this.convertValues(source["tool_calls"], ToolCall);
+	        this.tool_call_id = source["tool_call_id"];
+	    }
+	
+		convertValues(a: any, classs: any, asMap: boolean = false): any {
+		    if (!a) {
+		        return a;
+		    }
+		    if (a.slice && a.map) {
+		        return (a as any[]).map(elem => this.convertValues(elem, classs));
+		    } else if ("object" === typeof a) {
+		        if (asMap) {
+		            for (const key of Object.keys(a)) {
+		                a[key] = new classs(a[key]);
+		            }
+		            return a;
+		        }
+		        return new classs(a);
+		    }
+		    return a;
+		}
+	}
+	
+	
+	
+
+}
+

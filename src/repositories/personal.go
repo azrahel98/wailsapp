@@ -8,6 +8,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"strings"
 	"vesgoapp/src/models"
 
 	"github.com/jmoiron/sqlx"
@@ -21,7 +22,7 @@ type PersonalRepository interface {
 	Search_Areas_count(ctx context.Context, area string) (*[]models.AreaCargoSerch, error)
 	Search_Cargo_count(ctx context.Context, cargo string) (*[]models.AreaCargoSerch, error)
 	IsCasbyDni(ctx context.Context, dni string) (bool, error)
-	EditByDni(ctx context.Context, telf1 string, telf2 string, direccion string, emai string, dni string, ruc string) error
+	EditByDni(ctx context.Context, telf1, telf2, direccion, email, ruc, dni *string) error
 	AddRenuncia(ctx context.Context, doc models.Documento, idvinculo int) (*int64, error)
 	Buscar_Asistencia(ctx context.Context, dni string, mes int, año int) (*[]models.AsistenciaDb, error)
 	Create_newIUser(ctx *sqlx.Tx, perfil models.Perfil) (*models.Perfil, error)
@@ -212,19 +213,51 @@ func (p *personalRepository) AddRenuncia(ctx context.Context, doc models.Documen
 	return &id2, nil
 }
 
-func (p *personalRepository) EditByDni(ctx context.Context, telf1 string, telf2 string, direccion string, emai string, ruc string, dni string) error {
+func (p *personalRepository) EditByDni(ctx context.Context, telf1, telf2, direccion, email, ruc, dni *string) error {
 	key := os.Getenv("DBKEY")
-	query := `UPDATE Persona SET 
-        direccion = aes_encrypt(?, ?), 
-        telf1 = aes_encrypt(?, ?), 
-        telf2 = aes_encrypt(?, ?), 
-        email = aes_encrypt(?, ?), 
-        ruc = ? 
-        WHERE dni = ?`
 
-	result, err := p.Db.ExecContext(ctx, query, direccion, key, telf1, key, telf2, key, emai, key, ruc, dni)
+	// Construcción dinámica de la consulta
+	var queryBuilder strings.Builder
+	var args []interface{}
+
+	queryBuilder.WriteString("UPDATE Persona SET ")
+
+	if direccion != nil {
+		queryBuilder.WriteString("direccion = aes_encrypt(?, ?), ")
+		args = append(args, *direccion, key)
+	}
+	if telf1 != nil {
+		queryBuilder.WriteString("telf1 = aes_encrypt(?, ?), ")
+		args = append(args, *telf1, key)
+	}
+	if telf2 != nil {
+		queryBuilder.WriteString("telf2 = aes_encrypt(?, ?), ")
+		args = append(args, *telf2, key)
+	}
+	if email != nil {
+		queryBuilder.WriteString("email = aes_encrypt(?, ?), ")
+		args = append(args, *email, key)
+	}
+	if ruc != nil {
+		queryBuilder.WriteString("ruc = ?, ")
+		args = append(args, *ruc)
+	}
+
+	// Remover la última coma y espacio
+	query := strings.TrimSuffix(queryBuilder.String(), ", ")
+
+	// Agregar condición WHERE
+	query += " WHERE dni = ?"
+	args = append(args, dni)
+
+	// Si no hay campos a actualizar, retornar error
+	if len(args) == 1 {
+		return errors.New("no fields to update")
+	}
+
+	// Ejecutar la consulta
+	result, err := p.Db.ExecContext(ctx, query, args...)
 	if err != nil {
-
 		return err
 	}
 

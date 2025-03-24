@@ -24,7 +24,7 @@ func (s *PersonalService) Buscar_persona_by_dni(dni string) (*models.Perfil, err
 }
 
 func (s *PersonalService) EditByDni(telf1 string, telf2 string, direccion string, email string, ruc string, dni string) error {
-	err := s.repo.EditByDni(context.Background(), telf1, telf2, direccion, email, dni, ruc)
+	err := s.repo.EditByDni(context.Background(), &telf1, &telf2, &direccion, &email, &dni, &ruc)
 	if err != nil {
 		return err
 	}
