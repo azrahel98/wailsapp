@@ -34,6 +34,7 @@ func (d *dashboardRepository) Report_funcionarios(ctx context.Context) (*[]model
   a.id,
   a.nombre area,
   concat(p.apaterno, " ", p.amaterno, " ", p.nombre) nombre,
+  cast(p.dni as char) dni,
   a.nivel nivel
 from
   Area a

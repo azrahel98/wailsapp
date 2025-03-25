@@ -65,5 +65,6 @@ type Reporte_Funcionarios struct {
 	Id     int     `db:"id" json:"id"`
 	Area   string  `db:"area" json:"area"`
 	Nombre *string `db:"nombre" json:"nombre"`
+	Dni    *string `db:"dni" json:"dni"`
 	Nivel  *int    `db:"nivel" json:"nivel"`
 }

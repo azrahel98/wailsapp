@@ -120,6 +120,7 @@ type Organigrama struct {
 	Id           int
 	Area         string
 	Jefe         *string
+	Dni          *string
 	Subgerencias []Organigrama
 }
 
@@ -135,6 +136,7 @@ func (s *DashboardService) Reporte_Organigrama(año int) (*[]Organigrama, error)
 			org := Organigrama{
 				Id:   item.Id,
 				Area: item.Area,
+				Dni:  item.Dni,
 				Jefe: item.Nombre,
 			}
 			organigrama = append(organigrama, org)
@@ -148,6 +150,7 @@ func (s *DashboardService) Reporte_Organigrama(año int) (*[]Organigrama, error)
 					sub := Organigrama{
 						Id:           item.Id,
 						Area:         item.Area,
+						Dni:          item.Dni,
 						Jefe:         item.Nombre,
 						Subgerencias: nil,
 					}
@@ -164,6 +167,7 @@ func (s *DashboardService) Reporte_Organigrama(año int) (*[]Organigrama, error)
 					organigrama[i].Subgerencias[j].Subgerencias = append(organigrama[i].Subgerencias[j].Subgerencias, Organigrama{
 						Id:   item.Id,
 						Area: item.Area,
+						Dni:  item.Dni,
 						Jefe: item.Nombre,
 					})
 				}
